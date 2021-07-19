@@ -1,7 +1,3 @@
-# Hello, I'm Avish Jha!
-
-Welcome to my portfolio site repo!
-
 # avishj.dev
 
 ## Project setup
@@ -26,4 +22,3 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-

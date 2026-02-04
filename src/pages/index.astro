@@ -13,53 +13,91 @@ import SkillsSection from '../components/SkillsSection.astro';
   <Header />
   
   <main>
-    <!-- Hero Section -->
-    <section class="hero relative flex min-h-screen items-center justify-center overflow-hidden">
-      <!-- Mathematical grid overlay -->
-      <div class="pointer-events-none absolute inset-0 opacity-[0.03]">
-        <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" stroke-width="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-        </svg>
+    <!-- Hero Section — Cinematic with magnetic cursor + split text -->
+    <section class="hero relative flex min-h-screen items-center justify-center overflow-hidden bg-[--color-bg-primary]">
+      
+      <!-- Ambient floating particles (constant subtle motion) -->
+      <div class="particles pointer-events-none absolute inset-0" aria-hidden="true">
+        <div class="particle" style="--x: 15%; --y: 20%; --size: 3px; --duration: 18s; --delay: 0s;"></div>
+        <div class="particle" style="--x: 85%; --y: 15%; --size: 2px; --duration: 22s; --delay: -5s;"></div>
+        <div class="particle" style="--x: 45%; --y: 80%; --size: 4px; --duration: 25s; --delay: -10s;"></div>
+        <div class="particle" style="--x: 70%; --y: 60%; --size: 2px; --duration: 20s; --delay: -3s;"></div>
+        <div class="particle" style="--x: 25%; --y: 70%; --size: 3px; --duration: 28s; --delay: -8s;"></div>
+        <div class="particle" style="--x: 90%; --y: 40%; --size: 2px; --duration: 16s; --delay: -12s;"></div>
+        <div class="particle" style="--x: 10%; --y: 55%; --size: 3px; --duration: 24s; --delay: -6s;"></div>
+        <div class="particle" style="--x: 60%; --y: 25%; --size: 2px; --duration: 19s; --delay: -15s;"></div>
       </div>
 
-      <!-- Parallax floating shapes -->
+      <!-- Golden ratio construction lines (mathematical precision) -->
+      <svg class="construction-lines pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+        <line class="construction-line" x1="38.2%" y1="0" x2="38.2%" y2="100%" />
+        <line class="construction-line" x1="61.8%" y1="0" x2="61.8%" y2="100%" />
+        <line class="construction-line" x1="0" y1="38.2%" x2="100%" y2="38.2%" />
+        <line class="construction-line" x1="0" y1="61.8%" x2="100%" y2="61.8%" />
+        <line class="construction-line diagonal" x1="0" y1="100%" x2="100%" y2="0" />
+      </svg>
+
+      <!-- Magnetic cursor blob -->
+      <div class="cursor-blob pointer-events-none fixed z-50 h-96 w-96 rounded-full opacity-0" aria-hidden="true"></div>
+
+      <!-- Floating depth layers (5-layer parallax) -->
       <div class="parallax-container pointer-events-none absolute inset-0">
-        <!-- Depth layer 1 (slowest) -->
-        <div class="parallax-layer" data-depth="1">
-          <div class="absolute left-[10%] top-[20%] h-32 w-32 rounded-full border border-white/5"></div>
-          <div class="absolute right-[15%] top-[60%] h-24 w-24 rotate-45 border border-white/5"></div>
+        <div class="parallax-layer" data-depth="1" data-speed="0.02">
+          <div class="floating-ring absolute left-[8%] top-[15%] h-64 w-64 rounded-full border border-white/[0.03]"></div>
+          <div class="floating-ring absolute right-[12%] bottom-[20%] h-48 w-48 rounded-full border border-white/[0.02]"></div>
         </div>
-        <!-- Depth layer 2 -->
-        <div class="parallax-layer" data-depth="2">
-          <div class="absolute left-[20%] top-[70%] h-16 w-16 rounded-full bg-white/[0.02]"></div>
-          <div class="absolute right-[25%] top-[25%] h-20 w-20 rotate-12 border border-white/[0.03]"></div>
+        <div class="parallax-layer" data-depth="2" data-speed="0.04">
+          <div class="floating-square absolute right-[20%] top-[25%] h-32 w-32 rotate-12 border border-white/[0.04]"></div>
+          <div class="floating-square absolute left-[15%] bottom-[30%] h-24 w-24 -rotate-6 bg-white/[0.015]"></div>
         </div>
-        <!-- Depth layer 3 (faster) -->
-        <div class="parallax-layer" data-depth="3">
-          <div class="absolute left-[5%] top-[40%] h-2 w-2 rounded-full bg-white/10"></div>
-          <div class="absolute right-[10%] top-[30%] h-3 w-3 rounded-full bg-white/10"></div>
-          <div class="absolute left-[30%] top-[80%] h-2 w-2 rounded-full bg-white/10"></div>
+        <div class="parallax-layer" data-depth="3" data-speed="0.08">
+          <div class="floating-dot absolute left-[5%] top-[45%] h-2 w-2 rounded-full bg-white/20"></div>
+          <div class="floating-dot absolute right-[8%] top-[35%] h-3 w-3 rounded-full bg-white/15"></div>
+          <div class="floating-dot absolute left-[25%] bottom-[15%] h-2 w-2 rounded-full bg-white/20"></div>
+        </div>
+        <div class="parallax-layer" data-depth="4" data-speed="0.12">
+          <div class="floating-dot absolute right-[30%] bottom-[40%] h-1.5 w-1.5 rounded-full bg-white/25"></div>
+          <div class="floating-dot absolute left-[40%] top-[20%] h-2 w-2 rounded-full bg-white/20"></div>
+        </div>
+        <div class="parallax-layer" data-depth="5" data-speed="0.18">
+          <div class="floating-dot absolute left-[60%] bottom-[25%] h-1 w-1 rounded-full bg-white/30"></div>
+          <div class="floating-dot absolute right-[45%] top-[15%] h-1.5 w-1.5 rounded-full bg-white/25"></div>
         </div>
       </div>
 
-      <!-- Hero content -->
-      <div class="relative z-10 px-6 text-center">
-        <h1 class="font-display text-5xl font-medium tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
-          <span class="hero-line block opacity-0">Avish Jha</span>
+      <!-- Hero content with character-split animation -->
+      <div class="hero-content relative z-10 px-6 text-center">
+        <h1 class="hero-title font-display text-6xl font-medium tracking-tight sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem]">
+          <span class="hero-name inline-block overflow-hidden">
+            <span class="hero-char" data-char="A">A</span><span class="hero-char" data-char="v">v</span><span class="hero-char" data-char="i">i</span><span class="hero-char" data-char="s">s</span><span class="hero-char" data-char="h">h</span>
+          </span>
+          <span class="hero-name inline-block overflow-hidden ml-[0.2em]">
+            <span class="hero-char" data-char="J">J</span><span class="hero-char" data-char="h">h</span><span class="hero-char" data-char="a">a</span>
+          </span>
         </h1>
-        <p class="hero-line mt-6 text-lg text-[--color-text-muted] opacity-0 sm:text-xl md:text-2xl">
-          Software Engineer · CMU SCS · Builder
-        </p>
+        
+        <div class="hero-tagline mt-8 overflow-hidden">
+          <p class="tagline-text text-lg tracking-[0.3em] text-[--color-text-muted] uppercase sm:text-xl md:text-2xl">
+            <span class="tagline-word">Software</span>
+            <span class="tagline-dot mx-3 inline-block h-1.5 w-1.5 rounded-full bg-white/40"></span>
+            <span class="tagline-word">CMU</span>
+            <span class="tagline-dot mx-3 inline-block h-1.5 w-1.5 rounded-full bg-white/40"></span>
+            <span class="tagline-word">Builder</span>
+          </p>
+        </div>
       </div>
       
-      <!-- Scroll indicator -->
-      <div class="hero-line absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0">
-        <div class="h-12 w-px bg-gradient-to-b from-white/40 to-transparent"></div>
+      <!-- Scroll indicator with pulse -->
+      <div class="scroll-indicator absolute bottom-12 left-1/2 -translate-x-1/2">
+        <div class="scroll-line relative h-16 w-px overflow-hidden">
+          <div class="scroll-progress absolute inset-0 origin-top bg-gradient-to-b from-white to-transparent"></div>
+        </div>
+        <span class="mt-4 block font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">Scroll</span>
+      </div>
+
+      <!-- Portal transition mask (expands on scroll) -->
+      <div class="portal-mask pointer-events-none fixed inset-0 z-40 flex items-center justify-center">
+        <div class="portal-circle h-0 w-0 rounded-full bg-[--color-bg-cream]"></div>
       </div>
     </section>
 
@@ -94,57 +132,290 @@ import SkillsSection from '../components/SkillsSection.astro';
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Hero text reveal animation
-  gsap.set('.hero-line', { y: 30 });
-  gsap.to('.hero-line', {
-    opacity: 1,
-    y: 0,
-    duration: 0.8,
-    stagger: 0.15,
-    ease: 'power4.out',
-    delay: 0.3,
-  });
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CHARACTER-BY-CHARACTER TITLE REVEAL
+  // ═══════════════════════════════════════════════════════════════════════════
+  const chars = document.querySelectorAll('.hero-char');
+  const taglineWords = document.querySelectorAll('.tagline-word');
+  const taglineDots = document.querySelectorAll('.tagline-dot');
+  
+  // Initial state
+  gsap.set(chars, { y: '120%', rotateX: -80, opacity: 0 });
+  gsap.set(taglineWords, { y: 40, opacity: 0 });
+  gsap.set(taglineDots, { scale: 0, opacity: 0 });
+  gsap.set('.scroll-indicator', { opacity: 0, y: 20 });
+  gsap.set('.construction-line', { strokeDasharray: 1000, strokeDashoffset: 1000 });
 
-  // Parallax on scroll
+  // Orchestrated reveal sequence
+  const heroTimeline = gsap.timeline({ delay: 0.5 });
+  
+  heroTimeline
+    // Construction lines draw in
+    .to('.construction-line', {
+      strokeDashoffset: 0,
+      duration: 1.5,
+      ease: 'power2.inOut',
+      stagger: 0.1,
+    })
+    // Characters fly up with rotation
+    .to(chars, {
+      y: '0%',
+      rotateX: 0,
+      opacity: 1,
+      duration: 1,
+      ease: 'power4.out',
+      stagger: 0.05,
+    }, '-=0.8')
+    // Tagline words slide up
+    .to(taglineWords, {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power4.out',
+      stagger: 0.1,
+    }, '-=0.4')
+    // Dots pop in
+    .to(taglineDots, {
+      scale: 1,
+      opacity: 1,
+      duration: 0.4,
+      ease: 'back.out(3)',
+      stagger: 0.1,
+    }, '-=0.6')
+    // Scroll indicator
+    .to('.scroll-indicator', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power3.out',
+    }, '-=0.2');
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MAGNETIC CURSOR EFFECT
+  // ═══════════════════════════════════════════════════════════════════════════
+  const cursorBlob = document.querySelector('.cursor-blob') as HTMLElement;
+  let mouseX = 0, mouseY = 0, blobX = 0, blobY = 0;
+
+  if (cursorBlob && window.matchMedia('(pointer: fine)').matches) {
+    gsap.set(cursorBlob, { opacity: 0.03 });
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    // Smooth follow with lerp
+    gsap.ticker.add(() => {
+      blobX += (mouseX - blobX) * 0.08;
+      blobY += (mouseY - blobY) * 0.08;
+      gsap.set(cursorBlob, {
+        x: blobX - 192, // half of 384px (h-96)
+        y: blobY - 192,
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 5-LAYER PARALLAX SYSTEM
+  // ═══════════════════════════════════════════════════════════════════════════
   const parallaxLayers = document.querySelectorAll('.parallax-layer');
-  const depths = [0.0125, 0.025, 0.075, 0.1, 0.175];
-
+  
   parallaxLayers.forEach((layer) => {
-    const depth = parseInt(layer.getAttribute('data-depth') || '1');
-    const speed = depths[depth - 1] || 0.025;
-
+    const speed = parseFloat(layer.getAttribute('data-speed') || '0.05');
+    
     gsap.to(layer, {
-      y: () => window.innerHeight * speed * 2,
+      y: () => window.innerHeight * speed * 3,
       ease: 'none',
       scrollTrigger: {
         trigger: '.hero',
         start: 'top top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 0.5,
       },
     });
   });
 
-  // Fade out hero on scroll
-  gsap.to('.hero', {
-    opacity: 0,
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PORTAL CIRCLE TRANSITION
+  // ═══════════════════════════════════════════════════════════════════════════
+  const portalCircle = document.querySelector('.portal-circle');
+  
+  if (portalCircle) {
+    gsap.to(portalCircle, {
+      width: '300vmax',
+      height: '300vmax',
+      ease: 'power2.inOut',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: '70% top',
+        end: 'bottom top',
+        scrub: 1,
+        onLeave: () => {
+          gsap.set('.portal-mask', { display: 'none' });
+        },
+        onEnterBack: () => {
+          gsap.set('.portal-mask', { display: 'flex' });
+        },
+      },
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SCROLL PROGRESS INDICATOR
+  // ═══════════════════════════════════════════════════════════════════════════
+  gsap.to('.scroll-progress', {
+    scaleY: 0,
+    transformOrigin: 'top',
+    ease: 'none',
     scrollTrigger: {
       trigger: '.hero',
-      start: '60% top',
-      end: 'bottom top',
+      start: 'top top',
+      end: '30% top',
+      scrub: true,
+    },
+  });
+
+  // Fade out hero content on scroll
+  gsap.to('.hero-content', {
+    y: -100,
+    opacity: 0,
+    ease: 'power2.in',
+    scrollTrigger: {
+      trigger: '.hero',
+      start: '20% top',
+      end: '60% top',
       scrub: true,
     },
   });
 </script>
 
 <style>
-  .hero-line {
-    transform: translateY(30px);
+  /* ═══════════════════════════════════════════════════════════════════════════
+     AMBIENT PARTICLES — Constant floating motion
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .particle {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: white;
+    border-radius: 50%;
+    opacity: 0.06;
+    animation: float var(--duration) ease-in-out infinite var(--delay);
   }
 
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -40px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.9); }
+    75% { transform: translate(40px, 30px) scale(1.05); }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CONSTRUCTION LINES — Golden ratio grid
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .construction-line {
+    stroke: rgba(255, 255, 255, 0.04);
+    stroke-width: 1;
+  }
+
+  .construction-line.diagonal {
+    stroke: rgba(255, 255, 255, 0.02);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CURSOR BLOB — Magnetic glow effect
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .cursor-blob {
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    filter: blur(60px);
+    mix-blend-mode: screen;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     PARALLAX LAYERS
+     ═══════════════════════════════════════════════════════════════════════════ */
   .parallax-layer {
     position: absolute;
     inset: 0;
     will-change: transform;
+  }
+
+  .floating-ring,
+  .floating-square {
+    animation: subtle-rotate 60s linear infinite;
+  }
+
+  .floating-ring:nth-child(2) {
+    animation-direction: reverse;
+    animation-duration: 80s;
+  }
+
+  @keyframes subtle-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CHARACTER ANIMATION — 3D transform origin
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .hero-char {
+    display: inline-block;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .hero-title {
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     SCROLL INDICATOR
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, white, transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(0.6); }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     PORTAL TRANSITION
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .portal-mask {
+    pointer-events: none;
+  }
+
+  .portal-circle {
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     REDUCED MOTION
+     ═══════════════════════════════════════════════════════════════════════════ */
+  @media (prefers-reduced-motion: reduce) {
+    .particle,
+    .floating-ring,
+    .floating-square,
+    .scroll-line::after {
+      animation: none;
+    }
   }
 </style>

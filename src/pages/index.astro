@@ -2,6 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import FloatingContact from '../components/FloatingContact.astro';
+import AboutSection from '../components/AboutSection.astro';
+import ExperienceSection from '../components/ExperienceSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import ResearchSection from '../components/ResearchSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
 ---
 
 <BaseLayout>
@@ -52,20 +57,32 @@ import FloatingContact from '../components/FloatingContact.astro';
         </p>
       </div>
       
-      <!-- Scroll indicator (outside hero content, positioned at section bottom) -->
+      <!-- Scroll indicator -->
       <div class="hero-line absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0">
         <div class="h-12 w-px bg-gradient-to-b from-white/40 to-transparent"></div>
       </div>
     </section>
 
-    <!-- Placeholder sections for scroll testing -->
-    <section class="flex min-h-screen items-center justify-center bg-[--color-bg-cream]">
-      <p class="font-display text-4xl text-[--color-text-dark]">Experience</p>
-    </section>
-    
-    <section class="flex min-h-screen items-center justify-center">
-      <p class="font-display text-4xl">Projects</p>
-    </section>
+    <!-- Content Sections -->
+    <AboutSection />
+    <ExperienceSection />
+    <ProjectsSection />
+    <ResearchSection />
+    <SkillsSection />
+
+    <!-- Footer -->
+    <footer class="bg-[--color-bg-primary] py-12">
+      <div class="mx-auto max-w-[--max-width] px-6">
+        <div class="flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 md:flex-row">
+          <p class="font-mono text-xs text-[--color-text-muted]">
+            © 2025 Avish Jha · Built with intention
+          </p>
+          <p class="font-mono text-xs text-[--color-text-muted]">
+            Pittsburgh, PA
+          </p>
+        </div>
+      </div>
+    </footer>
   </main>
 
   <FloatingContact />

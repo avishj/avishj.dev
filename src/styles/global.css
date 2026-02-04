@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AVISHJ.DEV — Renaissance Engineering Design System
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ─────────────────────────────────────────────────────────────────────────
+     COLORS
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  /* Core palette */
+  --color-bg-primary: #000000;
+  --color-bg-cream: #F5F4F0;
+  --color-text-primary: #ffffff;
+  --color-text-muted: #a1a1a1;
+  --color-text-dark: #1a1a1a;
+  
+  /* Section accent colors (per employer) */
+  --color-accent-snap: #FFFC00;
+  --color-accent-siemens: #009999;
+  --color-accent-addverb: #0066CC;
+  --color-accent-mitacs: #E31937;
+  --color-accent-ey: #FFE600;
+  --color-accent-tata: #005587;
+  
+  /* UI colors */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-hover: rgba(255, 255, 255, 0.2);
+  --color-glass: rgba(0, 0, 0, 0.8);
+  --color-glass-light: rgba(255, 255, 255, 0.05);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     TYPOGRAPHY
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  /* Font families - will be refined when fonts are added */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     SPACING & LAYOUT
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  --max-width: 1200px;
+  --max-width-narrow: 666px;
+  --margin: 1rem;
+  --margin-lg: 2rem;
+  --vertical-padding: 3rem;
+  --vertical-padding-lg: 4rem;
+  --header-height: 56px;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     ANIMATION
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  --duration-fast: 50ms;
+  --duration-base: 200ms;
+  --duration-slow: 350ms;
+  --duration-reveal: 800ms;
+  
+  /* Signature easings from PLAN.md */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  
+  /* ─────────────────────────────────────────────────────────────────────────
+     SHADOWS
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  --shadow-sm: 0 4px 35px 0 rgba(23, 55, 87, 0.1), 0 5px 15px 0 rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 60px rgba(255, 255, 255, 0.1);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     PARALLAX DEPTH VALUES
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  --parallax-depth-1: 0.0125;
+  --parallax-depth-2: 0.025;
+  --parallax-depth-3: 0.075;
+  --parallax-depth-4: 0.1;
+  --parallax-depth-5: 0.175;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Tabular numbers for dates/metrics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATION UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ease-out-expo {
+  transition-timing-function: var(--ease-out-expo);
+}
+
+.ease-out-quint {
+  transition-timing-function: var(--ease-out-quint);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CANVAS GRAIN TEXTURE OVERLAY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.grain-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLASSMORPHISM
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-light {
+  background: var(--color-glass-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

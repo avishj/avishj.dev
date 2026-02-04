@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative flex min-h-screen items-center justify-center overflow-hidden">
+      <!-- Mathematical grid overlay -->
+      <div class="pointer-events-none absolute inset-0 opacity-[0.03]">
+        <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" stroke-width="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
+      <!-- Hero content -->
+      <div class="relative z-10 px-6 text-center">
+        <h1 class="font-display text-5xl font-medium tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+          <span class="hero-line block opacity-0">Avish Aviraj Jha</span>
+        </h1>
+        <p class="hero-line mt-6 text-lg text-[--color-text-muted] opacity-0 sm:text-xl">
+          Software Engineer • CMU SCS • Builder
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  import gsap from 'gsap';
+
+  // Hero text reveal animation
+  gsap.to('.hero-line', {
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+    stagger: 0.15,
+    ease: 'power4.out',
+    delay: 0.3,
+  });
+
+  // Set initial state
+  gsap.set('.hero-line', {
+    y: 30,
+  });
+</script>
+
+<style>
+  .hero-line {
+    transform: translateY(30px);
+  }
+</style>

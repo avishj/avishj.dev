@@ -94,7 +94,7 @@ const experiences: Experience[] = [
 
 <section id="experience" class="experience-section relative bg-[--color-bg-primary]">
   <!-- Section header with massive typography -->
-  <div class="sticky top-0 z-10 flex min-h-screen items-center bg-[--color-bg-primary] py-24">
+  <div class="flex min-h-[60vh] items-center bg-[--color-bg-primary] py-24">
     <div class="mx-auto max-w-[--max-width] px-6">
       <div class="flex items-end justify-between">
         <div>
@@ -111,11 +111,11 @@ const experiences: Experience[] = [
     </div>
   </div>
 
-  <!-- Horizontal scroll experience cards -->
+  <!-- Experience cards - regular flow, no sticky overlap -->
   <div class="experience-track relative">
     {experiences.map((exp, index) => (
       <article 
-        class="experience-card sticky top-0 flex min-h-screen items-center"
+        class="experience-card relative flex items-center py-24"
         data-index={index}
         style={`--accent: ${exp.accentColor}; --card-index: ${index};`}
       >
@@ -186,11 +186,6 @@ const experiences: Experience[] = [
           </div>
         </div>
 
-        <!-- Vertical progress line -->
-        <div 
-          class="progress-line absolute bottom-0 left-1/2 h-24 w-px -translate-x-1/2"
-          style={`background: linear-gradient(to bottom, ${exp.accentColor}40, transparent);`}
-        ></div>
       </article>
     ))}
   </div>
@@ -340,11 +335,7 @@ const experiences: Experience[] = [
 
 <style>
   .experience-card {
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.95) 0%,
-      rgba(0, 0, 0, 0.98) 100%
-    );
+    background: transparent;
   }
 
   .text-gradient {
@@ -361,13 +352,10 @@ const experiences: Experience[] = [
     transform-origin: left center;
   }
 
-  /* Stacking effect for cards */
-  .experience-card:nth-child(1) { z-index: 6; }
-  .experience-card:nth-child(2) { z-index: 5; }
-  .experience-card:nth-child(3) { z-index: 4; }
-  .experience-card:nth-child(4) { z-index: 3; }
-  .experience-card:nth-child(5) { z-index: 2; }
-  .experience-card:nth-child(6) { z-index: 1; }
+  /* Divider between cards */
+  .experience-card + .experience-card {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .highlight-item {

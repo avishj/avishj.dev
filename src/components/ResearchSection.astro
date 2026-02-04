@@ -1,0 +1,151 @@
+---
+// Research & Publications Section
+// Clean list with external link arrows and tabular numbers
+
+interface Publication {
+  venue: string;
+  venueType: 'IEEE' | 'Springer' | 'Elsevier';
+  title: string;
+  year: string;
+  link: string;
+  tech?: string;
+}
+
+const publications: Publication[] = [
+  {
+    venue: 'IEEE · 7th CSI-TSS',
+    venueType: 'IEEE',
+    title: 'Harnessing Creative Methods for EEG Feature Extraction and Modeling in Neurological Disorder Diagnoses',
+    year: '2023',
+    link: '#',
+    tech: 'Python, TensorFlow',
+  },
+  {
+    venue: 'IEEE · 7th CSI-TSS',
+    venueType: 'IEEE',
+    title: 'Enhancing Visibility: Multiresolution Dark Channel Prior for Dehazing and Fog Removal in Images',
+    year: '2023',
+    link: '#',
+    tech: 'Python, OpenCV',
+  },
+  {
+    venue: 'Springer · 4th ICICIT',
+    venueType: 'Springer',
+    title: 'Randomised Analysis of Backtracking-based Search Algorithms in Elucidating Sudoku Puzzles',
+    year: '2022',
+    link: 'https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21',
+    tech: 'Python, Various Libraries',
+  },
+  {
+    venue: 'IEEE · ic-ETITE',
+    venueType: 'IEEE',
+    title: 'Automated Detection Of Driving Pathway Using Image Processing',
+    year: '2020',
+    link: 'https://ieeexplore.ieee.org/document/9077722',
+    tech: 'Python, Embedded C, Arduino, Raspberry Pi',
+  },
+];
+
+const venueColors = {
+  IEEE: '#00629B',
+  Springer: '#333333',
+  Elsevier: '#FF6B00',
+};
+---
+
+<section id="research" class="research-section relative bg-[--color-bg-primary] py-24 md:py-32">
+  <!-- Section header -->
+  <div class="mx-auto max-w-[--max-width] px-6">
+    <div class="mb-16 flex items-baseline gap-4">
+      <span class="font-mono text-sm text-[--color-text-muted]">04</span>
+      <h2 class="font-display text-4xl font-medium tracking-tight md:text-5xl">Research</h2>
+    </div>
+
+    <!-- Publications list -->
+    <div class="publications-list space-y-1">
+      {publications.map((pub, index) => (
+        <a 
+          href={pub.link}
+          target={pub.link.startsWith('http') ? '_blank' : undefined}
+          rel={pub.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+          class="publication-item group flex items-start gap-4 border-b border-white/[0.06] py-6 transition-colors duration-200 hover:bg-white/[0.02] md:items-center md:gap-8"
+          data-index={index}
+        >
+          <!-- Year (tabular numbers) -->
+          <span class="w-12 flex-shrink-0 font-mono text-sm tabular-nums text-[--color-text-muted]">
+            {pub.year}
+          </span>
+
+          <!-- Content -->
+          <div class="flex flex-grow flex-col gap-2 md:flex-row md:items-center md:gap-4">
+            <!-- Venue badge -->
+            <span 
+              class="w-fit rounded px-2 py-0.5 font-mono text-xs"
+              style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}
+            >
+              {pub.venue}
+            </span>
+
+            <!-- Title -->
+            <span class="flex-grow text-sm leading-relaxed transition-colors duration-200 group-hover:text-white md:text-base">
+              {pub.title}
+            </span>
+          </div>
+
+          <!-- External link arrow -->
+          <div class="flex-shrink-0 text-[--color-text-muted] transition-all duration-200 group-hover:translate-x-1 group-hover:text-white">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Scholar link -->
+    <div class="mt-8 flex justify-end">
+      <a 
+        href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group flex items-center gap-2 text-sm text-[--color-text-muted] transition-colors duration-200 hover:text-white"
+      >
+        <span>View all on Google Scholar</span>
+        <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Staggered reveal for publications
+  const items = document.querySelectorAll('.publication-item');
+  
+  items.forEach((item, index) => {
+    gsap.fromTo(item,
+      { 
+        x: -20, 
+        opacity: 0,
+      },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+        delay: index * 0.1,
+      }
+    );
+  });
+</script>

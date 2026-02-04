@@ -1,11 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import FloatingContact from '../components/FloatingContact.astro';
 ---
 
 <BaseLayout>
-  <main class="min-h-screen">
+  <Header />
+  
+  <main>
     <!-- Hero Section -->
-    <section class="relative flex min-h-screen items-center justify-center overflow-hidden">
+    <section class="hero relative flex min-h-screen items-center justify-center overflow-hidden">
       <!-- Mathematical grid overlay -->
       <div class="pointer-events-none absolute inset-0 opacity-[0.03]">
         <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
@@ -18,23 +22,63 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </svg>
       </div>
 
+      <!-- Parallax floating shapes -->
+      <div class="parallax-container pointer-events-none absolute inset-0">
+        <!-- Depth layer 1 (slowest) -->
+        <div class="parallax-layer" data-depth="1">
+          <div class="absolute left-[10%] top-[20%] h-32 w-32 rounded-full border border-white/5"></div>
+          <div class="absolute right-[15%] top-[60%] h-24 w-24 rotate-45 border border-white/5"></div>
+        </div>
+        <!-- Depth layer 2 -->
+        <div class="parallax-layer" data-depth="2">
+          <div class="absolute left-[20%] top-[70%] h-16 w-16 rounded-full bg-white/[0.02]"></div>
+          <div class="absolute right-[25%] top-[25%] h-20 w-20 rotate-12 border border-white/[0.03]"></div>
+        </div>
+        <!-- Depth layer 3 (faster) -->
+        <div class="parallax-layer" data-depth="3">
+          <div class="absolute left-[5%] top-[40%] h-2 w-2 rounded-full bg-white/10"></div>
+          <div class="absolute right-[10%] top-[30%] h-3 w-3 rounded-full bg-white/10"></div>
+          <div class="absolute left-[30%] top-[80%] h-2 w-2 rounded-full bg-white/10"></div>
+        </div>
+      </div>
+
       <!-- Hero content -->
       <div class="relative z-10 px-6 text-center">
         <h1 class="font-display text-5xl font-medium tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
-          <span class="hero-line block opacity-0">Avish Aviraj Jha</span>
+          <span class="hero-line block opacity-0">Avish Jha</span>
         </h1>
-        <p class="hero-line mt-6 text-lg text-[--color-text-muted] opacity-0 sm:text-xl">
-          Software Engineer • CMU SCS • Builder
+        <p class="hero-line mt-6 text-lg text-[--color-text-muted] opacity-0 sm:text-xl md:text-2xl">
+          Software Engineer · CMU SCS · Builder
         </p>
       </div>
+      
+      <!-- Scroll indicator (outside hero content, positioned at section bottom) -->
+      <div class="hero-line absolute bottom-12 left-1/2 -translate-x-1/2 opacity-0">
+        <div class="h-12 w-px bg-gradient-to-b from-white/40 to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- Placeholder sections for scroll testing -->
+    <section class="flex min-h-screen items-center justify-center bg-[--color-bg-cream]">
+      <p class="font-display text-4xl text-[--color-text-dark]">Experience</p>
+    </section>
+    
+    <section class="flex min-h-screen items-center justify-center">
+      <p class="font-display text-4xl">Projects</p>
     </section>
   </main>
+
+  <FloatingContact />
 </BaseLayout>
 
 <script>
   import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
 
   // Hero text reveal animation
+  gsap.set('.hero-line', { y: 30 });
   gsap.to('.hero-line', {
     opacity: 1,
     y: 0,
@@ -44,14 +88,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     delay: 0.3,
   });
 
-  // Set initial state
-  gsap.set('.hero-line', {
-    y: 30,
+  // Parallax on scroll
+  const parallaxLayers = document.querySelectorAll('.parallax-layer');
+  const depths = [0.0125, 0.025, 0.075, 0.1, 0.175];
+
+  parallaxLayers.forEach((layer) => {
+    const depth = parseInt(layer.getAttribute('data-depth') || '1');
+    const speed = depths[depth - 1] || 0.025;
+
+    gsap.to(layer, {
+      y: () => window.innerHeight * speed * 2,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  });
+
+  // Fade out hero on scroll
+  gsap.to('.hero', {
+    opacity: 0,
+    scrollTrigger: {
+      trigger: '.hero',
+      start: '60% top',
+      end: 'bottom top',
+      scrub: true,
+    },
   });
 </script>
 
 <style>
   .hero-line {
     transform: translateY(30px);
+  }
+
+  .parallax-layer {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
   }
 </style>

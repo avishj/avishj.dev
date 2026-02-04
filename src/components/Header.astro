@@ -1,0 +1,73 @@
+---
+// Sticky header with backdrop blur
+---
+
+<header class="header fixed left-0 right-0 top-0 z-50">
+  <div class="header-bg absolute inset-0 border-b border-white/[0.06] opacity-0 transition-opacity duration-300"></div>
+  
+  <nav class="relative mx-auto flex h-14 max-w-[--max-width] items-center justify-between px-6">
+    <!-- Logo -->
+    <a href="/" class="font-display text-lg font-medium tracking-tight transition-opacity duration-200 hover:opacity-70">
+      AJ
+    </a>
+
+    <!-- Navigation Links -->
+    <ul class="flex items-center gap-8">
+      <li>
+        <a href="#experience" class="nav-link text-sm text-[--color-text-muted] transition-colors duration-200 hover:text-white">
+          Experience
+        </a>
+      </li>
+      <li>
+        <a href="#projects" class="nav-link text-sm text-[--color-text-muted] transition-colors duration-200 hover:text-white">
+          Projects
+        </a>
+      </li>
+      <li>
+        <a href="#research" class="nav-link text-sm text-[--color-text-muted] transition-colors duration-200 hover:text-white">
+          Research
+        </a>
+      </li>
+      <li>
+        <a 
+          href="mailto:avishj@cs.cmu.edu" 
+          class="rounded-full border border-white/20 px-4 py-1.5 text-sm transition-all duration-200 hover:border-white/40 hover:bg-white/5"
+        >
+          Contact
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector('.header');
+  const headerBg = document.querySelector('.header-bg');
+
+  if (header && headerBg) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          headerBg.classList.add('opacity-100');
+          headerBg.classList.remove('opacity-0');
+        } else {
+          headerBg.classList.remove('opacity-100');
+          headerBg.classList.add('opacity-0');
+        }
+      },
+      { threshold: 0, rootMargin: '-100px 0px 0px 0px' }
+    );
+
+    // Observe the hero section
+    const hero = document.querySelector('.hero');
+    if (hero) observer.observe(hero);
+  }
+</script>
+
+<style>
+  .header-bg {
+    background: color-mix(in oklab, var(--color-bg-primary) 85%, transparent);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  }
+</style>

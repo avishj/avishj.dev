@@ -1,0 +1,201 @@
+---
+// About Section with scroll-linked text opacity highlighting
+// Inspired by Off.site reading spotlight effect
+---
+
+<section id="about" class="about-section relative bg-[--color-bg-primary] py-24 md:py-32">
+  <div class="mx-auto max-w-[--max-width] px-6">
+    <div class="mb-16 flex items-baseline gap-4">
+      <span class="font-mono text-sm text-[--color-text-muted]">01</span>
+      <h2 class="font-display text-4xl font-medium tracking-tight md:text-5xl">About</h2>
+    </div>
+
+    <!-- Bio with scroll-linked opacity -->
+    <div class="about-content grid gap-12 md:grid-cols-12">
+      <!-- Main bio text -->
+      <div class="md:col-span-8">
+        <div class="about-text space-y-6 text-xl leading-relaxed md:text-2xl md:leading-relaxed">
+          <p class="about-paragraph text-[--color-text-muted]" data-index="0">
+            <span class="about-word">I'm</span>
+            <span class="about-word">a</span>
+            <span class="about-word">software</span>
+            <span class="about-word">engineer</span>
+            <span class="about-word">at</span>
+            <span class="about-word highlight-word text-white">CMU</span>
+            <span class="about-word">with</span>
+            <span class="about-word">experience</span>
+            <span class="about-word">building</span>
+            <span class="about-word highlight-word text-white">XR/AR</span>
+            <span class="about-word">systems</span>
+            <span class="about-word">at</span>
+            <span class="about-word highlight-word text-[--color-accent-snap]">Snap</span>
+            <span class="about-word">and</span>
+            <span class="about-word">medical</span>
+            <span class="about-word">device</span>
+            <span class="about-word">infrastructure</span>
+            <span class="about-word">at</span>
+            <span class="about-word highlight-word text-[--color-accent-siemens]">Siemens Healthineers.</span>
+          </p>
+
+          <p class="about-paragraph text-[--color-text-muted]" data-index="1">
+            <span class="about-word">I</span>
+            <span class="about-word">specialize</span>
+            <span class="about-word">in</span>
+            <span class="about-word highlight-word text-white">scalable</span>
+            <span class="about-word highlight-word text-white">systems,</span>
+            <span class="about-word">from</span>
+            <span class="about-word">real-time</span>
+            <span class="about-word">streaming</span>
+            <span class="about-word">to</span>
+            <span class="about-word">observability</span>
+            <span class="about-word">pipelines</span>
+            <span class="about-word">to</span>
+            <span class="about-word">warehouse</span>
+            <span class="about-word">simulation</span>
+            <span class="about-word">engines.</span>
+          </p>
+
+          <p class="about-paragraph text-[--color-text-muted]" data-index="2">
+            <span class="about-word">Published</span>
+            <span class="about-word">researcher</span>
+            <span class="about-word">in</span>
+            <span class="about-word highlight-word text-white">IEEE,</span>
+            <span class="about-word highlight-word text-white">Springer,</span>
+            <span class="about-word">and</span>
+            <span class="about-word highlight-word text-white">Elsevier.</span>
+            <span class="about-word">Driven</span>
+            <span class="about-word">by</span>
+            <span class="about-word">elegant</span>
+            <span class="about-word">solutions</span>
+            <span class="about-word">to</span>
+            <span class="about-word">complex</span>
+            <span class="about-word">problems.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Status card -->
+      <div class="md:col-span-4">
+        <div class="status-card sticky top-24 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+          <!-- Availability -->
+          <div class="mb-6 flex items-center gap-3">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span>
+            </span>
+            <span class="text-sm">Available for opportunities</span>
+          </div>
+
+          <!-- Quick facts -->
+          <div class="space-y-4 border-t border-white/[0.06] pt-6">
+            <div class="flex justify-between text-sm">
+              <span class="text-[--color-text-muted]">Education</span>
+              <span class="font-mono">CMU SCS</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-[--color-text-muted]">QPA</span>
+              <span class="font-mono tabular-nums">4.17/4.00</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-[--color-text-muted]">Graduating</span>
+              <span class="font-mono tabular-nums">Dec 2025</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-[--color-text-muted]">Location</span>
+              <span class="font-mono">Pittsburgh, PA</span>
+            </div>
+          </div>
+
+          <!-- Resume link -->
+          <a 
+            href="mailto:avishj@cs.cmu.edu"
+            class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 py-3 text-sm transition-all duration-200 hover:border-white/40 hover:bg-white/5"
+          >
+            <span>Get in touch</span>
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Scroll-linked word highlight (Off.site style)
+  const words = document.querySelectorAll('.about-word:not(.highlight-word)');
+  
+  words.forEach((word, index) => {
+    gsap.fromTo(word,
+      { opacity: 0.3 },
+      {
+        opacity: 0.8,
+        duration: 0.1,
+        scrollTrigger: {
+          trigger: word,
+          start: 'top 80%',
+          end: 'top 40%',
+          scrub: 0.5,
+        },
+      }
+    );
+  });
+
+  // Paragraph entrance animation
+  const paragraphs = document.querySelectorAll('.about-paragraph');
+  
+  paragraphs.forEach((p, index) => {
+    gsap.fromTo(p,
+      { y: 20, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: p,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+        delay: index * 0.2,
+      }
+    );
+  });
+
+  // Status card animation
+  const statusCard = document.querySelector('.status-card');
+  if (statusCard) {
+    gsap.fromTo(statusCard,
+      { x: 30, opacity: 0 },
+      {
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: statusCard,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+        delay: 0.3,
+      }
+    );
+  }
+</script>
+
+<style>
+  .about-word {
+    display: inline;
+    transition: opacity 0.3s ease;
+  }
+
+  .highlight-word {
+    font-weight: 500;
+  }
+</style>

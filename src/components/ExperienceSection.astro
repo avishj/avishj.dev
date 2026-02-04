@@ -1,0 +1,239 @@
+---
+// Experience Section with section-based accent colors and sticky assembly animations
+// Inspired by Shopify Editions + destroytoday.com
+
+interface Experience {
+  company: string;
+  role: string;
+  location: string;
+  period: string;
+  accentColor: string;
+  highlights: string[];
+  metrics?: string[];
+}
+
+const experiences: Experience[] = [
+  {
+    company: 'Snap Inc.',
+    role: 'Software Engineering Intern · Practicum',
+    location: 'Pittsburgh, PA',
+    period: 'Aug 2025 · Dec 2025',
+    accentColor: 'var(--color-accent-snap)',
+    highlights: [
+      'Architected novel XR remote desktop PoC for Snap Spectacles from scratch (C++, OpenXR, VNC)',
+      'Engineered adaptive VNC streaming with tear-free double buffering and adaptive encoding',
+      'Implemented hand-tracking with dual-pinch gesture recognition for 6DoF display manipulation',
+      'Developed multi-threaded keyboard pipeline supporting physical and virtual input',
+    ],
+    metrics: ['51.7 FPS', '138ms latency', '97% bandwidth reduction'],
+  },
+  {
+    company: 'Siemens Healthineers',
+    role: 'Software Development Engineer Intern',
+    location: 'Issaquah, WA',
+    period: 'Jun 2025 · Aug 2025',
+    accentColor: 'var(--color-accent-siemens)',
+    highlights: [
+      'Centralized observability for 120+ modules using LLM-powered migration system',
+      'Designed custom OpenTelemetry exporters with OTel Collector, Prometheus, Grafana, Loki',
+      'Resolved 3.5-year .NET modernization blocker via test framework automation',
+      'Recovered lost-source security module via Ghidra reverse engineering',
+    ],
+    metrics: ['13,000+ loggers migrated', '28,700+ tests', '120+ modules'],
+  },
+  {
+    company: 'Addverb Technologies',
+    role: 'Software Engineer · Simulations & Analytics',
+    location: 'Delhi NCR, India',
+    period: 'Jan 2023 · Jul 2024',
+    accentColor: 'var(--color-accent-addverb)',
+    highlights: [
+      'Developed high-performance SpringBoot middleware replacing OPC for conveyor control',
+      'Performed 230+ GTP simulations and data analysis for 4 client solutions',
+      'Designed 120-page functional spec with 78 wireframes for end-to-end warehouse solution',
+      'Optimized pick face efficiency reducing simulation runtime from 32hrs to 12.5hrs',
+    ],
+    metrics: ['230+ simulations', '120-page spec', '32hr → 12.5hr'],
+  },
+  {
+    company: 'MITACS · Athabasca University',
+    role: 'Graduate Research Intern',
+    location: 'Edmonton, Canada',
+    period: 'May 2022 · Aug 2022',
+    accentColor: 'var(--color-accent-mitacs)',
+    highlights: [
+      'Created multi-modal learning framework for digital student involvement',
+      'Architected responsive dashboard in native JavaScript and Bootstrap',
+      'Transformed and integrated 3 deep learning models in live MLOps pipeline via AWS',
+    ],
+  },
+  {
+    company: 'Ernst & Young',
+    role: 'Technology Consulting Intern',
+    location: 'Kolkata, India',
+    period: 'Jan 2022 · Apr 2022',
+    accentColor: 'var(--color-accent-ey)',
+    highlights: [
+      'Built ML-based web dashboard with SAP Leonardo for decision-making efficiency',
+      'Transformed client operations with insights from 800+ MB of cleaned data',
+    ],
+  },
+  {
+    company: 'Tata Steel',
+    role: 'Intern · Vocational Trainee',
+    location: 'Jamshedpur, India',
+    period: 'Jun 2021 · Aug 2021',
+    accentColor: 'var(--color-accent-tata)',
+    highlights: [
+      'Designed responsive dashboard for inventory management using DevExpress',
+      'Supported 5 employees via support workflows with C# .NET WinForms',
+    ],
+  },
+];
+---
+
+<section id="experience" class="experience-section relative bg-[--color-bg-primary] py-24 md:py-32">
+  <!-- Section header -->
+  <div class="mx-auto max-w-[--max-width] px-6">
+    <div class="mb-16 flex items-baseline gap-4">
+      <span class="font-mono text-sm text-[--color-text-muted]">02</span>
+      <h2 class="font-display text-4xl font-medium tracking-tight md:text-5xl">Experience</h2>
+    </div>
+  </div>
+
+  <!-- Experience cards with staggered reveal -->
+  <div class="experience-container mx-auto max-w-[--max-width] px-6">
+    {experiences.map((exp, index) => (
+      <article 
+        class="experience-card group relative mb-8 overflow-hidden rounded-2xl border border-white/[0.06] p-6 md:p-8 transition-all duration-300 hover:border-white/[0.12]"
+        data-index={index}
+        style={`--accent: ${exp.accentColor};`}
+      >
+        <!-- Accent glow on hover -->
+        <div 
+          class="pointer-events-none absolute -left-1/2 -top-1/2 h-[200%] w-[200%] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={`background: radial-gradient(circle at center, ${exp.accentColor}08 0%, transparent 50%);`}
+        ></div>
+
+        <!-- Top row: Company + Period -->
+        <div class="relative mb-4 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-2xl font-medium tracking-tight transition-colors duration-200 group-hover:text-[--accent] md:text-3xl">
+              {exp.company}
+            </h3>
+            <p class="mt-1 text-[--color-text-muted]">{exp.role}</p>
+          </div>
+          <div class="text-right">
+            <span class="font-mono text-sm tabular-nums text-[--color-text-muted]">{exp.period}</span>
+            <p class="text-sm text-[--color-text-muted]">{exp.location}</p>
+          </div>
+        </div>
+
+        <!-- Metrics pills -->
+        {exp.metrics && (
+          <div class="relative mb-6 flex flex-wrap gap-2">
+            {exp.metrics.map((metric) => (
+              <span 
+                class="rounded-full border px-3 py-1 font-mono text-xs transition-colors duration-200"
+                style={`border-color: ${exp.accentColor}40; color: ${exp.accentColor};`}
+              >
+                {metric}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <!-- Highlights with staggered opacity -->
+        <ul class="relative space-y-2">
+          {exp.highlights.map((highlight, i) => (
+            <li 
+              class="experience-highlight flex gap-3 text-sm leading-relaxed text-[--color-text-muted] transition-opacity duration-200"
+              style={`--delay: ${i * 50}ms;`}
+            >
+              <span 
+                class="mt-2 h-1 w-1 flex-shrink-0 rounded-full"
+                style={`background: ${exp.accentColor};`}
+              ></span>
+              <span>{highlight}</span>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Bottom accent line -->
+        <div 
+          class="absolute bottom-0 left-0 h-px w-0 transition-all duration-500 group-hover:w-full"
+          style={`background: linear-gradient(90deg, transparent, ${exp.accentColor}, transparent);`}
+        ></div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Staggered reveal for experience cards
+  const cards = document.querySelectorAll('.experience-card');
+  
+  cards.forEach((card, index) => {
+    gsap.fromTo(card,
+      { 
+        y: 40, 
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+        delay: index * 0.05,
+      }
+    );
+  });
+
+  // Highlight opacity animation on scroll (Off.site style)
+  const highlights = document.querySelectorAll('.experience-highlight');
+  
+  highlights.forEach((highlight) => {
+    gsap.fromTo(highlight,
+      { opacity: 0.4 },
+      {
+        opacity: 1,
+        duration: 0.4,
+        scrollTrigger: {
+          trigger: highlight,
+          start: 'top 80%',
+          end: 'top 30%',
+          toggleActions: 'play reverse play reverse',
+        },
+      }
+    );
+  });
+</script>
+
+<style>
+  .experience-card {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+  }
+
+  .experience-card:hover .experience-highlight {
+    opacity: 0.6;
+    transition-delay: var(--delay);
+  }
+
+  .experience-card:hover .experience-highlight:hover {
+    opacity: 1;
+  }
+</style>

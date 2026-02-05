@@ -1,82 +1,44 @@
 ---
 // Portal Burn Effect Component
-// Three.js-based dissolve transition with particles and bloom
+// Shader-based dissolve transition inspired by Shopify Editions
+// Uses FBM noise for organic chaotic edges, no particle system
 ---
 
 <canvas id="portal-canvas" class="pointer-events-none fixed inset-0 z-[100] hidden"></canvas>
 
 <script>
 import * as THREE from 'three';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
-// Simplex noise GLSL
-const snoiseGLSL = `
-vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+// Noise functions for organic dissolve
+const noiseGLSL = `
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
 
-float snoise(vec3 v) {
-  const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-  const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+float noise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
   
-  vec3 i  = floor(v + dot(v, C.yyy));
-  vec3 x0 = v - i + dot(i, C.xxx);
+  float a = hash(i);
+  float b = hash(i + vec2(1.0, 0.0));
+  float c = hash(i + vec2(0.0, 1.0));
+  float d = hash(i + vec2(1.0, 1.0));
   
-  vec3 g = step(x0.yzx, x0.xyz);
-  vec3 l = 1.0 - g;
-  vec3 i1 = min(g.xyz, l.zxy);
-  vec3 i2 = max(g.xyz, l.zxy);
+  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+
+float fbm(vec2 p) {
+  float value = 0.0;
+  float amplitude = 0.5;
+  float frequency = 1.0;
   
-  vec3 x1 = x0 - i1 + C.xxx;
-  vec3 x2 = x0 - i2 + C.yyy;
-  vec3 x3 = x0 - D.yyy;
-  
-  i = mod289(i);
-  vec4 p = permute(permute(permute(
-    i.z + vec4(0.0, i1.z, i2.z, 1.0))
-    + i.y + vec4(0.0, i1.y, i2.y, 1.0))
-    + i.x + vec4(0.0, i1.x, i2.x, 1.0));
-  
-  float n_ = 0.142857142857;
-  vec3 ns = n_ * D.wyz - D.xzx;
-  
-  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-  
-  vec4 x_ = floor(j * ns.z);
-  vec4 y_ = floor(j - 7.0 * x_);
-  
-  vec4 x = x_ *ns.x + ns.yyyy;
-  vec4 y = y_ *ns.x + ns.yyyy;
-  vec4 h = 1.0 - abs(x) - abs(y);
-  
-  vec4 b0 = vec4(x.xy, y.xy);
-  vec4 b1 = vec4(x.zw, y.zw);
-  
-  vec4 s0 = floor(b0)*2.0 + 1.0;
-  vec4 s1 = floor(b1)*2.0 + 1.0;
-  vec4 sh = -step(h, vec4(0.0));
-  
-  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
-  vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
-  
-  vec3 p0 = vec3(a0.xy, h.x);
-  vec3 p1 = vec3(a0.zw, h.y);
-  vec3 p2 = vec3(a1.xy, h.z);
-  vec3 p3 = vec3(a1.zw, h.w);
-  
-  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
-  p0 *= norm.x;
-  p1 *= norm.y;
-  p2 *= norm.z;
-  p3 *= norm.w;
-  
-  vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-  m = m * m;
-  return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+  for (int i = 0; i < 5; i++) {
+    value += amplitude * noise(p * frequency);
+    amplitude *= 0.5;
+    frequency *= 2.0;
+  }
+  return value;
 }
 `;
 
@@ -93,12 +55,12 @@ export function initPortalBurn(
   const W = window.innerWidth;
   const H = window.innerHeight;
   
-  // Normalize origin to -1 to 1 range
-  const normOriginX = (originX / W) * 2 - 1;
-  const normOriginY = -((originY / H) * 2 - 1);
+  // Normalize origin to 0-1 UV range
+  const centerX = originX / W;
+  const centerY = 1.0 - (originY / H); // Flip Y for WebGL
   
   // Setup Three.js
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
   renderer.setSize(W, H);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
@@ -107,26 +69,32 @@ export function initPortalBurn(
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
   camera.position.z = 1;
   
-  // Calculate max radius needed (in normalized coordinates)
-  const maxRadius = Math.sqrt(
-    Math.pow(Math.max(Math.abs(normOriginX - 1), Math.abs(normOriginX + 1)), 2) +
-    Math.pow(Math.max(Math.abs(normOriginY - 1), Math.abs(normOriginY + 1)), 2)
-  ) * 1.3;
+  const aspect = W / H;
   
-  // Uniforms shared between mask and particles
+  // Calculate max distance from origin to any corner (for full coverage)
+  const corners = [
+    [0, 0], [1, 0], [0, 1], [1, 1]
+  ];
+  let maxDist = 0;
+  for (const [cx, cy] of corners) {
+    const dx = (cx - centerX) * aspect;
+    const dy = cy - centerY;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d > maxDist) maxDist = d;
+  }
+  // Add extra margin for noise distortion
+  maxDist *= 1.4;
+  
   const uniforms = {
-    uProgress: { value: -0.5 },
-    uOrigin: { value: new THREE.Vector2(normOriginX, normOriginY) },
-    uMaxRadius: { value: maxRadius },
-    uEdge: { value: 0.15 },
-    uEdgeColor: { value: new THREE.Color(0xffaa33) },
-    uTime: { value: 0 },
-    uAspect: { value: W / H },
+    uDissolve: { value: 0.0 },
+    uCenter: { value: new THREE.Vector2(centerX, centerY) },
+    uResolution: { value: new THREE.Vector2(W, H) },
+    uMaxDist: { value: maxDist },
+    uEdgeColor: { value: new THREE.Color(1.0, 0.7, 0.3) }, // Warm golden
   };
   
-  // === BLACK MASK WITH DISSOLVING HOLE ===
-  const maskGeometry = new THREE.PlaneGeometry(2, 2);
-  const maskMaterial = new THREE.ShaderMaterial({
+  const geometry = new THREE.PlaneGeometry(2, 2);
+  const material = new THREE.ShaderMaterial({
     uniforms,
     transparent: true,
     vertexShader: `
@@ -137,228 +105,115 @@ export function initPortalBurn(
       }
     `,
     fragmentShader: `
-      ${snoiseGLSL}
+      ${noiseGLSL}
       
-      uniform float uProgress;
-      uniform vec2 uOrigin;
-      uniform float uMaxRadius;
-      uniform float uEdge;
+      uniform float uDissolve;
+      uniform vec2 uCenter;
+      uniform vec2 uResolution;
+      uniform float uMaxDist;
       uniform vec3 uEdgeColor;
-      uniform float uTime;
-      uniform float uAspect;
       
       varying vec2 vUv;
       
       void main() {
-        vec2 pos = vUv * 2.0 - 1.0;
-        pos.x *= uAspect;
+        // Aspect-corrected coordinates
+        float aspect = uResolution.x / uResolution.y;
+        vec2 centeredUv = vUv - uCenter;
+        centeredUv.x *= aspect;
         
-        vec2 origin = uOrigin;
-        origin.x *= uAspect;
+        float dist = length(centeredUv);
         
-        float dist = length(pos - origin);
+        // Angular position for directional noise
+        float angle = atan(centeredUv.y, centeredUv.x);
         
-        // Add noise to the distance for organic edge
-        float noiseScale = 3.0;
-        float noise = snoise(vec3(pos * noiseScale, uTime * 0.5)) * 0.1;
-        noise += snoise(vec3(pos * noiseScale * 2.0, uTime * 0.3)) * 0.05;
+        // Pixelated/block noise for scattered particle look
+        float noiseScale = 8.0;
+        vec2 pixelatedUv = floor(vUv * uResolution / noiseScale) * noiseScale / uResolution;
+        float blockNoise = fbm(pixelatedUv * 80.0) * 0.25;
         
-        float radius = uProgress * uMaxRadius;
-        float distWithNoise = dist + noise * radius * 0.3;
+        // Angular noise for jagged edge
+        float angularNoise = fbm(vec2(angle * 4.0, dist * 3.0)) * 0.2;
         
-        // Inside the hole = transparent
-        if (distWithNoise < radius) {
+        // Fine detail noise
+        float fineNoise = fbm(vUv * 150.0) * 0.08;
+        
+        // Combine noises for chaotic distortion
+        float totalNoise = blockNoise + angularNoise + fineNoise;
+        float noisyDist = dist + totalNoise;
+        
+        // Normalize to 0-1 range
+        float normalizedDist = noisyDist / uMaxDist;
+        
+        // Dissolve threshold based on progress
+        float dissolveThreshold = uDissolve;
+        
+        // Sharp dissolve mask
+        float dissolveMask = smoothstep(dissolveThreshold - 0.02, dissolveThreshold, normalizedDist);
+        
+        // Inside the hole = fully transparent
+        if (dissolveMask < 0.01) {
           discard;
         }
         
+        // Edge glow zone
+        float edgeZoneWidth = 0.12 * (1.0 - uDissolve) + 0.03;
+        float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.04, normalizedDist) *
+                         smoothstep(dissolveThreshold + 0.03, dissolveThreshold - 0.01, normalizedDist);
+        
+        // Sparkle/scattered particles at edge
+        float sparkle = hash(floor(vUv * uResolution / 3.0)) * edgeZone;
+        sparkle = pow(sparkle, 1.5) * 2.5;
+        
+        // Additional scattered bright points
+        float scatter = hash(floor(vUv * uResolution / 5.0));
+        scatter = step(0.92, scatter) * edgeZone * 3.0;
+        
+        // Base color (dark background)
+        vec3 bgColor = vec3(0.04, 0.04, 0.04);
+        
         // Edge glow
-        float edgeStart = radius;
-        float edgeEnd = radius + uEdge;
+        float glowIntensity = edgeZone * 1.5;
+        vec3 glow = uEdgeColor * glowIntensity;
         
-        if (distWithNoise < edgeEnd) {
-          float edgeFactor = 1.0 - (distWithNoise - edgeStart) / uEdge;
-          edgeFactor = pow(edgeFactor, 0.5);
-          vec3 color = uEdgeColor * edgeFactor * 2.0;
-          gl_FragColor = vec4(color, 1.0);
-        } else {
-          gl_FragColor = vec4(0.04, 0.04, 0.04, 1.0);
-        }
-      }
-    `,
-  });
-  const mask = new THREE.Mesh(maskGeometry, maskMaterial);
-  mask.renderOrder = 1;
-  scene.add(mask);
-  
-  // === PARTICLE SYSTEM ===
-  const PARTICLE_COUNT = 8000;
-  const particleGeometry = new THREE.BufferGeometry();
-  
-  // Particle attributes
-  const positions = new Float32Array(PARTICLE_COUNT * 3);
-  const angles = new Float32Array(PARTICLE_COUNT);
-  const distances = new Float32Array(PARTICLE_COUNT);
-  const speeds = new Float32Array(PARTICLE_COUNT);
-  const sizes = new Float32Array(PARTICLE_COUNT);
-  const offsets = new Float32Array(PARTICLE_COUNT);
-  
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    // Random angle around the circle
-    angles[i] = Math.random() * Math.PI * 2;
-    // Random distance offset from edge
-    distances[i] = Math.random();
-    // Random speed
-    speeds[i] = 0.5 + Math.random() * 1.5;
-    // Random size
-    sizes[i] = 0.5 + Math.random() * 2.0;
-    // Random offset for noise sampling
-    offsets[i] = Math.random() * 100;
-    
-    // Initial position (will be updated in shader)
-    positions[i * 3] = 0;
-    positions[i * 3 + 1] = 0;
-    positions[i * 3 + 2] = 0;
-  }
-  
-  particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  particleGeometry.setAttribute('aAngle', new THREE.BufferAttribute(angles, 1));
-  particleGeometry.setAttribute('aDistance', new THREE.BufferAttribute(distances, 1));
-  particleGeometry.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
-  particleGeometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
-  particleGeometry.setAttribute('aOffset', new THREE.BufferAttribute(offsets, 1));
-  
-  const particleMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      ...uniforms,
-      uPixelRatio: { value: renderer.getPixelRatio() },
-    },
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    vertexShader: `
-      ${snoiseGLSL}
-      
-      uniform float uProgress;
-      uniform vec2 uOrigin;
-      uniform float uMaxRadius;
-      uniform float uEdge;
-      uniform float uTime;
-      uniform float uAspect;
-      uniform float uPixelRatio;
-      
-      attribute float aAngle;
-      attribute float aDistance;
-      attribute float aSpeed;
-      attribute float aSize;
-      attribute float aOffset;
-      
-      varying float vAlpha;
-      varying float vBrightness;
-      
-      void main() {
-        float radius = uProgress * uMaxRadius;
-        float edgeWidth = uEdge * 1.5;
+        // Add sparkles
+        vec3 sparkleColor = vec3(1.0, 0.95, 0.85) * (sparkle + scatter);
         
-        // Particle spawns at the dissolve edge
-        float particleRadius = radius + aDistance * edgeWidth - edgeWidth * 0.3;
+        // Final color
+        vec3 finalColor = bgColor + glow + sparkleColor;
         
-        // Add chaotic movement using noise
-        float noiseX = snoise(vec3(aAngle * 2.0, uTime * aSpeed + aOffset, 0.0)) * 0.1;
-        float noiseY = snoise(vec3(aAngle * 2.0 + 100.0, uTime * aSpeed + aOffset, 0.0)) * 0.1;
+        // Alpha: solid background fading at very edge
+        float alpha = dissolveMask;
         
-        // Spiral outward motion
-        float angle = aAngle + uTime * 0.2 * aSpeed + snoise(vec3(aOffset, uTime * 0.5, 0.0)) * 0.5;
-        
-        vec2 pos = uOrigin + vec2(
-          cos(angle) * particleRadius / uAspect + noiseX,
-          sin(angle) * particleRadius + noiseY
-        );
-        
-        // Only show particles near the active edge
-        float distFromEdge = abs(particleRadius - radius);
-        vAlpha = 1.0 - smoothstep(0.0, edgeWidth, distFromEdge);
-        vAlpha *= smoothstep(0.0, 0.1, uProgress); // Fade in
-        vAlpha *= 1.0 - smoothstep(0.85, 1.0, uProgress); // Fade out
-        
-        // Brightness variation
-        vBrightness = 0.5 + snoise(vec3(aOffset * 10.0, uTime, 0.0)) * 0.5;
-        
-        vec4 mvPosition = modelViewMatrix * vec4(pos, 0.0, 1.0);
-        gl_Position = projectionMatrix * mvPosition;
-        gl_PointSize = aSize * uPixelRatio * 3.0 * vAlpha;
-      }
-    `,
-    fragmentShader: `
-      uniform vec3 uEdgeColor;
-      
-      varying float vAlpha;
-      varying float vBrightness;
-      
-      void main() {
-        if (vAlpha < 0.01) discard;
-        
-        // Circular particle with soft edge
-        vec2 center = gl_PointCoord - 0.5;
-        float dist = length(center);
-        if (dist > 0.5) discard;
-        
-        float alpha = 1.0 - smoothstep(0.2, 0.5, dist);
-        alpha *= vAlpha;
-        
-        // Color: bright core fading to edge color
-        vec3 coreColor = vec3(1.0, 0.95, 0.8);
-        vec3 color = mix(uEdgeColor, coreColor, vBrightness * 0.7);
-        
-        gl_FragColor = vec4(color * (1.0 + vBrightness), alpha);
+        gl_FragColor = vec4(finalColor, alpha);
       }
     `,
   });
   
-  const particles = new THREE.Points(particleGeometry, particleMaterial);
-  particles.renderOrder = 2;
-  scene.add(particles);
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
   
-  // === POST-PROCESSING: BLOOM ===
-  const composer = new EffectComposer(renderer);
-  const renderPass = new RenderPass(scene, camera);
-  composer.addPass(renderPass);
-  
-  const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(W, H),
-    1.5,   // strength
-    0.4,   // radius
-    0.1    // threshold
-  );
-  composer.addPass(bloomPass);
-  
-  const outputPass = new OutputPass();
-  composer.addPass(outputPass);
-  
-  // === ANIMATION ===
-  const duration = 3500;
+  // Animation
+  const duration = 2800;
   const startTime = performance.now();
   
   function animate() {
     const elapsed = performance.now() - startTime;
     const progress = Math.min(elapsed / duration, 1);
     
-    // Ease out
-    const easedProgress = 1 - Math.pow(1 - progress, 2.5);
+    // Aggressive ease-out curve
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
     
-    uniforms.uProgress.value = easedProgress;
-    uniforms.uTime.value = elapsed * 0.001;
+    uniforms.uDissolve.value = easedProgress;
     
-    composer.render();
+    renderer.render(scene, camera);
     
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
       // Cleanup
       renderer.dispose();
-      particleGeometry.dispose();
-      maskGeometry.dispose();
-      maskMaterial.dispose();
-      particleMaterial.dispose();
+      geometry.dispose();
+      material.dispose();
       canvas.classList.add('hidden');
       onComplete();
     }

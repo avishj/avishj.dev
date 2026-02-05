@@ -126,25 +126,26 @@ export function initPortalBurn(
         // Angular position for directional noise
         float angle = atan(centeredUv.y, centeredUv.x);
         
-        // Pixelated/block noise - tiny particles
-        float noiseScale = 1.5;
+        // Noise intensity ramps up as dissolve progresses
+        float noiseRamp = smoothstep(0.0, 0.5, uDissolve);
+        
+        // Use cartesian-based noise instead of angular to avoid star patterns
+        // This creates organic blob-like variations instead of radial spikes
+        float blobNoise = fbm(centeredUv * 3.0) * 0.3 * noiseRamp;
+        
+        // Gentle organic edge variation
+        float edgeVariation = fbm(centeredUv * 5.0 + vec2(0.5, 0.3)) * 0.2;
+        
+        // Subtle high-freq texture for ember feel
+        float emberTexture = fbm(vUv * 60.0) * 0.1;
+        
+        // Small scattered ember spots
+        float noiseScale = 4.0;
         vec2 pixelatedUv = floor(vUv * uResolution / noiseScale) * noiseScale / uResolution;
-        float blockNoise = fbm(pixelatedUv * 180.0) * 0.3;
+        float emberSpots = fbm(pixelatedUv * 40.0) * 0.08;
         
-        // Angular noise for jagged edge - extreme variance
-        float angularNoise = fbm(vec2(angle * 8.0, dist * 6.0)) * 0.45;
-        
-        // Radial streaks - strong directional bias for streak effect
-        float radialNoise = fbm(vec2(angle * 20.0, 0.0)) * 0.4;
-        
-        // Secondary streaks at different frequency
-        float streakNoise = fbm(vec2(angle * 35.0, dist * 2.0)) * 0.25;
-        
-        // Fine ember dust
-        float fineNoise = fbm(vUv * 300.0) * 0.1;
-        
-        // Combine noises for chaotic streaky distortion
-        float totalNoise = blockNoise + angularNoise + radialNoise + streakNoise + fineNoise;
+        // Combine noises - organic blobs, not radial spikes
+        float totalNoise = blobNoise + edgeVariation + emberTexture + emberSpots;
         float noisyDist = dist + totalNoise;
         
         // Normalize to 0-1 range

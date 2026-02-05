@@ -93,21 +93,11 @@ const experiences: Experience[] = [
 ---
 
 <section id="experience" class="experience-section relative bg-[--color-bg-primary]">
-  <!-- Section header with massive typography -->
-  <div class="flex min-h-[60vh] items-center bg-[--color-bg-primary] py-24">
-    <div class="max-w-[--max-width]">
-      <div class="flex items-end justify-between">
-        <div>
-          <span class="experience-label block font-mono text-sm uppercase tracking-[0.3em] text-[--color-text-muted]">02 · Experience</span>
-          <h2 class="experience-title mt-4 font-display text-6xl font-medium tracking-tight md:text-7xl lg:text-8xl">
-            Where I've<br/>
-            <span class="text-gradient bg-gradient-to-r from-white via-white/80 to-white/40 bg-clip-text text-transparent">Built Things</span>
-          </h2>
-        </div>
-        <div class="hidden text-right md:block">
-          <span class="font-mono text-[8rem] font-bold leading-none text-white/[0.03]">06</span>
-        </div>
-      </div>
+  <!-- Section header -->
+  <div class="max-w-[--max-width] pt-4 pb-16 md:pt-6 md:pb-24">
+    <div class="section-header mb-12 flex items-baseline gap-4">
+      <span class="text-5xl text-white/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">02</span>
+      <h2 class="text-5xl italic md:text-6xl" style="font-family: 'Instrument Serif', serif;">Experience</h2>
     </div>
   </div>
 
@@ -196,38 +186,6 @@ const experiences: Experience[] = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   gsap.registerPlugin(ScrollTrigger);
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SECTION HEADER ANIMATION
-  // ═══════════════════════════════════════════════════════════════════════════
-  gsap.fromTo('.experience-label', 
-    { x: -30, opacity: 0 },
-    {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: 'power4.out',
-      scrollTrigger: {
-        trigger: '.experience-section',
-        start: 'top 60%',
-      },
-    }
-  );
-
-  gsap.fromTo('.experience-title',
-    { y: 50, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 1,
-      ease: 'power4.out',
-      scrollTrigger: {
-        trigger: '.experience-section',
-        start: 'top 60%',
-      },
-      delay: 0.2,
-    }
-  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // STICKY CARD SCROLL — Each card pins and reveals content

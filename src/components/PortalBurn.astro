@@ -126,22 +126,25 @@ export function initPortalBurn(
         // Angular position for directional noise
         float angle = atan(centeredUv.y, centeredUv.x);
         
-        // Pixelated/block noise for scattered particle look - smaller blocks, more quantity
-        float noiseScale = 3.0;
+        // Pixelated/block noise - tiny particles
+        float noiseScale = 1.5;
         vec2 pixelatedUv = floor(vUv * uResolution / noiseScale) * noiseScale / uResolution;
-        float blockNoise = fbm(pixelatedUv * 120.0) * 0.35;
+        float blockNoise = fbm(pixelatedUv * 180.0) * 0.3;
         
-        // Angular noise for jagged edge - stronger variance
-        float angularNoise = fbm(vec2(angle * 6.0, dist * 5.0)) * 0.35;
+        // Angular noise for jagged edge - extreme variance
+        float angularNoise = fbm(vec2(angle * 8.0, dist * 6.0)) * 0.45;
         
-        // Radial streaks for non-uniform expansion
-        float radialNoise = fbm(vec2(angle * 12.0, 0.0)) * 0.25;
+        // Radial streaks - strong directional bias for streak effect
+        float radialNoise = fbm(vec2(angle * 20.0, 0.0)) * 0.4;
         
-        // Fine detail noise - more intense
-        float fineNoise = fbm(vUv * 200.0) * 0.12;
+        // Secondary streaks at different frequency
+        float streakNoise = fbm(vec2(angle * 35.0, dist * 2.0)) * 0.25;
         
-        // Combine noises for chaotic distortion
-        float totalNoise = blockNoise + angularNoise + radialNoise + fineNoise;
+        // Fine ember dust
+        float fineNoise = fbm(vUv * 300.0) * 0.1;
+        
+        // Combine noises for chaotic streaky distortion
+        float totalNoise = blockNoise + angularNoise + radialNoise + streakNoise + fineNoise;
         float noisyDist = dist + totalNoise;
         
         // Normalize to 0-1 range
@@ -163,26 +166,36 @@ export function initPortalBurn(
         float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.04, normalizedDist) *
                          smoothstep(dissolveThreshold + 0.03, dissolveThreshold - 0.01, normalizedDist);
         
-        // Sparkle/scattered particles at edge - smaller, more dense
-        float sparkle = hash(floor(vUv * uResolution / 1.5)) * edgeZone;
-        sparkle = pow(sparkle, 1.8) * 2.0;
+        // Ember particles - tiny hot specks
+        float ember = hash(floor(vUv * uResolution / 1.0)) * edgeZone;
+        ember = pow(ember, 2.2) * 1.8;
         
-        // Additional scattered bright points - more frequent
-        float scatter = hash(floor(vUv * uResolution / 2.5));
-        scatter = step(0.88, scatter) * edgeZone * 2.5;
+        // Scattered bright embers
+        float scatter = hash(floor(vUv * uResolution / 1.8));
+        scatter = step(0.85, scatter) * edgeZone * 2.0;
         
         // Base color (dark background)
-        vec3 bgColor = vec3(0.04, 0.04, 0.04);
+        vec3 bgColor = vec3(0.03, 0.02, 0.02);
         
-        // Edge glow
-        float glowIntensity = edgeZone * 1.5;
-        vec3 glow = uEdgeColor * glowIntensity;
+        // Ember color gradient: white hot core -> orange -> deep red at edges
+        float emberTemp = ember + scatter * 0.5;
+        vec3 hotCore = vec3(1.0, 0.95, 0.8);    // White-yellow
+        vec3 midFlame = vec3(1.0, 0.5, 0.1);    // Orange
+        vec3 coolEdge = vec3(0.8, 0.2, 0.05);   // Deep red-orange
         
-        // Add sparkles
-        vec3 sparkleColor = vec3(1.0, 0.95, 0.85) * (sparkle + scatter);
+        // Temperature-based color mixing
+        vec3 emberColor = mix(coolEdge, midFlame, smoothstep(0.0, 0.5, emberTemp));
+        emberColor = mix(emberColor, hotCore, smoothstep(0.5, 1.0, emberTemp));
+        
+        // Edge glow - warmer orange tones
+        float glowIntensity = edgeZone * 1.2;
+        vec3 glow = mix(vec3(0.9, 0.3, 0.05), vec3(1.0, 0.6, 0.2), edgeZone) * glowIntensity;
+        
+        // Combine ember particles
+        vec3 emberParticles = emberColor * (ember + scatter);
         
         // Final color
-        vec3 finalColor = bgColor + glow + sparkleColor;
+        vec3 finalColor = bgColor + glow + emberParticles;
         
         // Alpha: solid background fading at very edge
         float alpha = dissolveMask;

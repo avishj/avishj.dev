@@ -22,15 +22,15 @@ import SkillsSection from '../components/SkillsSection.astro';
          ═══════════════════════════════════════════════════════════════════════════ -->
     <div class="min-h-screen bg-[--color-bg-primary]">
       
-      <!-- Fixed name — top left -->
-      <header class="fixed left-6 top-6 z-40 lg:left-12 lg:top-10">
+      <!-- Name header — scrolls with page -->
+      <header class="px-6 pb-12 pt-8 lg:px-12 lg:pb-16 lg:pt-12">
         <a href="#" class="block">
-          <h1 class="font-display text-3xl font-medium tracking-tight text-white lg:text-4xl xl:text-5xl">
-            Avish<br/>Jha
+          <h1 class="font-display text-5xl font-medium tracking-tight text-white lg:text-6xl xl:text-7xl">
+            Avish Jha
           </h1>
         </a>
-        <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
-          Software · CMU
+        <p class="mt-4 font-mono text-xs uppercase tracking-[0.25em] text-white/40 lg:text-sm">
+          Software Engineer · CMU CS
         </p>
       </header>
 
@@ -71,7 +71,7 @@ import SkillsSection from '../components/SkillsSection.astro';
       </nav>
 
       <!-- Scrollable content area -->
-      <div class="content-area ml-0 pt-32 lg:ml-[200px] lg:mr-[180px] lg:pt-0">
+      <div class="content-area px-6 lg:mr-[180px] lg:px-12">
         <section id="about"><AboutSection /></section>
         <section id="experience"><ExperienceSection /></section>
         <section id="projects"><ProjectsSection /></section>
@@ -80,7 +80,7 @@ import SkillsSection from '../components/SkillsSection.astro';
       </div>
 
       <!-- Footer -->
-      <footer class="ml-0 bg-[--color-bg-primary] py-12 lg:ml-[200px] lg:mr-[180px]">
+      <footer class="bg-[--color-bg-primary] px-6 py-12 lg:mr-[180px] lg:px-12">
         <div class="px-6">
           <div class="flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 md:flex-row">
             <p class="font-mono text-xs text-[--color-text-muted]">
@@ -174,7 +174,7 @@ import SkillsSection from '../components/SkillsSection.astro';
       });
     });
 
-    // Safety timeout
+    // Safety timeout (animation is ~2.5s + 1.2s swirl = ~4s total)
     setTimeout(() => {
       if (introSplash.parentNode) {
         anim.stop();
@@ -188,7 +188,7 @@ import SkillsSection from '../components/SkillsSection.astro';
           }
         });
       }
-    }, 8000);
+    }, 6000);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════

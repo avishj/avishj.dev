@@ -61,7 +61,7 @@ const sizeClasses = {
 
 <section id="projects" class="projects-section relative bg-[--color-bg-cream] py-24 text-[--color-text-dark] md:py-32">
   <!-- Section header -->
-  <div class="max-w-[--max-width]">
+  <div class="max-w-(--max-width)">
     <div class="section-header mb-12 flex items-baseline gap-4">
       <span class="text-5xl text-[--color-text-dark]/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">03</span>
       <h2 class="text-5xl italic text-[--color-text-dark] md:text-6xl" style="font-family: 'Instrument Serif', serif;">Projects</h2>
@@ -69,7 +69,7 @@ const sizeClasses = {
   </div>
 
   <!-- Bento Grid -->
-  <div class="bento-grid group mx-auto grid max-w-[--max-width] gap-4 px-6 md:grid-cols-3 md:gap-6">
+  <div class="bento-grid group mx-auto grid max-w-(--max-width) gap-4 px-6 md:grid-cols-3 md:gap-6">
     {projects.map((project, index) => (
       <article 
         class={`project-card relative overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-6 transition-all duration-200 hover:border-black/20 hover:shadow-lg ${sizeClasses[project.size]}`}

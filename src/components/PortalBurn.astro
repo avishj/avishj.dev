@@ -52,8 +52,8 @@ export function initPortalBurn(
   
   canvas.classList.remove('hidden');
   
-  const W = window.innerWidth;
-  const H = window.innerHeight;
+  let W = window.innerWidth;
+  let H = window.innerHeight;
   
   // Normalize origin to 0-1 UV range
   const centerX = originX / W;
@@ -69,21 +69,22 @@ export function initPortalBurn(
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
   camera.position.z = 1;
   
-  const aspect = W / H;
-  
   // Calculate max distance from origin to any corner (for full coverage)
-  const corners = [
-    [0, 0], [1, 0], [0, 1], [1, 1]
-  ];
-  let maxDist = 0;
-  for (const [cx, cy] of corners) {
-    const dx = (cx - centerX) * aspect;
-    const dy = cy - centerY;
-    const d = Math.sqrt(dx * dx + dy * dy);
-    if (d > maxDist) maxDist = d;
-  }
-  // Add extra margin for noise distortion
-  maxDist *= 1.4;
+  const computeMaxDist = () => {
+    const aspect = W / H;
+    const corners = [
+      [0, 0], [1, 0], [0, 1], [1, 1]
+    ];
+    let maxDist = 0;
+    for (const [cx, cy] of corners) {
+      const dx = (cx - centerX) * aspect;
+      const dy = cy - centerY;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d > maxDist) maxDist = d;
+    }
+    return maxDist * 1.4;
+  };
+  let maxDist = computeMaxDist();
   
   const uniforms = {
     uDissolve: { value: 0.0 },
@@ -92,6 +93,16 @@ export function initPortalBurn(
     uMaxDist: { value: maxDist },
     uEdgeColor: { value: new THREE.Color(1.0, 0.7, 0.3) }, // Warm golden
   };
+  
+  const onResize = () => {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    uniforms.uResolution.value.set(W, H);
+    uniforms.uMaxDist.value = computeMaxDist();
+  };
+  window.addEventListener('resize', onResize, { passive: true });
   
   const geometry = new THREE.PlaneGeometry(2, 2);
   const material = new THREE.ShaderMaterial({
@@ -225,6 +236,7 @@ export function initPortalBurn(
       requestAnimationFrame(animate);
     } else {
       // Cleanup
+      window.removeEventListener('resize', onResize);
       renderer.dispose();
       geometry.dispose();
       material.dispose();

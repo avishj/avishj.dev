@@ -59,7 +59,7 @@ const socialLinks = [
   const floatingContact = document.querySelector('.floating-contact');
   
   if (floatingContact) {
-    // Show after scroll
+    // Show after scrolling past the header
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
@@ -73,7 +73,8 @@ const socialLinks = [
       { threshold: 0.5 }
     );
 
-    const hero = document.querySelector('.hero');
-    if (hero) observer.observe(hero);
+    // Observe the header instead of hero
+    const header = document.querySelector('header');
+    if (header) observer.observe(header);
   }
 </script>

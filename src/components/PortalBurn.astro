@@ -136,16 +136,14 @@ export function initPortalBurn(
         // Gentle organic edge variation
         float edgeVariation = fbm(centeredUv * 5.0 + vec2(0.5, 0.3)) * 0.2;
         
-        // Subtle high-freq texture for ember feel
-        float emberTexture = fbm(vUv * 60.0) * 0.1;
+        // Smooth high-freq texture (no pixelation)
+        float emberTexture = fbm(vUv * 50.0) * 0.08;
         
-        // Small scattered ember spots
-        float noiseScale = 4.0;
-        vec2 pixelatedUv = floor(vUv * uResolution / noiseScale) * noiseScale / uResolution;
-        float emberSpots = fbm(pixelatedUv * 40.0) * 0.08;
+        // Finer detail layer for natural look
+        float fineDetail = fbm(vUv * 120.0) * 0.04;
         
-        // Combine noises - organic blobs, not radial spikes
-        float totalNoise = blobNoise + edgeVariation + emberTexture + emberSpots;
+        // Combine noises - smooth organic variation
+        float totalNoise = blobNoise + edgeVariation + emberTexture + fineDetail;
         float noisyDist = dist + totalNoise;
         
         // Normalize to 0-1 range
@@ -162,38 +160,37 @@ export function initPortalBurn(
           discard;
         }
         
-        // Edge glow zone
-        float edgeZoneWidth = 0.12 * (1.0 - uDissolve) + 0.03;
-        float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.04, normalizedDist) *
-                         smoothstep(dissolveThreshold + 0.03, dissolveThreshold - 0.01, normalizedDist);
+        // Edge glow zone - wider and smoother
+        float edgeZoneWidth = 0.15 * (1.0 - uDissolve) + 0.04;
+        float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.06, normalizedDist) *
+                         smoothstep(dissolveThreshold + 0.04, dissolveThreshold - 0.02, normalizedDist);
         
-        // Ember particles - tiny hot specks
-        float ember = hash(floor(vUv * uResolution / 1.0)) * edgeZone;
-        ember = pow(ember, 2.2) * 1.8;
+        // Smooth ember glow using continuous noise instead of hash
+        float emberNoise = fbm(vUv * 80.0 + vec2(normalizedDist * 5.0, 0.0));
+        float ember = pow(emberNoise, 1.5) * edgeZone * 1.5;
         
-        // Scattered bright embers
-        float scatter = hash(floor(vUv * uResolution / 1.8));
-        scatter = step(0.85, scatter) * edgeZone * 2.0;
+        // Subtle bright spots using smooth noise threshold
+        float brightSpots = smoothstep(0.65, 0.75, fbm(vUv * 100.0)) * edgeZone * 0.8;
         
         // Base color (dark background)
         vec3 bgColor = vec3(0.03, 0.02, 0.02);
         
         // Ember color gradient: white hot core -> orange -> deep red at edges
-        float emberTemp = ember + scatter * 0.5;
-        vec3 hotCore = vec3(1.0, 0.95, 0.8);    // White-yellow
-        vec3 midFlame = vec3(1.0, 0.5, 0.1);    // Orange
-        vec3 coolEdge = vec3(0.8, 0.2, 0.05);   // Deep red-orange
+        float emberTemp = ember + brightSpots * 0.6;
+        vec3 hotCore = vec3(1.0, 0.95, 0.85);   // White-yellow
+        vec3 midFlame = vec3(1.0, 0.55, 0.15);  // Orange
+        vec3 coolEdge = vec3(0.85, 0.25, 0.08); // Deep red-orange
         
-        // Temperature-based color mixing
-        vec3 emberColor = mix(coolEdge, midFlame, smoothstep(0.0, 0.5, emberTemp));
-        emberColor = mix(emberColor, hotCore, smoothstep(0.5, 1.0, emberTemp));
+        // Smooth temperature-based color mixing
+        vec3 emberColor = mix(coolEdge, midFlame, smoothstep(0.0, 0.4, emberTemp));
+        emberColor = mix(emberColor, hotCore, smoothstep(0.4, 0.9, emberTemp));
         
-        // Edge glow - warmer orange tones
-        float glowIntensity = edgeZone * 1.2;
-        vec3 glow = mix(vec3(0.9, 0.3, 0.05), vec3(1.0, 0.6, 0.2), edgeZone) * glowIntensity;
+        // Soft edge glow - warmer orange tones with smooth falloff
+        float glowIntensity = edgeZone * 1.0;
+        vec3 glow = mix(vec3(0.85, 0.35, 0.08), vec3(1.0, 0.65, 0.25), sqrt(edgeZone)) * glowIntensity;
         
-        // Combine ember particles
-        vec3 emberParticles = emberColor * (ember + scatter);
+        // Combine ember particles with smooth blending
+        vec3 emberParticles = emberColor * (ember + brightSpots * 0.5);
         
         // Final color
         vec3 finalColor = bgColor + glow + emberParticles;

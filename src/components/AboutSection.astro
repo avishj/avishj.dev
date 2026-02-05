@@ -1,6 +1,6 @@
 ---
-// About Section with scroll-linked text opacity highlighting
-// Inspired by Off.site reading spotlight effect
+// About Section with cursor-trailing line highlight effect
+// Text trails from white to grey based on distance from cursor
 ---
 
 <section id="about" class="about-section relative bg-[--color-bg-primary] pt-4 pb-16 md:pt-6 md:pb-24">
@@ -11,93 +11,19 @@
 			<h2 class="text-5xl italic md:text-6xl" style="font-family: 'Instrument Serif', serif;">About</h2>
 		</div>
 
-		<!-- Bio with scroll-linked opacity -->
+		<!-- Bio with cursor-trailing opacity -->
 		<div class="about-content grid gap-12 md:grid-cols-12">
 			<!-- Main bio text -->
 			<div class="md:col-span-8">
 				<div class="about-text space-y-6 text-xl leading-relaxed md:text-2xl md:leading-relaxed">
-					<p class="about-paragraph text-[--color-text-muted]" data-index="0">
-						<span class="about-word highlight-word text-white"></span>
+					<p class="about-para" data-para="0">
+						Hi, I'm <span class="highlight-word">Avish</span>! A software engineer with <span class="highlight-word">1.5 years</span> of experience. <span class="highlight-word">MS Software Engineering</span> graduate from <span class="highlight-word">CMU's School of Computer Science.</span> I love tackling <span class="highlight-word">complex system problems</span> and I'm always looking for something <span class="highlight-word">fun</span> or <span class="highlight-word">challenging :)</span>
 					</p>
-
-					<p class="about-paragraph text-[--color-text-muted]" data-index="1">
-						<span class="about-word">Hi,</span>
-						<span class="about-word">I'm</span>
-						<span class="about-word">Avish!</span>
-						<span class="about-word">A</span>
-						<span class="about-word">software</span>
-						<span class="about-word">engineer</span>
-						<span class="about-word">with</span>
-						<span class="about-word highlight-word text-white">1.5</span>
-						<span class="about-word highlight-word text-white">years</span>
-						<span class="about-word">of</span>
-						<span class="about-word">experience.</span>
-						<span class="about-word highlight-word text-white">MS</span>
-						<span class="about-word highlight-word text-white">Software</span>
-						<span class="about-word highlight-word text-white">Engineering</span>
-						<span class="about-word">graduate</span>
-						<span class="about-word">from</span>
-						<span class="about-word highlight-word text-white">CMU's</span>
-						<span class="about-word highlight-word text-white">School</span>
-						<span class="about-word highlight-word text-white">of</span>
-						<span class="about-word highlight-word text-white">Computer</span>
-						<span class="about-word highlight-word text-white">Science.</span>
-						<span class="about-word">I</span>
-						<span class="about-word">love</span>
-						<span class="about-word">tackling</span>
-						<span class="about-word highlight-word text-white">complex</span>
-						<span class="about-word highlight-word text-white">system</span>
-						<span class="about-word highlight-word text-white">problems</span>
-						<span class="about-word">and</span>
-						<span class="about-word">I'm</span>
-						<span class="about-word">always</span>
-						<span class="about-word">looking</span>
-						<span class="about-word">for</span>
-						<span class="about-word">something</span>
-						<span class="about-word highlight-word text-white">fun</span>
-						<span class="about-word">or</span>
-						<span class="about-word highlight-word text-white">challenging :)</span>
+					<p class="about-para" data-para="1">
+						Built <span class="highlight-word">XR remote desktop</span> systems at <span class="highlight-word highlight-snap">Snap</span> and centralized observability for 120+ modules at <span class="highlight-word highlight-siemens">Siemens.</span>
 					</p>
-
-					<p class="about-paragraph text-[--color-text-muted]" data-index="2">
-						<span class="about-word">Built</span>
-						<span class="about-word highlight-word text-white">XR</span>
-						<span class="about-word highlight-word text-white">remote</span>
-						<span class="about-word highlight-word text-white">desktop</span>
-						<span class="about-word">systems</span>
-						<span class="about-word">at</span>
-						<span class="about-word highlight-word text-[--color-accent-snap]">Snap</span>
-						<span class="about-word">and</span>
-						<span class="about-word">centralized</span>
-						<span class="about-word">observability</span>
-						<span class="about-word">for</span>
-						<span class="about-word">120+</span>
-						<span class="about-word">modules</span>
-						<span class="about-word">at</span>
-						<span class="about-word highlight-word text-[--color-accent-siemens]">Siemens Healthineers.</span>
-					</p>
-
-					<p class="about-paragraph text-[--color-text-muted]" data-index="3">
-						<span class="about-word">Previously</span>
-						<span class="about-word">built</span>
-						<span class="about-word">warehouse</span>
-						<span class="about-word">simulation</span>
-						<span class="about-word">engines</span>
-						<span class="about-word">and</span>
-						<span class="about-word">real-time</span>
-						<span class="about-word">conveyor</span>
-						<span class="about-word">middleware</span>
-						<span class="about-word">at</span>
-						<span class="about-word highlight-word text-[--color-accent-addverb]">Addverb.</span>
-						<span class="about-word">Published</span>
-						<span class="about-word">in</span>
-						<span class="about-word highlight-word text-white">IEEE</span>
-						<span class="about-word">and</span>
-						<span class="about-word highlight-word text-white">Springer,</span>
-						<span class="about-word">former</span>
-						<span class="about-word highlight-word text-white">MITACS</span>
-						<span class="about-word">research</span>
-						<span class="about-word">intern.</span>
+					<p class="about-para" data-para="2">
+						Previously built warehouse simulation engines and real-time conveyor middleware at <span class="highlight-word highlight-addverb">Addverb.</span> Published in <span class="highlight-word">IEEE</span> and <span class="highlight-word">Springer,</span> former <span class="highlight-word">MITACS</span> research intern.
 					</p>
 				</div>
 			</div>
@@ -153,32 +79,104 @@
 
 	gsap.registerPlugin(ScrollTrigger);
 
-	// Scroll-linked word highlight (Off.site style)
-	const words = document.querySelectorAll(".about-word:not(.highlight-word)");
+	const paras = document.querySelectorAll(".about-para");
+	const textContainer = document.querySelector(".about-text");
+	let currentParaIndex = -1;
+	let isHovering = false;
 
-	words.forEach((word, index) => {
-		gsap.fromTo(
-			word,
-			{ opacity: 0.3 },
-			{
-				opacity: 0.8,
-				duration: 0.1,
-				scrollTrigger: {
-					trigger: word,
-					start: "top 80%",
-					end: "top 40%",
-					scrub: 0.5
-				}
+	// Color values for interpolation
+	const activeColor = "rgba(255, 255, 255, 0.95)";
+	const mutedColor = "rgba(255, 255, 255, 0.35)";
+
+	// Calculate para distances and apply colors
+	function updateParaColors(hoveredIndex: number) {
+		paras.forEach((para, index) => {
+			const distance = Math.abs(index - hoveredIndex);
+			const el = para as HTMLElement;
+			const highlights = el.querySelectorAll(".highlight-word");
+
+			if (distance === 0) {
+				el.style.color = activeColor;
+				highlights.forEach((h) => {
+					const highlight = h as HTMLElement;
+					if (highlight.classList.contains("highlight-snap")) {
+						highlight.style.color = "var(--color-accent-snap)";
+					} else if (highlight.classList.contains("highlight-siemens")) {
+						highlight.style.color = "var(--color-accent-siemens)";
+					} else if (highlight.classList.contains("highlight-addverb")) {
+						highlight.style.color = "var(--color-accent-addverb)";
+					} else {
+						highlight.style.color = "rgba(255, 255, 255, 1)";
+					}
+				});
+			} else {
+				const opacity = Math.max(0.35, 0.95 - distance * 0.25);
+				el.style.color = `rgba(255, 255, 255, ${opacity})`;
+
+				highlights.forEach((h) => {
+					const highlight = h as HTMLElement;
+					const brandOpacity = Math.max(0.6, 1 - distance * 0.15);
+					if (highlight.classList.contains("highlight-snap")) {
+						highlight.style.color = `color-mix(in srgb, var(--color-accent-snap) ${brandOpacity * 100}%, transparent)`;
+					} else if (highlight.classList.contains("highlight-siemens")) {
+						highlight.style.color = `color-mix(in srgb, var(--color-accent-siemens) ${brandOpacity * 100}%, transparent)`;
+					} else if (highlight.classList.contains("highlight-addverb")) {
+						highlight.style.color = `color-mix(in srgb, var(--color-accent-addverb) ${brandOpacity * 100}%, transparent)`;
+					} else {
+						highlight.style.color = `rgba(255, 255, 255, ${Math.min(1, opacity + 0.2)})`;
+					}
+				});
 			}
-		);
+		});
+	}
+
+	// Reset to default muted state
+	function resetToDefault() {
+		paras.forEach((para) => {
+			const el = para as HTMLElement;
+			el.style.color = mutedColor;
+
+			const highlights = el.querySelectorAll(".highlight-word");
+			highlights.forEach((h) => {
+				const highlight = h as HTMLElement;
+				if (highlight.classList.contains("highlight-snap")) {
+					highlight.style.color = "var(--color-accent-snap)";
+				} else if (highlight.classList.contains("highlight-siemens")) {
+					highlight.style.color = "var(--color-accent-siemens)";
+				} else if (highlight.classList.contains("highlight-addverb")) {
+					highlight.style.color = "var(--color-accent-addverb)";
+				} else {
+					highlight.style.color = "rgba(255, 255, 255, 0.7)";
+				}
+			});
+		});
+	}
+
+	// Set up event listeners for each paragraph
+	paras.forEach((para, index) => {
+		para.addEventListener("mouseenter", () => {
+			isHovering = true;
+			currentParaIndex = index;
+			updateParaColors(index);
+		});
 	});
 
-	// Paragraph entrance animation
-	const paragraphs = document.querySelectorAll(".about-paragraph");
+	// Handle mouse leave on container - triggers the trailing fade
+	if (textContainer) {
+		textContainer.addEventListener("mouseleave", () => {
+			isHovering = false;
+			currentParaIndex = -1;
+			resetToDefault();
+		});
+	}
 
-	paragraphs.forEach((p, index) => {
+	// Initial state
+	resetToDefault();
+
+	// Paragraph entrance animation on scroll
+	paras.forEach((para, index) => {
 		gsap.fromTo(
-			p,
+			para,
 			{ y: 20, opacity: 0 },
 			{
 				y: 0,
@@ -186,11 +184,11 @@
 				duration: 0.8,
 				ease: "power3.out",
 				scrollTrigger: {
-					trigger: p,
+					trigger: para,
 					start: "top 85%",
 					toggleActions: "play none none reverse"
 				},
-				delay: index * 0.2
+				delay: index * 0.15
 			}
 		);
 	});
@@ -218,12 +216,26 @@
 </script>
 
 <style>
-	.about-word {
-		display: inline;
-		transition: opacity 0.3s ease;
+	.about-para {
+		color: rgba(255, 255, 255, 0.35);
+		transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		cursor: default;
 	}
 
 	.highlight-word {
 		font-weight: 500;
+		transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.highlight-snap {
+		color: var(--color-accent-snap);
+	}
+
+	.highlight-siemens {
+		color: var(--color-accent-siemens);
+	}
+
+	.highlight-addverb {
+		color: var(--color-accent-addverb);
 	}
 </style>

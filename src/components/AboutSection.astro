@@ -16,15 +16,9 @@
 			<!-- Main bio text -->
 			<div class="md:col-span-8">
 				<div class="about-text space-y-6 text-xl leading-relaxed md:text-2xl md:leading-relaxed">
-					<p class="about-para" data-para="0">
-						Hi, I'm <span class="highlight-word">Avish</span>! A software engineer with <span class="highlight-word">1.5 years</span> of experience. <span class="highlight-word">MS Software Engineering</span> graduate from <span class="highlight-word">CMU's School of Computer Science.</span> I love tackling <span class="highlight-word">complex system problems</span> and I'm always looking for something <span class="highlight-word">fun</span> or <span class="highlight-word">challenging :)</span>
-					</p>
-					<p class="about-para" data-para="1">
-						Built <span class="highlight-word">XR remote desktop</span> systems at <span class="highlight-word highlight-snap">Snap</span> and centralized observability for 120+ modules at <span class="highlight-word highlight-siemens">Siemens.</span>
-					</p>
-					<p class="about-para" data-para="2">
-						Previously built warehouse simulation engines and real-time conveyor middleware at <span class="highlight-word highlight-addverb">Addverb.</span> Published in <span class="highlight-word">IEEE</span> and <span class="highlight-word">Springer,</span> former <span class="highlight-word">MITACS</span> research intern.
-					</p>
+					<p class="about-para">Hi, I'm <span class="hw">Avish</span>! A software engineer with <span class="hw">1.5 years</span> of experience. <span class="hw">MS Software Engineering</span> graduate from <span class="hw">CMU's School of Computer Science.</span> I love tackling <span class="hw">complex system problems</span> and I'm always looking for something <span class="hw">fun</span> or <span class="hw">challenging :)</span></p>
+					<p class="about-para">Built <span class="hw">XR remote desktop</span> systems at <span class="hw hw-snap">Snap</span> and centralized observability for 120+ modules at <span class="hw hw-siemens">Siemens.</span></p>
+					<p class="about-para">Previously built warehouse simulation engines and real-time conveyor middleware at <span class="hw hw-addverb">Addverb.</span> Published in <span class="hw">IEEE</span> and <span class="hw">Springer,</span> former <span class="hw">MITACS</span> research intern.</p>
 				</div>
 			</div>
 
@@ -79,101 +73,173 @@
 
 	gsap.registerPlugin(ScrollTrigger);
 
+	const textContainer = document.querySelector(".about-text") as HTMLElement;
 	const paras = document.querySelectorAll(".about-para");
-	const textContainer = document.querySelector(".about-text");
-	let currentParaIndex = -1;
-	let isHovering = false;
+	let wordSpans: HTMLSpanElement[] = [];
+	let currentLineY = -1;
 
-	// Color values for interpolation
-	const activeColor = "rgba(255, 255, 255, 0.95)";
-	const mutedColor = "rgba(255, 255, 255, 0.35)";
-
-	// Calculate para distances and apply colors
-	function updateParaColors(hoveredIndex: number) {
-		paras.forEach((para, index) => {
-			const distance = Math.abs(index - hoveredIndex);
-			const el = para as HTMLElement;
-			const highlights = el.querySelectorAll(".highlight-word");
-
-			if (distance === 0) {
-				el.style.color = activeColor;
-				highlights.forEach((h) => {
-					const highlight = h as HTMLElement;
-					if (highlight.classList.contains("highlight-snap")) {
-						highlight.style.color = "var(--color-accent-snap)";
-					} else if (highlight.classList.contains("highlight-siemens")) {
-						highlight.style.color = "var(--color-accent-siemens)";
-					} else if (highlight.classList.contains("highlight-addverb")) {
-						highlight.style.color = "var(--color-accent-addverb)";
-					} else {
-						highlight.style.color = "rgba(255, 255, 255, 1)";
-					}
-				});
-			} else {
-				const opacity = Math.max(0.35, 0.95 - distance * 0.25);
-				el.style.color = `rgba(255, 255, 255, ${opacity})`;
-
-				highlights.forEach((h) => {
-					const highlight = h as HTMLElement;
-					const brandOpacity = Math.max(0.6, 1 - distance * 0.15);
-					if (highlight.classList.contains("highlight-snap")) {
-						highlight.style.color = `color-mix(in srgb, var(--color-accent-snap) ${brandOpacity * 100}%, transparent)`;
-					} else if (highlight.classList.contains("highlight-siemens")) {
-						highlight.style.color = `color-mix(in srgb, var(--color-accent-siemens) ${brandOpacity * 100}%, transparent)`;
-					} else if (highlight.classList.contains("highlight-addverb")) {
-						highlight.style.color = `color-mix(in srgb, var(--color-accent-addverb) ${brandOpacity * 100}%, transparent)`;
-					} else {
-						highlight.style.color = `rgba(255, 255, 255, ${Math.min(1, opacity + 0.2)})`;
-					}
-				});
-			}
-		});
-	}
-
-	// Reset to default muted state
-	function resetToDefault() {
+	// Wrap text nodes in word spans for line detection (skip highlights)
+	function wrapWords() {
 		paras.forEach((para) => {
-			const el = para as HTMLElement;
-			el.style.color = mutedColor;
-
-			const highlights = el.querySelectorAll(".highlight-word");
-			highlights.forEach((h) => {
-				const highlight = h as HTMLElement;
-				if (highlight.classList.contains("highlight-snap")) {
-					highlight.style.color = "var(--color-accent-snap)";
-				} else if (highlight.classList.contains("highlight-siemens")) {
-					highlight.style.color = "var(--color-accent-siemens)";
-				} else if (highlight.classList.contains("highlight-addverb")) {
-					highlight.style.color = "var(--color-accent-addverb)";
-				} else {
-					highlight.style.color = "rgba(255, 255, 255, 0.7)";
+			const walker = document.createTreeWalker(para, NodeFilter.SHOW_TEXT, {
+				acceptNode: (node) => {
+					// Skip text inside .hw highlights
+					if ((node.parentElement as HTMLElement)?.closest(".hw")) {
+						return NodeFilter.FILTER_REJECT;
+					}
+					return node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
 				}
+			});
+			const textNodes: Text[] = [];
+			let node: Text | null;
+			while ((node = walker.nextNode() as Text)) {
+				textNodes.push(node);
+			}
+
+			textNodes.forEach((textNode) => {
+				const words = textNode.textContent!.split(/(\s+)/);
+				const fragment = document.createDocumentFragment();
+
+				words.forEach((word) => {
+					if (word.trim()) {
+						const span = document.createElement("span");
+						span.className = "about-word";
+						span.textContent = word;
+						fragment.appendChild(span);
+						wordSpans.push(span);
+					} else if (word) {
+						fragment.appendChild(document.createTextNode(word));
+					}
+				});
+
+				textNode.parentNode?.replaceChild(fragment, textNode);
 			});
 		});
 	}
 
-	// Set up event listeners for each paragraph
-	paras.forEach((para, index) => {
-		para.addEventListener("mouseenter", () => {
-			isHovering = true;
-			currentParaIndex = index;
-			updateParaColors(index);
-		});
-	});
+	// Group words by their visual line (Y position)
+	function getLineGroups(): Map<number, HTMLSpanElement[]> {
+		const lines = new Map<number, HTMLSpanElement[]>();
+		const tolerance = 5;
 
-	// Handle mouse leave on container - triggers the trailing fade
-	if (textContainer) {
-		textContainer.addEventListener("mouseleave", () => {
-			isHovering = false;
-			currentParaIndex = -1;
-			resetToDefault();
+		wordSpans.forEach((span) => {
+			const rect = span.getBoundingClientRect();
+			const y = Math.round(rect.top / tolerance) * tolerance;
+
+			let foundLine = false;
+			for (const [lineY] of lines) {
+				if (Math.abs(lineY - y) < tolerance) {
+					lines.get(lineY)!.push(span);
+					foundLine = true;
+					break;
+				}
+			}
+			if (!foundLine) {
+				lines.set(y, [span]);
+			}
+		});
+
+		return lines;
+	}
+
+	// Update colors based on cursor Y position - inverted spotlight effect
+	function updateColors(cursorY: number) {
+		const lines = getLineGroups();
+		const sortedLineYs = Array.from(lines.keys()).sort((a, b) => a - b);
+
+		// Find the closest line to cursor
+		let closestLineY = sortedLineYs[0];
+		let minDist = Infinity;
+		sortedLineYs.forEach((lineY) => {
+			const dist = Math.abs(lineY - cursorY);
+			if (dist < minDist) {
+				minDist = dist;
+				closestLineY = lineY;
+			}
+		});
+
+		currentLineY = closestLineY;
+		const closestIndex = sortedLineYs.indexOf(closestLineY);
+
+		// Inverted: active line stays bright, others dim based on distance
+		sortedLineYs.forEach((lineY, index) => {
+			const distance = Math.abs(index - closestIndex);
+			const words = lines.get(lineY)!;
+
+			words.forEach((word) => {
+				const isHighlight = word.closest(".hw");
+				if (isHighlight) return;
+
+				// Active line: full brightness, others fade out
+				const opacity = distance === 0 ? 0.9 : Math.max(0.25, 0.7 - distance * 0.15);
+				word.style.color = `rgba(255, 255, 255, ${opacity})`;
+			});
+		});
+
+		// Handle highlights - same inverted logic
+		document.querySelectorAll(".hw").forEach((hw) => {
+			const el = hw as HTMLElement;
+			const rect = el.getBoundingClientRect();
+			const hwY = Math.round(rect.top / 5) * 5;
+
+			let hwLineIndex = 0;
+			for (let i = 0; i < sortedLineYs.length; i++) {
+				if (Math.abs(sortedLineYs[i] - hwY) < 10) {
+					hwLineIndex = i;
+					break;
+				}
+			}
+
+			const distance = Math.abs(hwLineIndex - closestIndex);
+			const dimAmount = Math.max(0.4, 1 - distance * 0.2);
+
+			if (el.classList.contains("hw-snap")) {
+				el.style.color = distance === 0 ? "var(--color-accent-snap)" : `color-mix(in srgb, var(--color-accent-snap) ${dimAmount * 100}%, transparent)`;
+			} else if (el.classList.contains("hw-siemens")) {
+				el.style.color = distance === 0 ? "var(--color-accent-siemens)" : `color-mix(in srgb, var(--color-accent-siemens) ${dimAmount * 100}%, transparent)`;
+			} else if (el.classList.contains("hw-addverb")) {
+				el.style.color = distance === 0 ? "var(--color-accent-addverb)" : `color-mix(in srgb, var(--color-accent-addverb) ${dimAmount * 100}%, transparent)`;
+			} else {
+				el.style.color = `rgba(255, 255, 255, ${distance === 0 ? 1 : Math.max(0.45, 0.9 - distance * 0.15)})`;
+			}
 		});
 	}
 
-	// Initial state
+	// Reset to bright readable state
+	function resetToDefault() {
+		wordSpans.forEach((word) => {
+			word.style.color = "rgba(255, 255, 255, 0.8)";
+		});
+
+		document.querySelectorAll(".hw").forEach((hw) => {
+			const el = hw as HTMLElement;
+			if (el.classList.contains("hw-snap")) {
+				el.style.color = "var(--color-accent-snap)";
+			} else if (el.classList.contains("hw-siemens")) {
+				el.style.color = "var(--color-accent-siemens)";
+			} else if (el.classList.contains("hw-addverb")) {
+				el.style.color = "var(--color-accent-addverb)";
+			} else {
+				el.style.color = "rgba(255, 255, 255, 1)";
+			}
+		});
+	}
+
+	// Initialize
+	wrapWords();
 	resetToDefault();
 
-	// Paragraph entrance animation on scroll
+	// Mouse move handler
+	textContainer?.addEventListener("mousemove", (e) => {
+		updateColors(e.clientY);
+	});
+
+	textContainer?.addEventListener("mouseleave", () => {
+		currentLineY = -1;
+		resetToDefault();
+	});
+
+	// Paragraph entrance animation
 	paras.forEach((para, index) => {
 		gsap.fromTo(
 			para,
@@ -217,25 +283,28 @@
 
 <style>
 	.about-para {
-		color: rgba(255, 255, 255, 0.35);
-		transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 		cursor: default;
 	}
 
-	.highlight-word {
+	.about-word {
+		color: rgba(255, 255, 255, 0.8);
+		transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.hw {
 		font-weight: 500;
 		transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.highlight-snap {
+	.hw-snap {
 		color: var(--color-accent-snap);
 	}
 
-	.highlight-siemens {
+	.hw-siemens {
 		color: var(--color-accent-siemens);
 	}
 
-	.highlight-addverb {
+	.hw-addverb {
 		color: var(--color-accent-addverb);
 	}
 </style>

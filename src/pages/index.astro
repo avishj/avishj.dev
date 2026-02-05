@@ -131,10 +131,32 @@ import PortalBurn from '../components/PortalBurn.astro';
     });
 
     anim.addEventListener('complete', () => {
-      // Get burn origin from signature endpoint
-      const lottieRect = lottieContainer.getBoundingClientRect();
-      const originX = lottieRect.right - 80;
-      const originY = lottieRect.top + lottieRect.height * 0.5;
+      // Get burn origin from actual signature endpoint
+      // Find the last stroke path in the Lottie SVG
+      const svgElement = lottieContainer.querySelector('svg');
+      let originX = window.innerWidth / 2;
+      let originY = window.innerHeight / 2;
+      
+      if (svgElement) {
+        const paths = svgElement.querySelectorAll('path');
+        if (paths.length > 0) {
+          const lastPath = paths[paths.length - 1];
+          const pathLength = lastPath.getTotalLength?.();
+          if (pathLength) {
+            // Get the endpoint of the last stroke
+            const endPoint = lastPath.getPointAtLength(pathLength);
+            const svgRect = svgElement.getBoundingClientRect();
+            const svgViewBox = svgElement.viewBox.baseVal;
+            
+            // Convert SVG coordinates to screen coordinates
+            const scaleX = svgRect.width / (svgViewBox.width || svgRect.width);
+            const scaleY = svgRect.height / (svgViewBox.height || svgRect.height);
+            
+            originX = svgRect.left + endPoint.x * scaleX;
+            originY = svgRect.top + endPoint.y * scaleY;
+          }
+        }
+      }
       
       // Show main content behind the effect
       mainContent.style.visibility = 'visible';

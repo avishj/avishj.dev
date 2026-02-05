@@ -6,6 +6,7 @@ import ExperienceSection from '../components/ExperienceSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import ResearchSection from '../components/ResearchSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
+import PortalBurn from '../components/PortalBurn.astro';
 ---
 
 <BaseLayout>
@@ -14,7 +15,11 @@ import SkillsSection from '../components/SkillsSection.astro';
        ═══════════════════════════════════════════════════════════════════════════ -->
   <div id="intro-splash" class="fixed inset-0 z-50 flex items-center justify-center bg-[--color-bg-primary]">
     <div id="lottie-container"></div>
-  </div>
+    
+    </div>
+  
+  <!-- Three.js Portal Burn Effect -->
+  <PortalBurn />
 
   <main id="main-content" class="invisible opacity-0">
     <!-- ═══════════════════════════════════════════════════════════════════════════
@@ -126,39 +131,40 @@ import SkillsSection from '../components/SkillsSection.astro';
     });
 
     anim.addEventListener('complete', () => {
-      // Swirl away animation
-      const swirlTimeline = gsap.timeline({
-        onComplete: () => {
+      // Get burn origin from signature endpoint
+      const lottieRect = lottieContainer.getBoundingClientRect();
+      const originX = lottieRect.right - 80;
+      const originY = lottieRect.top + lottieRect.height * 0.5;
+      
+      // Show main content behind the effect
+      mainContent.style.visibility = 'visible';
+      mainContent.style.opacity = '1';
+      
+      // Fade out the lottie
+      gsap.to(lottieContainer, {
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power2.in',
+      });
+      
+      // Start the Three.js portal burn effect
+      if ((window as any).initPortalBurn) {
+        (window as any).initPortalBurn(originX, originY, () => {
+          // Cleanup after effect completes
           introSplash.remove();
           document.body.style.overflow = '';
-        }
-      });
-
-      swirlTimeline
-        // Swirl the signature down and away
-        .to(lottieContainer, {
-          rotation: 360,
-          scale: 0.3,
-          y: '100vh',
+        });
+      } else {
+        // Fallback if Three.js effect not loaded
+        gsap.to(introSplash, {
           opacity: 0,
-          duration: 1.2,
-          ease: 'power3.in',
-        })
-        // Fade out splash background
-        .to(introSplash, {
-          opacity: 0,
-          duration: 0.4,
-          ease: 'power2.out',
-        }, '-=0.4')
-        // Reveal main content
-        .set(mainContent, {
-          visibility: 'visible',
-        }, '-=0.3')
-        .to(mainContent, {
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out',
-        }, '-=0.3');
+          duration: 0.8,
+          onComplete: () => {
+            introSplash.remove();
+            document.body.style.overflow = '';
+          }
+        });
+      }
     });
 
     // Fallback if animation takes too long or fails

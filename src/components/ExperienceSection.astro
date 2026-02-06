@@ -248,18 +248,12 @@ const experiences: Experience[] = [
   }
 
   function highlightCardMeta(activeCard: HTMLElement | null) {
-    const activeIndex = activeCard?.dataset.index;
-    
     cardsArray.forEach((card) => {
-      const meta = card.querySelector('.exp-meta');
-      if (meta) {
-        const isActive = card.dataset.index === activeIndex;
-        gsap.to(meta, {
-          filter: isActive ? 'brightness(1.3)' : 'brightness(1)',
-          duration: 0.15,
-          ease: 'power2.out',
-          overwrite: true,
-        });
+      const isActive = card === activeCard;
+      if (isActive) {
+        card.classList.add('meta-active');
+      } else {
+        card.classList.remove('meta-active');
       }
     });
   }
@@ -285,15 +279,7 @@ const experiences: Experience[] = [
     });
 
     cardsArray.forEach((card) => {
-      const meta = card.querySelector('.exp-meta');
-      if (meta) {
-        gsap.to(meta, {
-          filter: 'brightness(1)',
-          duration: 0.2,
-          ease: 'power2.out',
-          overwrite: true,
-        });
-      }
+      card.classList.remove('meta-active');
     });
   }
 
@@ -319,6 +305,27 @@ const experiences: Experience[] = [
     transform-origin: left center;
   }
 
+  .exp-card.meta-active .exp-company {
+    filter: brightness(1.4);
+  }
+
+  .exp-card.meta-active .exp-meta p,
+  .exp-card.meta-active .exp-meta > div:not(.mt-3) {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .exp-card.meta-active .metric-pill {
+    filter: brightness(1.3);
+  }
+
+  .exp-company,
+  .exp-meta p,
+  .exp-meta > div,
+  .metric-pill {
+    transition: filter 0.15s cubic-bezier(0.16, 1, 0.3, 1), 
+                color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
   .metric-pill {
     backdrop-filter: blur(4px);
   }
@@ -331,6 +338,9 @@ const experiences: Experience[] = [
     .exp-highlights li {
       opacity: 1 !important;
       transform: none !important;
+    }
+    .exp-meta {
+      transition: none;
     }
   }
 </style>

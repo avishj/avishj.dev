@@ -321,6 +321,33 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // SECTION HEADER ENTRANCE ANIMATION — Number then title stagger in
+  // ═══════════════════════════════════════════════════════════════════════════
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  
+  if (!prefersReducedMotion) {
+    const sectionHeaders = document.querySelectorAll('.section-header');
+    sectionHeaders.forEach((header) => {
+      const number = header.querySelector('span');
+      const title = header.querySelector('h2');
+      
+      if (number && title) {
+        gsap.set([number, title], { y: 20, opacity: 0 });
+        
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: header,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          }
+        })
+        .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
+        .to(title, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
+      }
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // SECTION NAV HIGHLIGHTING — Update active state on scroll
   // ═══════════════════════════════════════════════════════════════════════════
   const sections = ['about', 'experience', 'projects', 'research', 'skills'];
@@ -480,6 +507,14 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
   .hero-subtitle,
   #hero-nav .header-link {
     will-change: transform, opacity, filter;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     SECTION HEADER ENTRANCE ANIMATION
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .section-header span,
+  .section-header h2 {
+    will-change: transform, opacity;
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════

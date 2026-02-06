@@ -176,41 +176,36 @@ import PortalBurn from '../components/PortalBurn.astro';
     });
 
     anim.addEventListener('complete', () => {
-      // Get burn origin from Lottie container position
-      // Use the right-center of the signature as origin
-      const lottieRect = lottieContainer.getBoundingClientRect();
-      const originX = lottieRect.left + lottieRect.width * 0.75;
-      const originY = lottieRect.top + lottieRect.height * 0.55;
-      
-      // Show main content behind the effect
-      mainContent.style.visibility = 'visible';
-      mainContent.style.opacity = '1';
-      
-      // Fade out the lottie
-      gsap.to(lottieContainer, {
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power2.in',
-      });
-      
-      // Start the Three.js portal burn effect
-      if ((window as any).initPortalBurn) {
-        (window as any).initPortalBurn(originX, originY, () => {
-          // Cleanup after effect completes
-          introSplash.remove();
-          document.body.style.overflow = '';
-        });
-      } else {
-        // Fallback if Three.js effect not loaded
-        gsap.to(introSplash, {
+      setTimeout(() => {
+        const lottieRect = lottieContainer.getBoundingClientRect();
+        const originX = lottieRect.left + lottieRect.width * 0.75;
+        const originY = lottieRect.top + lottieRect.height * 0.55;
+        
+        mainContent.style.visibility = 'visible';
+        mainContent.style.opacity = '1';
+        
+        gsap.to(lottieContainer, {
           opacity: 0,
-          duration: 0.8,
-          onComplete: () => {
+          duration: 0.5,
+          ease: 'power2.in',
+        });
+        
+        if ((window as any).initPortalBurn) {
+          (window as any).initPortalBurn(originX, originY, () => {
             introSplash.remove();
             document.body.style.overflow = '';
-          }
-        });
-      }
+          });
+        } else {
+          gsap.to(introSplash, {
+            opacity: 0,
+            duration: 0.8,
+            onComplete: () => {
+              introSplash.remove();
+              document.body.style.overflow = '';
+            }
+          });
+        }
+      }, 400);
     });
 
     // Fallback if animation takes too long or fails

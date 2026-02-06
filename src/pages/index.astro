@@ -325,6 +325,11 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
     color: white;
   }
 
+  /* Fixed width to prevent layout shift when active section changes */
+  .nav-text {
+    min-width: 5.5rem;
+  }
+
   /* ═══════════════════════════════════════════════════════════════════════════
      HEADER LINK ANIMATED DOTTED UNDERLINE
      ═══════════════════════════════════════════════════════════════════════════ */

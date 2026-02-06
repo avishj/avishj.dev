@@ -1,7 +1,4 @@
 ---
-// Experience Section with section-based accent colors and sticky assembly animations
-// Inspired by Shopify Editions + destroytoday.com
-
 interface Experience {
   company: string;
   role: string;
@@ -93,91 +90,92 @@ const experiences: Experience[] = [
 ---
 
 <section id="experience" class="experience-section relative bg-[--color-bg-primary]">
-  <!-- Section header -->
-  <div class="max-w-(--max-width) pt-4 pb-16 md:pt-6 md:pb-24">
-    <div class="section-header mb-12 flex items-baseline gap-4">
+  <div class="mx-auto max-w-(--max-width) px-6 pt-4 pb-20 md:pt-6 md:pb-28 lg:px-12">
+    <!-- Section header -->
+    <div class="section-header mb-14 flex items-baseline gap-4">
       <span class="text-5xl text-white/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">02</span>
       <h2 class="text-5xl italic md:text-6xl" style="font-family: 'Instrument Serif', serif;">Experience</h2>
     </div>
-  </div>
 
-  <!-- Experience cards - regular flow, no sticky overlap -->
-  <div class="experience-track relative">
-    {experiences.map((exp, index) => (
-      <article 
-        class="experience-card relative flex items-center py-24"
-        data-index={index}
-        style={`--accent: ${exp.accentColor}; --card-index: ${index};`}
-      >
-        <!-- Full-screen accent background glow -->
-        <div 
-          class="accent-glow pointer-events-none absolute inset-0 opacity-0"
-          style={`background: radial-gradient(ellipse 80% 50% at 50% 100%, ${exp.accentColor}15 0%, transparent 50%);`}
-        ></div>
+    <!-- Timeline -->
+    <div class="experience-timeline relative">
+      <!-- Vertical timeline line -->
+      <div class="timeline-line absolute top-0 bottom-0 left-0 w-px bg-white/[0.08] md:left-[140px]"></div>
 
-        <div class="mx-auto w-full max-w-(--max-width) px-6">
-          <div class="grid gap-8 md:grid-cols-12 md:gap-12">
-            <!-- Left: Company info -->
-            <div class="md:col-span-5">
-              <!-- Large index number -->
-              <span 
-                class="card-index block font-display text-[6rem] font-bold leading-none md:text-[8rem]"
-                style={`color: ${exp.accentColor}20;`}
-              >
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              
-              <h3 
-                class="card-title -mt-8 font-display text-3xl font-medium tracking-tight md:-mt-12 md:text-4xl lg:text-5xl"
-                style={`color: ${exp.accentColor};`}
-              >
-                {exp.company}
-              </h3>
-              <p class="card-role mt-2 text-lg text-white/70">{exp.role}</p>
-              
-              <div class="card-meta mt-6 flex items-center gap-4 font-mono text-sm text-[--color-text-muted]">
-                <span class="tabular-nums">{exp.period}</span>
-                <span class="h-1 w-1 rounded-full bg-white/30"></span>
-                <span>{exp.location}</span>
-              </div>
+      {experiences.map((exp, index) => (
+        <article 
+          class="experience-entry group relative pb-12 last:pb-0"
+          data-index={index}
+          style={`--accent: ${exp.accentColor};`}
+        >
+          <!-- Timeline dot -->
+          <div 
+            class="timeline-dot absolute left-0 top-[2px] z-10 h-2 w-2 -translate-x-[3.5px] rounded-full border border-white/20 bg-[--color-bg-primary] transition-all duration-300 group-hover:scale-125 md:left-[140px]"
+            style={`border-color: ${exp.accentColor}50;`}
+          >
+            <div 
+              class="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              style={`background: ${exp.accentColor}; box-shadow: 0 0 8px ${exp.accentColor}60;`}
+            ></div>
+          </div>
 
-              <!-- Metrics with animated counters -->
-              {exp.metrics && (
-                <div class="card-metrics mt-8 flex flex-wrap gap-3">
-                  {exp.metrics.map((metric) => (
-                    <div 
-                      class="metric-pill rounded-xl border px-4 py-2"
-                      style={`border-color: ${exp.accentColor}30; background: ${exp.accentColor}08;`}
-                    >
-                      <span class="font-mono text-lg font-medium" style={`color: ${exp.accentColor};`}>{metric}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+          <div class="grid md:grid-cols-[140px_1fr] md:gap-0">
+            <!-- Left: Period (visible on md+) -->
+            <div class="hidden pr-8 text-right md:block">
+              <span class="font-mono text-xs tracking-wide text-white/35">{exp.period}</span>
             </div>
 
-            <!-- Right: Highlights -->
-            <div class="md:col-span-7">
-              <ul class="card-highlights space-y-4">
-                {exp.highlights.map((highlight, i) => (
-                  <li 
-                    class="highlight-item flex gap-4 rounded-xl border border-white/[0.04] bg-white/[0.02] p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04]"
-                    style={`--highlight-delay: ${i * 100}ms;`}
+            <!-- Right: Content -->
+            <div class="pl-6 md:pl-8">
+              <!-- Company & role row -->
+              <div class="mb-3">
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3 
+                    class="entry-title text-lg font-medium tracking-tight"
+                    style={`color: ${exp.accentColor};`}
                   >
+                    {exp.company}
+                  </h3>
+                  {exp.metrics && (
+                    <div class="flex flex-wrap gap-1.5">
+                      {exp.metrics.map((metric) => (
+                        <span 
+                          class="rounded-md px-2 py-0.5 font-mono text-[10px] font-medium leading-tight"
+                          style={`color: ${exp.accentColor}; background: ${exp.accentColor}10; border: 1px solid ${exp.accentColor}20;`}
+                        >
+                          {metric}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <p class="mt-0.5 text-sm text-white/50">{exp.role}</p>
+                <!-- Mobile period + location -->
+                <div class="mt-1 flex items-center gap-2 font-mono text-[11px] text-white/30 md:hidden">
+                  <span>{exp.period}</span>
+                  <span class="h-0.5 w-0.5 rounded-full bg-white/20"></span>
+                  <span>{exp.location}</span>
+                </div>
+                <span class="mt-1 hidden font-mono text-[11px] text-white/30 md:block">{exp.location}</span>
+              </div>
+
+              <!-- Highlights as compact list -->
+              <ul class="entry-highlights space-y-1.5">
+                {exp.highlights.map((highlight) => (
+                  <li class="flex gap-2.5 text-[13px] leading-relaxed text-white/60">
                     <span 
-                      class="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full"
-                      style={`background: ${exp.accentColor};`}
+                      class="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
+                      style={`background: ${exp.accentColor}40;`}
                     ></span>
-                    <span class="text-base leading-relaxed text-white/80">{highlight}</span>
+                    <span>{highlight}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-        </div>
-
-      </article>
-    ))}
+        </article>
+      ))}
+    </div>
   </div>
 </section>
 
@@ -187,137 +185,69 @@ const experiences: Experience[] = [
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // STICKY CARD SCROLL — Each card pins and reveals content
-  // ═══════════════════════════════════════════════════════════════════════════
-  const cards = document.querySelectorAll('.experience-card');
+  const entries = document.querySelectorAll('.experience-entry');
   
-  cards.forEach((card, index) => {
-    const cardEl = card as HTMLElement;
-    const accentGlow = card.querySelector('.accent-glow');
-    const cardIndex = card.querySelector('.card-index');
-    const cardTitle = card.querySelector('.card-title');
-    const cardRole = card.querySelector('.card-role');
-    const cardMeta = card.querySelector('.card-meta');
-    const cardMetrics = card.querySelector('.card-metrics');
-    const highlights = card.querySelectorAll('.highlight-item');
+  entries.forEach((entry) => {
+    const dot = entry.querySelector('.timeline-dot');
+    const title = entry.querySelector('.entry-title');
+    const highlights = entry.querySelectorAll('.entry-highlights li');
 
-    // Initial state
-    gsap.set([cardIndex, cardTitle, cardRole, cardMeta, cardMetrics], { 
-      y: 40, 
+    gsap.set([title, ...entry.querySelectorAll('.entry-title, .entry-title + p, .entry-title ~ span, .entry-title ~ div')].filter(Boolean), { 
+      y: 12, 
       opacity: 0 
     });
     gsap.set(highlights, { 
-      x: 30, 
+      y: 8, 
       opacity: 0 
     });
+    gsap.set(dot, {
+      scale: 0,
+    });
 
-    // Card scroll trigger
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: card,
-        start: 'top 80%',
-        end: 'top 20%',
-        scrub: false,
+        trigger: entry,
+        start: 'top 85%',
         toggleActions: 'play none none reverse',
       },
     });
 
-    tl.to(accentGlow, {
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power2.out',
+    tl.to(dot, {
+      scale: 1,
+      duration: 0.4,
+      ease: 'back.out(2)',
     })
-    .to(cardIndex, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power4.out',
-    }, '-=0.4')
-    .to(cardTitle, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power4.out',
-    }, '-=0.5')
-    .to(cardRole, {
+    .to(entry.querySelector('.mb-3'), {
       y: 0,
       opacity: 1,
       duration: 0.5,
       ease: 'power3.out',
-    }, '-=0.4')
-    .to(cardMeta, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-      ease: 'power3.out',
-    }, '-=0.4')
-    .to(cardMetrics, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-      ease: 'power3.out',
-    }, '-=0.3')
+    }, '-=0.2')
     .to(highlights, {
-      x: 0,
+      y: 0,
       opacity: 1,
-      duration: 0.5,
+      duration: 0.4,
       ease: 'power3.out',
-      stagger: 0.08,
-    }, '-=0.4');
-  });
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // HIGHLIGHT HOVER MICRO-INTERACTION
-  // ═══════════════════════════════════════════════════════════════════════════
-  const highlightItems = document.querySelectorAll('.highlight-item');
-  
-  highlightItems.forEach((item) => {
-    item.addEventListener('mouseenter', () => {
-      gsap.to(item, {
-        scale: 1.02,
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-    });
-    
-    item.addEventListener('mouseleave', () => {
-      gsap.to(item, {
-        scale: 1,
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-    });
+      stagger: 0.04,
+    }, '-=0.3');
   });
 </script>
 
 <style>
-  .experience-card {
-    background: transparent;
+  .experience-entry + .experience-entry {
+    border-top: none;
   }
 
-  .text-gradient {
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .metric-pill {
-    backdrop-filter: blur(8px);
-  }
-
-  .highlight-item {
-    transform-origin: left center;
-  }
-
-  /* Divider between cards */
-  .experience-card + .experience-card {
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  .experience-entry:hover .timeline-dot {
+    border-color: var(--accent);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .highlight-item {
-      transition: none;
+    .timeline-dot,
+    .entry-title,
+    .entry-highlights li {
+      opacity: 1 !important;
+      transform: none !important;
     }
   }
 </style>

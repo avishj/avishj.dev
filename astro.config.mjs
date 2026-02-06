@@ -7,7 +7,8 @@ const isProd = import.meta.env.PROD;
 // https://astro.build/config
 export default defineConfig({
   site: isProd ? 'https://avishj.github.io' : 'http://localhost:4321',
-  base: isProd ? '/avishj.dev' : '/',
+  base: isProd ? '/avishj.dev' : '',
+  trailingSlash: 'ignore',
   vite: {
     plugins: [tailwindcss()],
   },

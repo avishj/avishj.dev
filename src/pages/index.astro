@@ -31,17 +31,17 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
     <div class="min-h-screen bg-[--color-bg-primary]">
       
       <!-- Name header — scrolls with page -->
-      <header class="px-6 pb-6 pt-8 lg:px-12 lg:pb-8 lg:pt-12">
+      <header id="hero-header" class="px-6 pb-6 pt-8 lg:px-12 lg:pb-8 lg:pt-12">
         <!-- Top row: Name + Links -->
         <div class="flex items-start justify-between">
           <a href="#" class="block">
-            <h1 class="font-display text-5xl font-medium tracking-tight text-white lg:text-6xl xl:text-7xl">
+            <h1 class="hero-title font-display text-5xl font-medium tracking-tight text-white lg:text-6xl xl:text-7xl">
               Avish Jha
             </h1>
           </a>
           
           <!-- Navigation links -->
-          <nav class="flex items-center gap-5 pt-2 lg:gap-6 lg:pt-3">
+          <nav id="hero-nav" class="flex items-center gap-5 pt-2 lg:gap-6 lg:pt-3">
             <a href={url('Jha, Avish - Resume.pdf')} target="_blank" rel="noopener noreferrer" download class="header-link group flex items-center gap-1.5">
               <span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease group-hover:text-white/90 lg:text-base">resume</span>
               <svg class="h-3 w-3 text-white/30 transition-colors duration-150 ease group-hover:text-white/70 lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -82,7 +82,7 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         </div>
         
         <!-- Subtitle row -->
-        <p class="mt-3 font-mono text-sm tracking-[0.2em] text-white/40 lg:mt-4 lg:text-base">
+        <p class="hero-subtitle mt-3 font-mono text-sm tracking-[0.2em] text-white/40 lg:mt-4 lg:text-base">
           Software Engineer · CMU
         </p>
       </header>
@@ -159,6 +159,74 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
   gsap.registerPlugin(ScrollTrigger);
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // HERO ENTRANCE ANIMATION — Name, subtitle, and nav reveal after intro
+  // ═══════════════════════════════════════════════════════════════════════════
+  function animateHeroEntrance() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const heroTitle = document.querySelector('.hero-title');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    const heroNavLinks = document.querySelectorAll('#hero-nav .header-link');
+
+    // Name reveal with blur
+    if (heroTitle) {
+      gsap.fromTo(heroTitle,
+        { y: 40, opacity: 0, filter: 'blur(8px)' },
+        {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 0.9,
+          ease: 'power4.out',
+          delay: 0.2,
+        }
+      );
+    }
+
+    // Subtitle follows
+    if (heroSubtitle) {
+      gsap.fromTo(heroSubtitle,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power3.out',
+          delay: 0.35,
+        }
+      );
+    }
+
+    // Nav links stagger in
+    if (heroNavLinks.length > 0) {
+      gsap.fromTo(heroNavLinks,
+        { y: 15, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+          stagger: 0.06,
+          delay: 0.5,
+        }
+      );
+    }
+  }
+
+  // Set initial hidden state for hero elements (before animation)
+  function setHeroInitialState() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    gsap.set('.hero-title', { y: 40, opacity: 0, filter: 'blur(8px)' });
+    gsap.set('.hero-subtitle', { y: 20, opacity: 0 });
+    gsap.set('#hero-nav .header-link', { y: 15, opacity: 0 });
+  }
+
+  setHeroInitialState();
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // INTRO ANIMATION — Lottie signature draws, then swirls away
   // ═══════════════════════════════════════════════════════════════════════════
   const introSplash = document.getElementById('intro-splash');
@@ -188,6 +256,10 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         
         mainContent.style.visibility = 'visible';
         mainContent.style.opacity = '1';
+        
+        // Delay hero entrance to sync with portal burn reaching the header
+        // Burn is 3800ms with ease-out, header at top edge gets revealed near the end
+        setTimeout(() => animateHeroEntrance(), 2800);
         
         // Refresh ScrollTrigger after intro so triggers recalculate
         ScrollTrigger.refresh();
@@ -225,6 +297,7 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
           introSplash.remove();
           document.body.style.overflow = '';
           gsap.set(mainContent, { visibility: 'visible', opacity: 1 });
+          animateHeroEntrance();
         }
       });
     });
@@ -240,6 +313,7 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
             introSplash.remove();
             document.body.style.overflow = '';
             gsap.set(mainContent, { visibility: 'visible', opacity: 1 });
+            animateHeroEntrance();
           }
         });
       }
@@ -397,6 +471,15 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
     to {
       background-position: 6px 0;
     }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     HERO ENTRANCE ANIMATION SETUP
+     ═══════════════════════════════════════════════════════════════════════════ */
+  .hero-title,
+  .hero-subtitle,
+  #hero-nav .header-link {
+    will-change: transform, opacity, filter;
   }
 
   /* ═══════════════════════════════════════════════════════════════════════════

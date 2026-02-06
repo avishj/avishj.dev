@@ -267,8 +267,15 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         mainContent.style.visibility = 'visible';
         mainContent.style.opacity = '1';
         
-        // Refresh ScrollTrigger after intro so triggers recalculate
-        ScrollTrigger.refresh();
+        // Store scroll position at intro complete for components to use
+        (window as any).__introScrollY = window.scrollY;
+        
+        // Wait for layout, then dispatch event for components to initialize animations
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.dispatchEvent(new CustomEvent('intro-complete'));
+          });
+        });
         
         gsap.to(lottieContainer, {
           opacity: 0,
@@ -335,30 +342,43 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
   // ═══════════════════════════════════════════════════════════════════════════
   // SECTION HEADER ENTRANCE ANIMATION — Number then title stagger in
   // ═══════════════════════════════════════════════════════════════════════════
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
-  if (!prefersReducedMotion) {
+  function initSectionHeaderAnimations() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    
+    const viewportBottom = window.scrollY + window.innerHeight;
     const sectionHeaders = document.querySelectorAll('.section-header');
+    
     sectionHeaders.forEach((header) => {
       const number = header.querySelector('span');
       const title = header.querySelector('h2');
       
       if (number && title) {
-        gsap.set([number, title], { y: 20, opacity: 0 });
+        const rect = header.getBoundingClientRect();
+        const elTop = window.scrollY + rect.top;
         
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: header,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-            invalidateOnRefresh: true,
-          }
-        })
-        .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
-        .to(title, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
+        if (elTop < viewportBottom) {
+          gsap.set([number, title], { y: 0, opacity: 1 });
+        } else {
+          gsap.set([number, title], { y: 20, opacity: 0 });
+          
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: header,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            }
+          })
+          .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
+          .to(title, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
+        }
       }
     });
+    
+    ScrollTrigger.refresh();
   }
+  
+  window.addEventListener('intro-complete', initSectionHeaderAnimations, { once: true });
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SECTION NAV HIGHLIGHTING — Update active state on scroll

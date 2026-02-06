@@ -275,48 +275,67 @@
 		});
 	});
 
-	// Paragraph entrance animation
-	paras.forEach((para, index) => {
-		gsap.fromTo(
-			para,
-			{ y: 20, opacity: 0 },
-			{
-				y: 0,
-				opacity: 1,
-				duration: 0.8,
-				ease: "power3.out",
-				scrollTrigger: {
-					trigger: para,
-					start: "top 85%",
-					toggleActions: "play none none reverse",
-					invalidateOnRefresh: true
-				},
-				delay: index * 0.15
+	// Paragraph and status card animations - wait for intro
+	function initAboutAnimations() {
+		const viewportBottom = window.scrollY + window.innerHeight;
+		
+		paras.forEach((para, index) => {
+			const rect = para.getBoundingClientRect();
+			const elTop = window.scrollY + rect.top;
+			
+			if (elTop < viewportBottom) {
+				gsap.set(para, { y: 0, opacity: 1 });
+			} else {
+				gsap.fromTo(
+					para,
+					{ y: 20, opacity: 0 },
+					{
+						y: 0,
+						opacity: 1,
+						duration: 0.8,
+						ease: "power3.out",
+						scrollTrigger: {
+							trigger: para,
+							start: "top 85%",
+							toggleActions: "play none none reverse",
+						},
+						delay: index * 0.15
+					}
+				);
 			}
-		);
-	});
+		});
 
-	// Status card animation
-	const statusCard = document.querySelector(".status-card");
-	if (statusCard) {
-		gsap.fromTo(
-			statusCard,
-			{ x: 30, opacity: 0 },
-			{
-				x: 0,
-				opacity: 1,
-				duration: 0.8,
-				ease: "power4.out",
-				scrollTrigger: {
-					trigger: statusCard,
-					start: "top 80%",
-					toggleActions: "play none none reverse",
-					invalidateOnRefresh: true
-				},
-				delay: 0.3
+		const statusCard = document.querySelector(".status-card");
+		if (statusCard) {
+			const rect = statusCard.getBoundingClientRect();
+			const elTop = window.scrollY + rect.top;
+			
+			if (elTop < viewportBottom) {
+				gsap.set(statusCard, { x: 0, opacity: 1 });
+			} else {
+				gsap.fromTo(
+					statusCard,
+					{ x: 30, opacity: 0 },
+					{
+						x: 0,
+						opacity: 1,
+						duration: 0.8,
+						ease: "power4.out",
+						scrollTrigger: {
+							trigger: statusCard,
+							start: "top 80%",
+							toggleActions: "play none none reverse",
+						},
+						delay: 0.3
+					}
+				);
 			}
-		);
+		}
+		
+		ScrollTrigger.refresh();
 	}
+
+	window.addEventListener('intro-complete', initAboutAnimations, { once: true });
 </script>
 
 <style>

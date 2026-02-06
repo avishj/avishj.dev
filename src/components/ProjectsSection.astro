@@ -136,32 +136,47 @@ const sizeClasses = {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Staggered reveal for project cards
-  const cards = document.querySelectorAll('.project-card');
-  
-  cards.forEach((card, index) => {
-    gsap.fromTo(card,
-      { 
-        y: 30, 
-        opacity: 0,
-        scale: 0.98,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 90%',
-          toggleActions: 'play none none reverse',
-          invalidateOnRefresh: true,
-        },
-        delay: index * 0.08,
+  function initProjectAnimations() {
+    const cards = document.querySelectorAll('.project-card');
+    const viewportBottom = window.scrollY + window.innerHeight;
+    
+    cards.forEach((card, index) => {
+      const rect = card.getBoundingClientRect();
+      const elTop = window.scrollY + rect.top;
+      
+      // Element is already in/above viewport - show immediately, no animation
+      if (elTop < viewportBottom) {
+        gsap.set(card, { y: 0, opacity: 1, scale: 1 });
+      } else {
+        // Element is below viewport - set up scroll animation
+        gsap.fromTo(card,
+          { 
+            y: 30, 
+            opacity: 0,
+            scale: 0.98,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            ease: 'power4.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 90%',
+              toggleActions: 'play none none reverse',
+            },
+            delay: index * 0.08,
+          }
+        );
       }
-    );
-  });
+    });
+    
+    ScrollTrigger.refresh();
+  }
+
+  // Wait for intro to complete before setting up animations
+  window.addEventListener('intro-complete', initProjectAnimations, { once: true });
 
   // Group hover opacity fade effect (pqoqubbw style)
   const grid = document.querySelector('.bento-grid');

@@ -167,46 +167,64 @@ const experiences: Experience[] = [
   const cards = document.querySelectorAll('.exp-card');
   const allBullets = document.querySelectorAll('.exp-bullet');
   
-  // Scroll-triggered entrance animations
-  cards.forEach((card) => {
-    const company = card.querySelector('.exp-company');
-    const meta = card.querySelectorAll('.exp-company ~ p, .exp-company ~ div');
-    const highlights = card.querySelectorAll('.exp-highlights li');
+  function initExperienceAnimations() {
+    const viewportBottom = window.scrollY + window.innerHeight;
+    
+    cards.forEach((card) => {
+      const company = card.querySelector('.exp-company');
+      const meta = card.querySelectorAll('.exp-company ~ p, .exp-company ~ div');
+      const highlights = card.querySelectorAll('.exp-highlights li');
+      
+      const rect = card.getBoundingClientRect();
+      const elTop = window.scrollY + rect.top;
+      
+      // Element is already in/above viewport - show immediately
+      if (elTop < viewportBottom) {
+        gsap.set(company, { y: 0, opacity: 1 });
+        gsap.set(meta, { y: 0, opacity: 1 });
+        gsap.set(highlights, { x: 0, opacity: 1 });
+      } else {
+        // Element is below viewport - set up scroll animation
+        gsap.set(company, { y: 15, opacity: 0 });
+        gsap.set(meta, { y: 10, opacity: 0 });
+        gsap.set(highlights, { x: 12, opacity: 0 });
 
-    gsap.set(company, { y: 15, opacity: 0 });
-    gsap.set(meta, { y: 10, opacity: 0 });
-    gsap.set(highlights, { x: 12, opacity: 0 });
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 90%',
+            once: true,
+          },
+        });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: card,
-        start: 'top 90%',
-        once: true,
-        invalidateOnRefresh: true,
-      },
+        tl.to(company, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: 'power4.out',
+        })
+        .to(meta, {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power3.out',
+          stagger: 0.06,
+        }, '-=0.4')
+        .to(highlights, {
+          x: 0,
+          opacity: 1,
+          duration: 0.4,
+          ease: 'power3.out',
+          stagger: 0.05,
+        }, '-=0.3');
+      }
     });
+    
+    ScrollTrigger.refresh();
+  }
 
-    tl.to(company, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      ease: 'power4.out',
-    })
-    .to(meta, {
-      y: 0,
-      opacity: 1,
-      duration: 0.5,
-      ease: 'power3.out',
-      stagger: 0.06,
-    }, '-=0.4')
-    .to(highlights, {
-      x: 0,
-      opacity: 1,
-      duration: 0.4,
-      ease: 'power3.out',
-      stagger: 0.05,
-    }, '-=0.3');
-  });
+  // Wait for intro to complete before setting up animations
+  window.addEventListener('intro-complete', initExperienceAnimations, { once: true });
 
   // Trailing hover brightness effect
   const bulletArray = Array.from(allBullets);

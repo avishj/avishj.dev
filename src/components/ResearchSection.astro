@@ -125,30 +125,39 @@ const venueColors = {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Staggered reveal for publications
-  const items = document.querySelectorAll('.publication-item');
-  
-  items.forEach((item, index) => {
-    gsap.fromTo(item,
-      { 
-        x: -20, 
-        opacity: 0,
-      },
-      {
-        x: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 90%',
-          toggleActions: 'play none none reverse',
-          invalidateOnRefresh: true,
-        },
-        delay: index * 0.1,
+  function initResearchAnimations() {
+    const items = document.querySelectorAll('.publication-item');
+    const viewportBottom = window.scrollY + window.innerHeight;
+    
+    items.forEach((item, index) => {
+      const rect = item.getBoundingClientRect();
+      const elTop = window.scrollY + rect.top;
+      
+      if (elTop < viewportBottom) {
+        gsap.set(item, { x: 0, opacity: 1 });
+      } else {
+        gsap.fromTo(item,
+          { x: -20, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 90%',
+              toggleActions: 'play none none reverse',
+            },
+            delay: index * 0.1,
+          }
+        );
       }
-    );
-  });
+    });
+    
+    ScrollTrigger.refresh();
+  }
+
+  window.addEventListener('intro-complete', initResearchAnimations, { once: true });
 </script>
 
 <style>

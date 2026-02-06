@@ -189,6 +189,9 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         mainContent.style.visibility = 'visible';
         mainContent.style.opacity = '1';
         
+        // Refresh ScrollTrigger after intro so triggers recalculate
+        ScrollTrigger.refresh();
+        
         gsap.to(lottieContainer, {
           opacity: 0,
           duration: 0.5,

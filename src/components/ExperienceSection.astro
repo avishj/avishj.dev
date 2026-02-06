@@ -114,7 +114,7 @@ const experiences: Experience[] = [
               >
                 {exp.company}
               </h3>
-              <p class="mt-1 text-sm text-white/60">{exp.role}</p>
+              <p class="mt-1 text-base text-white/60">{exp.role}</p>
               <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/40">
                 <span class="tabular-nums">{exp.period}</span>
                 <span class="inline-block h-px w-3 bg-white/25"></span>
@@ -139,7 +139,7 @@ const experiences: Experience[] = [
             <div class="md:col-span-8">
               <ul class="exp-highlights space-y-2">
                 {exp.highlights.map((highlight) => (
-                  <li class="exp-bullet flex gap-3 text-sm leading-relaxed text-white/55">
+                  <li class="exp-bullet flex gap-3 text-base leading-relaxed text-white/55">
                     <span 
                       class="bullet-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
                       style={`background: ${exp.accentColor}60;`}

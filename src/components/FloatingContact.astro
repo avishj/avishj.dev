@@ -8,7 +8,7 @@ const socialLinks = [
 ];
 ---
 
-<div class="floating-contact fixed bottom-6 left-1/2 z-50 -translate-x-1/2 opacity-0 transition-opacity duration-500">
+<div class="floating-contact fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
   <div class="glass flex items-center gap-1 rounded-2xl border border-white/10 px-2 py-2 shadow-lg">
     {socialLinks.map((link) => (
       <a
@@ -56,25 +56,50 @@ const socialLinks = [
 </div>
 
 <script>
-  const floatingContact = document.querySelector('.floating-contact');
+  import gsap from 'gsap';
+
+  const floatingContact = document.querySelector('.floating-contact') as HTMLElement;
   
   if (floatingContact) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Set initial hidden state
+    gsap.set(floatingContact, { y: 20, opacity: 0 });
+    
+    let isVisible = false;
+    
     // Show after scrolling past the header
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) {
-          floatingContact.classList.add('opacity-100');
-          floatingContact.classList.remove('opacity-0');
-        } else {
-          floatingContact.classList.remove('opacity-100');
-          floatingContact.classList.add('opacity-0');
+        if (!entry.isIntersecting && !isVisible) {
+          isVisible = true;
+          gsap.to(floatingContact, {
+            y: 0,
+            opacity: 1,
+            duration: prefersReducedMotion ? 0 : 0.4,
+            ease: 'power3.out',
+          });
+        } else if (entry.isIntersecting && isVisible) {
+          isVisible = false;
+          gsap.to(floatingContact, {
+            y: 10,
+            opacity: 0,
+            duration: prefersReducedMotion ? 0 : 0.3,
+            ease: 'power2.in',
+          });
         }
       },
       { threshold: 0.5 }
     );
 
-    // Observe the header instead of hero
+    // Observe the header
     const header = document.querySelector('header');
     if (header) observer.observe(header);
   }
 </script>
+
+<style>
+  .floating-contact {
+    will-change: transform, opacity;
+  }
+</style>

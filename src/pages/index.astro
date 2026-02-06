@@ -356,21 +356,24 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
       if (number && title) {
         const rect = header.getBoundingClientRect();
         const elTop = window.scrollY + rect.top;
+        const isAlreadyVisible = elTop < viewportBottom;
         
-        if (elTop < viewportBottom) {
-          gsap.set([number, title], { y: 0, opacity: 1 });
-        } else {
-          gsap.set([number, title], { y: 20, opacity: 0 });
-          
-          gsap.timeline({
-            scrollTrigger: {
-              trigger: header,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            }
-          })
-          .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
-          .to(title, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
+        // Always set initial hidden state for animation
+        gsap.set([number, title], { y: 20, opacity: 0 });
+        
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: header,
+            start: 'top 85%',
+            toggleActions: 'play none play reverse',
+          }
+        })
+        .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
+        .to(title, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
+        
+        // If already in viewport, jump to end state immediately
+        if (isAlreadyVisible) {
+          tl.progress(1);
         }
       }
     });

@@ -118,25 +118,26 @@ const awards = [
     categories.forEach((cat, index) => {
       const rect = cat.getBoundingClientRect();
       const elTop = window.scrollY + rect.top;
+      const isAlreadyVisible = elTop < viewportBottom;
       
-      if (elTop < viewportBottom) {
-        gsap.set(cat, { y: 0, opacity: 1 });
-      } else {
-        gsap.fromTo(cat,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: cat,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-            delay: index * 0.15,
-          }
-        );
+      gsap.set(cat, { y: 20, opacity: 0 });
+      
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: cat,
+          start: 'top 85%',
+          toggleActions: 'play none play reverse',
+        },
+        delay: index * 0.15,
+      }).to(cat, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power4.out',
+      });
+      
+      if (isAlreadyVisible) {
+        tl.progress(1);
       }
     });
 
@@ -145,25 +146,26 @@ const awards = [
     pills.forEach((pill, index) => {
       const rect = pill.getBoundingClientRect();
       const elTop = window.scrollY + rect.top;
+      const isAlreadyVisible = elTop < viewportBottom;
       
-      if (elTop < viewportBottom) {
-        gsap.set(pill, { scale: 1, opacity: 1 });
-      } else {
-        gsap.fromTo(pill,
-          { scale: 0.9, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.3,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: pill,
-              start: 'top 95%',
-              toggleActions: 'play none none none',
-            },
-            delay: index * 0.02,
-          }
-        );
+      gsap.set(pill, { scale: 0.9, opacity: 0 });
+      
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pill,
+          start: 'top 85%',
+          toggleActions: 'play none play none',
+        },
+        delay: index * 0.02,
+      }).to(pill, {
+        scale: 1,
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power4.out',
+      });
+      
+      if (isAlreadyVisible) {
+        tl.progress(1);
       }
     });
 
@@ -172,24 +174,25 @@ const awards = [
     if (callout) {
       const rect = callout.getBoundingClientRect();
       const elTop = window.scrollY + rect.top;
+      const isAlreadyVisible = elTop < viewportBottom;
       
-      if (elTop < viewportBottom) {
-        gsap.set(callout, { y: 0, opacity: 1 });
-      } else {
-        gsap.fromTo(callout,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power4.out',
-            scrollTrigger: {
-              trigger: callout,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
+      gsap.set(callout, { y: 30, opacity: 0 });
+      
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: callout,
+          start: 'top 85%',
+          toggleActions: 'play none play reverse',
+        },
+      }).to(callout, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: 'power4.out',
+      });
+      
+      if (isAlreadyVisible) {
+        tl.progress(1);
       }
     }
     

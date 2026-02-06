@@ -143,32 +143,27 @@ const sizeClasses = {
     cards.forEach((card, index) => {
       const rect = card.getBoundingClientRect();
       const elTop = window.scrollY + rect.top;
+      const isAlreadyVisible = elTop < viewportBottom;
       
-      // Element is already in/above viewport - show immediately, no animation
-      if (elTop < viewportBottom) {
-        gsap.set(card, { y: 0, opacity: 1, scale: 1 });
-      } else {
-        // Element is below viewport - set up scroll animation
-        gsap.fromTo(card,
-          { 
-            y: 30, 
-            opacity: 0,
-            scale: 0.98,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.6,
-            ease: 'power4.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 90%',
-              toggleActions: 'play none none reverse',
-            },
-            delay: index * 0.08,
-          }
-        );
+      gsap.set(card, { y: 30, opacity: 0, scale: 0.98 });
+      
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none play reverse',
+        },
+        delay: index * 0.08,
+      }).to(card, {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 0.6,
+        ease: 'power4.out',
+      });
+      
+      if (isAlreadyVisible) {
+        tl.progress(1);
       }
     });
     

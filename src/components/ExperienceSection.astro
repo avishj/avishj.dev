@@ -1,7 +1,4 @@
 ---
-// Experience Section — editorial cards with section-based accent colors
-// Inspired by destroytoday.com sticky assembly + pqoqubbw group hover fade
-
 interface Experience {
   company: string;
   role: string;
@@ -100,27 +97,27 @@ const experiences: Experience[] = [
       <h2 class="text-5xl italic md:text-6xl" style="font-family: 'Instrument Serif', serif;">Experience</h2>
     </div>
 
-    <!-- Experience list with group hover fade -->
-    <div class="experience-list group/list">
+    <!-- Experience list with bullet-based trailing hover -->
+    <div class="experience-list">
       {experiences.map((exp, index) => (
         <article 
-          class="exp-card group/card border-t border-white/[0.06] py-6 transition-opacity duration-[50ms] group-hover/list:opacity-30 hover:!opacity-100 md:py-8"
+          class="exp-card group/card border-t border-white/[0.06] py-6 md:py-8"
           data-index={index}
           style={`--accent: ${exp.accentColor};`}
         >
           <div class="grid gap-4 md:grid-cols-12 md:gap-6">
             <!-- Left column: meta -->
-            <div class="md:col-span-4">
+            <div class="exp-meta md:col-span-4">
               <h3 
                 class="exp-company font-display text-xl font-medium tracking-tight md:text-2xl"
                 style={`color: ${exp.accentColor};`}
               >
                 {exp.company}
               </h3>
-              <p class="mt-1 text-sm text-white/50">{exp.role}</p>
-              <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/30">
+              <p class="mt-1 text-sm text-white/60">{exp.role}</p>
+              <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/40">
                 <span class="tabular-nums">{exp.period}</span>
-                <span class="inline-block h-px w-3 bg-white/20"></span>
+                <span class="inline-block h-px w-3 bg-white/25"></span>
                 <span>{exp.location}</span>
               </div>
 
@@ -142,12 +139,12 @@ const experiences: Experience[] = [
             <div class="md:col-span-8">
               <ul class="exp-highlights space-y-2">
                 {exp.highlights.map((highlight) => (
-                  <li class="flex gap-3 text-sm leading-relaxed text-white/60">
+                  <li class="exp-bullet flex gap-3 text-sm leading-relaxed text-white/70">
                     <span 
-                      class="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
-                      style={`background: ${exp.accentColor}50;`}
+                      class="bullet-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
+                      style={`background: ${exp.accentColor}60;`}
                     ></span>
-                    <span>{highlight}</span>
+                    <span class="bullet-text">{highlight}</span>
                   </li>
                 ))}
               </ul>

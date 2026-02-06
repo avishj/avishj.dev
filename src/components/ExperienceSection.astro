@@ -241,14 +241,19 @@ const experiences: Experience[] = [
       }
     });
 
-    // Reset ALL metas first, then brighten the active one
+    // Brighten the active card's meta
     const hoveredBullet = bulletArray[hoveredIndex];
-    const parentCard = hoveredBullet?.closest('.exp-card');
+    const parentCard = hoveredBullet?.closest('.exp-card') as HTMLElement | null;
+    highlightCardMeta(parentCard);
+  }
+
+  function highlightCardMeta(activeCard: HTMLElement | null) {
+    const activeIndex = activeCard?.dataset.index;
     
     cardsArray.forEach((card) => {
       const meta = card.querySelector('.exp-meta');
       if (meta) {
-        const isActive = card === parentCard;
+        const isActive = card.dataset.index === activeIndex;
         gsap.to(meta, {
           filter: isActive ? 'brightness(1.3)' : 'brightness(1)',
           duration: 0.15,
@@ -292,8 +297,17 @@ const experiences: Experience[] = [
     });
   }
 
+  // Bullet hover listeners
   bulletArray.forEach((bullet, index) => {
     bullet.addEventListener('mouseenter', () => applyTrailingHover(index));
+  });
+
+  // Meta (left section) hover listeners - highlight the card
+  cardsArray.forEach((card) => {
+    const meta = card.querySelector('.exp-meta');
+    if (meta) {
+      meta.addEventListener('mouseenter', () => highlightCardMeta(card));
+    }
   });
 
   const experienceList = document.querySelector('.experience-list');

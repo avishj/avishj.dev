@@ -221,6 +221,9 @@ export function initPortalBurn(
   const duration = 3800;
   const startTime = performance.now();
   
+  // Unlock scroll early (after 400ms when main content is visible)
+  setTimeout(() => onComplete(), 400);
+  
   function animate() {
     const elapsed = performance.now() - startTime;
     const progress = Math.min(elapsed / duration, 1);
@@ -241,7 +244,6 @@ export function initPortalBurn(
       geometry.dispose();
       material.dispose();
       canvas.classList.add('hidden');
-      onComplete();
     }
   }
   

@@ -131,47 +131,14 @@ const sizeClasses = {
 </section>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  function initProjectAnimations() {
+  async function initProjectAnimations() {
+    const { scrollReveal, presets } = await import('../utils/scroll-animations');
     const cards = document.querySelectorAll('.project-card');
-    const viewportBottom = window.scrollY + window.innerHeight;
-    
-    cards.forEach((card, index) => {
-      const rect = card.getBoundingClientRect();
-      const elTop = window.scrollY + rect.top;
-      const isAlreadyVisible = elTop < viewportBottom;
-      
-      gsap.set(card, { y: 30, opacity: 0, scale: 0.98 });
-      
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 85%',
-          toggleActions: 'play none play reverse',
-        },
-        delay: index * 0.08,
-      }).to(card, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-      });
-      
-      if (isAlreadyVisible) {
-        tl.progress(1);
-      }
-    });
-    
-    ScrollTrigger.refresh();
+    scrollReveal(cards, presets.fadeUpScale);
   }
 
   // Wait for intro to complete before setting up animations
-  window.addEventListener('intro-complete', initProjectAnimations, { once: true });
+  window.addEventListener('intro-complete', () => initProjectAnimations(), { once: true });
 
   // Group hover opacity fade effect (pqoqubbw style)
   const grid = document.querySelector('.bento-grid');

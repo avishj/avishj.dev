@@ -158,13 +158,7 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Handle page refresh while scrolled - refresh ScrollTrigger after page load
-  // This ensures elements already in viewport are properly shown
   ScrollTrigger.config({ ignoreMobileResize: true });
-  
-  window.addEventListener('load', () => {
-    ScrollTrigger.refresh();
-  });
 
   // ═══════════════════════════════════════════════════════════════════════════
   // HERO ENTRANCE ANIMATION — Name, subtitle, and nav reveal after intro
@@ -274,6 +268,8 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             window.dispatchEvent(new CustomEvent('intro-complete'));
+            // Refresh ScrollTrigger after animations are set up to ensure correct positions
+            requestAnimationFrame(() => ScrollTrigger.refresh());
           });
         });
         
@@ -342,46 +338,26 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
   // ═══════════════════════════════════════════════════════════════════════════
   // SECTION HEADER ENTRANCE ANIMATION — Number then title stagger in
   // ═══════════════════════════════════════════════════════════════════════════
-  function initSectionHeaderAnimations() {
+  async function initSectionHeaderAnimations() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
     
-    const viewportBottom = window.scrollY + window.innerHeight;
+    const { scrollRevealTimeline } = await import('../utils/scroll-animations');
     const sectionHeaders = document.querySelectorAll('.section-header');
-    
+
     sectionHeaders.forEach((header) => {
       const number = header.querySelector('span');
       const title = header.querySelector('h2');
-      
       if (number && title) {
-        const rect = header.getBoundingClientRect();
-        const elTop = window.scrollY + rect.top;
-        const isAlreadyVisible = elTop < viewportBottom;
-        
-        // Always set initial hidden state for animation
-        gsap.set([number, title], { y: 20, opacity: 0 });
-        
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: header,
-            start: 'top 85%',
-            toggleActions: 'play none play reverse',
-          }
-        })
-        .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
-        .to(title, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
-        
-        // If already in viewport, jump to end state immediately
-        if (isAlreadyVisible) {
-          tl.progress(1);
-        }
+        scrollRevealTimeline(header, (tl) => {
+          tl.fromTo(number, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })
+            .fromTo(title, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }, '-=0.45');
+        });
       }
     });
-    
-    ScrollTrigger.refresh();
   }
   
-  window.addEventListener('intro-complete', initSectionHeaderAnimations, { once: true });
+  window.addEventListener('intro-complete', () => initSectionHeaderAnimations(), { once: true });
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SECTION NAV HIGHLIGHTING — Update active state on scroll

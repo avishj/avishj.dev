@@ -276,66 +276,17 @@
 	});
 
 	// Paragraph and status card animations - wait for intro
-	function initAboutAnimations() {
-		const viewportBottom = window.scrollY + window.innerHeight;
-		
-		paras.forEach((para, index) => {
-			const rect = para.getBoundingClientRect();
-			const elTop = window.scrollY + rect.top;
-			const isAlreadyVisible = elTop < viewportBottom;
-			
-			gsap.set(para, { y: 20, opacity: 0 });
-			
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: para,
-					start: "top 85%",
-					toggleActions: "play none play reverse",
-				},
-				delay: index * 0.15
-			}).to(para, {
-				y: 0,
-				opacity: 1,
-				duration: 0.6,
-				ease: "power4.out",
-			});
-			
-			if (isAlreadyVisible) {
-				tl.progress(1);
-			}
-		});
-
+	async function initAboutAnimations() {
+		const { scrollReveal, presets } = await import('../utils/scroll-animations');
 		const statusCard = document.querySelector(".status-card");
+
+		scrollReveal(paras, presets.fadeUp);
 		if (statusCard) {
-			const rect = statusCard.getBoundingClientRect();
-			const elTop = window.scrollY + rect.top;
-			const isAlreadyVisible = elTop < viewportBottom;
-			
-			gsap.set(statusCard, { x: 30, opacity: 0 });
-			
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: statusCard,
-					start: "top 85%",
-					toggleActions: "play none play reverse",
-				},
-				delay: 0.3
-			}).to(statusCard, {
-				x: 0,
-				opacity: 1,
-				duration: 0.6,
-				ease: "power4.out",
-			});
-			
-			if (isAlreadyVisible) {
-				tl.progress(1);
-			}
+			scrollReveal(statusCard, { from: { x: 30, opacity: 0 }, to: { x: 0, opacity: 1 } });
 		}
-		
-		ScrollTrigger.refresh();
 	}
 
-	window.addEventListener('intro-complete', initAboutAnimations, { once: true });
+	window.addEventListener('intro-complete', () => initAboutAnimations(), { once: true });
 </script>
 
 <style>

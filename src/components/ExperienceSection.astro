@@ -167,63 +167,35 @@ const experiences: Experience[] = [
   const cards = document.querySelectorAll('.exp-card');
   const allBullets = document.querySelectorAll('.exp-bullet');
   
-  function initExperienceAnimations() {
-    const viewportBottom = window.scrollY + window.innerHeight;
+  async function initExperienceAnimations() {
+    const { scrollRevealTimeline } = await import('../utils/scroll-animations');
     
     cards.forEach((card) => {
       const company = card.querySelector('.exp-company');
       const meta = card.querySelectorAll('.exp-company ~ p, .exp-company ~ div');
       const highlights = card.querySelectorAll('.exp-highlights li');
       
-      const rect = card.getBoundingClientRect();
-      const elTop = window.scrollY + rect.top;
-      const isAlreadyVisible = elTop < viewportBottom;
-      
-      // Always set initial hidden state for animation
-      gsap.set(company, { y: 15, opacity: 0 });
-      gsap.set(meta, { y: 10, opacity: 0 });
-      gsap.set(highlights, { x: 12, opacity: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 85%',
-          toggleActions: 'play none play reverse',
-        },
+      scrollRevealTimeline(card, (tl) => {
+        tl.fromTo(company, 
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }
+        )
+        .fromTo(meta, 
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.06 },
+          '-=0.4'
+        )
+        .fromTo(highlights,
+          { x: 12, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.05 },
+          '-=0.3'
+        );
       });
-
-      tl.to(company, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-      })
-      .to(meta, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-        stagger: 0.06,
-      }, '-=0.4')
-      .to(highlights, {
-        x: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-        stagger: 0.05,
-      }, '-=0.3');
-      
-      // If already in viewport, jump to end state immediately
-      if (isAlreadyVisible) {
-        tl.progress(1);
-      }
     });
-    
-    ScrollTrigger.refresh();
   }
 
   // Wait for intro to complete before setting up animations
-  window.addEventListener('intro-complete', initExperienceAnimations, { once: true });
+  window.addEventListener('intro-complete', () => initExperienceAnimations(), { once: true });
 
   // Trailing hover brightness effect
   const bulletArray = Array.from(allBullets);

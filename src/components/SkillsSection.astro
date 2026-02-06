@@ -105,101 +105,20 @@ const awards = [
 </section>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  function initSkillsAnimations() {
-    const viewportBottom = window.scrollY + window.innerHeight;
-    
-    // Skill categories
+  async function initSkillsAnimations() {
+    const { scrollReveal, presets } = await import('../utils/scroll-animations');
     const categories = document.querySelectorAll('.skill-category');
-    categories.forEach((cat, index) => {
-      const rect = cat.getBoundingClientRect();
-      const elTop = window.scrollY + rect.top;
-      const isAlreadyVisible = elTop < viewportBottom;
-      
-      gsap.set(cat, { y: 20, opacity: 0 });
-      
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: cat,
-          start: 'top 85%',
-          toggleActions: 'play none play reverse',
-        },
-        delay: index * 0.15,
-      }).to(cat, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-      });
-      
-      if (isAlreadyVisible) {
-        tl.progress(1);
-      }
-    });
-
-    // Skill pills
     const pills = document.querySelectorAll('.skill-pill');
-    pills.forEach((pill, index) => {
-      const rect = pill.getBoundingClientRect();
-      const elTop = window.scrollY + rect.top;
-      const isAlreadyVisible = elTop < viewportBottom;
-      
-      gsap.set(pill, { scale: 0.9, opacity: 0 });
-      
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: pill,
-          start: 'top 85%',
-          toggleActions: 'play none play none',
-        },
-        delay: index * 0.02,
-      }).to(pill, {
-        scale: 1,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-      });
-      
-      if (isAlreadyVisible) {
-        tl.progress(1);
-      }
-    });
-
-    // Education callout
     const callout = document.querySelector('.education-callout');
+
+    scrollReveal(categories, presets.fadeUp);
+    scrollReveal(pills, { ...presets.scaleUp, start: 'top 90%' });
     if (callout) {
-      const rect = callout.getBoundingClientRect();
-      const elTop = window.scrollY + rect.top;
-      const isAlreadyVisible = elTop < viewportBottom;
-      
-      gsap.set(callout, { y: 30, opacity: 0 });
-      
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: callout,
-          start: 'top 85%',
-          toggleActions: 'play none play reverse',
-        },
-      }).to(callout, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-      });
-      
-      if (isAlreadyVisible) {
-        tl.progress(1);
-      }
+      scrollReveal(callout, { from: { y: 30, opacity: 0 }, to: { y: 0, opacity: 1 } });
     }
-    
-    ScrollTrigger.refresh();
   }
 
-  window.addEventListener('intro-complete', initSkillsAnimations, { once: true });
+  window.addEventListener('intro-complete', () => initSkillsAnimations(), { once: true });
 </script>
 
 <style>

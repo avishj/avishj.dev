@@ -120,45 +120,13 @@ const venueColors = {
 </section>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  function initResearchAnimations() {
+  async function initResearchAnimations() {
+    const { scrollReveal, presets } = await import('../utils/scroll-animations');
     const items = document.querySelectorAll('.publication-item');
-    const viewportBottom = window.scrollY + window.innerHeight;
-    
-    items.forEach((item, index) => {
-      const rect = item.getBoundingClientRect();
-      const elTop = window.scrollY + rect.top;
-      const isAlreadyVisible = elTop < viewportBottom;
-      
-      gsap.set(item, { x: -20, opacity: 0 });
-      
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 85%',
-          toggleActions: 'play none play reverse',
-        },
-        delay: index * 0.1,
-      }).to(item, {
-        x: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: 'power4.out',
-      });
-      
-      if (isAlreadyVisible) {
-        tl.progress(1);
-      }
-    });
-    
-    ScrollTrigger.refresh();
+    scrollReveal(items, presets.fadeLeft);
   }
 
-  window.addEventListener('intro-complete', initResearchAnimations, { once: true });
+  window.addEventListener('intro-complete', () => initResearchAnimations(), { once: true });
 </script>
 
 <style>

@@ -45,7 +45,9 @@ float fbm(vec2 p) {
 export function initPortalBurn(
   originX: number, 
   originY: number, 
-  onComplete: () => void
+  onComplete: () => void,
+  onHeaderReveal?: () => void,
+  onNameReveal?: () => void
 ) {
   const canvas = document.getElementById('portal-canvas') as HTMLCanvasElement;
   if (!canvas) return;
@@ -224,6 +226,23 @@ export function initPortalBurn(
   // Unlock scroll early (after 400ms when main content is visible)
   setTimeout(() => onComplete(), 400);
   
+  // Calculate distances from origin to different screen regions
+  const aspect = W / H;
+  
+  // Distance to header (top edge)
+  const distToHeader = Math.sqrt(
+    Math.pow((0.5 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)
+  ) / maxDist;
+  
+  // Distance to name area (left side of screen where name sits)
+  const nameX = 0.05; // ~5% from left edge
+  const distToName = Math.sqrt(
+    Math.pow((nameX - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)
+  ) / maxDist;
+  
+  let headerRevealed = false;
+  let nameRevealed = false;
+  
   function animate() {
     const elapsed = performance.now() - startTime;
     const progress = Math.min(elapsed / duration, 1);
@@ -232,6 +251,18 @@ export function initPortalBurn(
     const easedProgress = 1 - Math.pow(1 - progress, 3);
     
     uniforms.uDissolve.value = easedProgress;
+    
+    // Fire name reveal when burn reaches name area
+    if (!nameRevealed && easedProgress >= distToName && onNameReveal) {
+      nameRevealed = true;
+      onNameReveal();
+    }
+    
+    // Fire header reveal when burn reaches header area
+    if (!headerRevealed && easedProgress >= distToHeader && onHeaderReveal) {
+      headerRevealed = true;
+      onHeaderReveal();
+    }
     
     renderer.render(scene, camera);
     

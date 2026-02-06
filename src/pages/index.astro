@@ -161,44 +161,12 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
   // ═══════════════════════════════════════════════════════════════════════════
   // HERO ENTRANCE ANIMATION — Name, subtitle, and nav reveal after intro
   // ═══════════════════════════════════════════════════════════════════════════
-  function animateHeroEntrance() {
+  // Nav links reveal (triggered when fire reaches header)
+  function animateNavReveal() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    const heroTitle = document.querySelector('.hero-title');
-    const heroSubtitle = document.querySelector('.hero-subtitle');
     const heroNavLinks = document.querySelectorAll('#hero-nav .header-link');
-
-    // Name reveal with blur
-    if (heroTitle) {
-      gsap.fromTo(heroTitle,
-        { y: 40, opacity: 0, filter: 'blur(8px)' },
-        {
-          y: 0,
-          opacity: 1,
-          filter: 'blur(0px)',
-          duration: 0.9,
-          ease: 'power4.out',
-          delay: 0.2,
-        }
-      );
-    }
-
-    // Subtitle follows
-    if (heroSubtitle) {
-      gsap.fromTo(heroSubtitle,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: 'power3.out',
-          delay: 0.35,
-        }
-      );
-    }
-
-    // Nav links stagger in
     if (heroNavLinks.length > 0) {
       gsap.fromTo(heroNavLinks,
         { y: 15, opacity: 0 },
@@ -208,7 +176,41 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
           duration: 0.5,
           ease: 'power2.out',
           stagger: 0.06,
-          delay: 0.5,
+        }
+      );
+    }
+  }
+
+  // Name + subtitle reveal (triggered when fire reaches name area)
+  function animateNameReveal() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const heroTitle = document.querySelector('.hero-title');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+
+    if (heroTitle) {
+      gsap.fromTo(heroTitle,
+        { y: 40, opacity: 0, filter: 'blur(8px)' },
+        {
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 0.9,
+          ease: 'power4.out',
+        }
+      );
+    }
+
+    if (heroSubtitle) {
+      gsap.fromTo(heroSubtitle,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power3.out',
+          delay: 0.15,
         }
       );
     }
@@ -257,10 +259,6 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         mainContent.style.visibility = 'visible';
         mainContent.style.opacity = '1';
         
-        // Delay hero entrance to sync with portal burn reaching the header
-        // Burn is 3800ms with ease-out, header at top edge gets revealed near the end
-        setTimeout(() => animateHeroEntrance(), 2800);
-        
         // Refresh ScrollTrigger after intro so triggers recalculate
         ScrollTrigger.refresh();
         
@@ -271,10 +269,16 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
         });
         
         if ((window as any).initPortalBurn) {
-          (window as any).initPortalBurn(originX, originY, () => {
-            introSplash.remove();
-            document.body.style.overflow = '';
-          });
+          (window as any).initPortalBurn(
+            originX, 
+            originY, 
+            () => {
+              introSplash.remove();
+              document.body.style.overflow = '';
+            },
+            () => animateNavReveal(),  // Called when burn reaches header
+            () => animateNameReveal()  // Called when burn reaches name area
+          );
         } else {
           gsap.to(introSplash, {
             opacity: 0,

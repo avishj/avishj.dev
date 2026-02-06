@@ -165,7 +165,9 @@ const experiences: Experience[] = [
   gsap.registerPlugin(ScrollTrigger);
 
   const cards = document.querySelectorAll('.exp-card');
+  const allBullets = document.querySelectorAll('.exp-bullet');
   
+  // Scroll-triggered entrance animations
   cards.forEach((card) => {
     const company = card.querySelector('.exp-company');
     const meta = card.querySelectorAll('.exp-company ~ p, .exp-company ~ div');
@@ -204,6 +206,93 @@ const experiences: Experience[] = [
       stagger: 0.05,
     }, '-=0.3');
   });
+
+  // Trailing hover brightness effect
+  const bulletArray = Array.from(allBullets);
+  const baseOpacity = 0.7;
+  const hoverOpacity = 1;
+  const trailFalloff = [0.9, 0.8]; // opacity for ±1, ±2 neighbors
+
+  function applyTrailingHover(hoveredIndex: number) {
+    bulletArray.forEach((bullet, i) => {
+      const distance = Math.abs(i - hoveredIndex);
+      let targetOpacity = baseOpacity;
+      
+      if (distance === 0) {
+        targetOpacity = hoverOpacity;
+      } else if (distance <= trailFalloff.length) {
+        targetOpacity = trailFalloff[distance - 1];
+      }
+
+      gsap.to(bullet, {
+        color: `rgba(255, 255, 255, ${targetOpacity})`,
+        duration: 0.15,
+        ease: 'power2.out',
+      });
+
+      const dot = bullet.querySelector('.bullet-dot');
+      if (dot) {
+        gsap.to(dot, {
+          opacity: targetOpacity,
+          duration: 0.15,
+          ease: 'power2.out',
+        });
+      }
+    });
+
+    // Brighten left meta section for the card containing hovered bullet
+    const hoveredBullet = bulletArray[hoveredIndex];
+    const parentCard = hoveredBullet?.closest('.exp-card');
+    
+    cards.forEach((card) => {
+      const meta = card.querySelector('.exp-meta');
+      const isActive = card === parentCard;
+      
+      if (meta) {
+        gsap.to(meta, {
+          opacity: isActive ? 1 : 0.7,
+          duration: 0.2,
+          ease: 'power2.out',
+        });
+      }
+    });
+  }
+
+  function resetHover() {
+    bulletArray.forEach((bullet) => {
+      gsap.to(bullet, {
+        color: `rgba(255, 255, 255, ${baseOpacity})`,
+        duration: 0.25,
+        ease: 'power2.out',
+      });
+
+      const dot = bullet.querySelector('.bullet-dot');
+      if (dot) {
+        gsap.to(dot, {
+          opacity: 0.6,
+          duration: 0.25,
+          ease: 'power2.out',
+        });
+      }
+    });
+
+    cards.forEach((card) => {
+      const meta = card.querySelector('.exp-meta');
+      if (meta) {
+        gsap.to(meta, {
+          opacity: 1,
+          duration: 0.25,
+          ease: 'power2.out',
+        });
+      }
+    });
+  }
+
+  bulletArray.forEach((bullet, index) => {
+    bullet.addEventListener('mouseenter', () => applyTrailingHover(index));
+  });
+
+  document.querySelector('.experience-list')?.addEventListener('mouseleave', resetHover);
 </script>
 
 <style>

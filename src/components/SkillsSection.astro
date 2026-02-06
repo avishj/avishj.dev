@@ -55,7 +55,7 @@ const awards = [
           <div class="flex flex-wrap gap-2">
             {category.skills.map((skill, skillIndex) => (
               <span 
-                class="skill-pill cursor-pointer select-none rounded-lg border border-black/10 bg-white px-3 py-1.5 font-mono text-xs transition-all duration-150 hover:border-black/30 hover:bg-black hover:text-white active:scale-[0.92]"
+                class="skill-pill cursor-pointer select-none rounded-lg border border-black/10 bg-white px-3 py-1.5 font-mono text-xs transition-all duration-150 active:scale-[0.92]"
                 style={`--delay: ${skillIndex * 30}ms;`}
                 role="button"
                 tabindex="0"
@@ -76,7 +76,7 @@ const awards = [
       <div class="flex flex-wrap gap-3">
         {awards.map((award, index) => (
           <div 
-            class="award-item flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm transition-all duration-200 hover:border-black/20"
+            class="award-item flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm transition-all duration-200"
             style={`--delay: ${index * 50}ms;`}
           >
             <span class="h-1.5 w-1.5 rounded-full bg-black/20"></span>
@@ -189,6 +189,26 @@ const awards = [
     to {
       opacity: 1;
       transform: scale(1);
+    }
+  }
+
+  /* Touch device protection - only apply hover on devices with pointer */
+  @media (hover: hover) and (pointer: fine) {
+    .skill-pill:hover {
+      border-color: rgba(0, 0, 0, 0.3);
+      background: black;
+      color: white;
+    }
+
+    .award-item:hover {
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .education-callout:hover {
+      border-color: rgba(0, 0, 0, 0.15);
+      box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.04);
     }
   }
 </style>

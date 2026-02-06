@@ -250,6 +250,30 @@
 		currentLineY = -1;
 		resetToDefault();
 	});
+    
+	const companyMap: Record<string, string> = {
+		'hw-snap': '0',
+		'hw-siemens': '1',
+		'hw-addverb': '2',
+		'hw-mitacs': '3',
+		'hw-ey': '4',
+		'hw-tata': '5'
+	};
+
+	Object.entries(companyMap).forEach(([className, dataIndex]) => {
+		document.querySelectorAll(`.${className}`).forEach((el) => {
+			el.classList.add('company-link');
+			el.addEventListener('click', () => {
+				const targetCard = document.querySelector(`.exp-card[data-index="${dataIndex}"]`);
+				if (targetCard) {
+					targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					// Flash highlight
+					targetCard.classList.add('flash-highlight');
+					setTimeout(() => targetCard.classList.remove('flash-highlight'), 1200);
+				}
+			});
+		});
+	});
 
 	// Paragraph entrance animation
 	paras.forEach((para, index) => {
@@ -330,5 +354,19 @@
 
 	.hw-tata {
 		color: var(--color-accent-tata);
+	}
+
+	.company-link {
+		cursor: pointer;
+		text-decoration-line: underline;
+		text-decoration-style: dotted;
+		text-decoration-color: currentColor;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+		opacity: 1;
+	}
+
+	.company-link:hover {
+		text-decoration-style: solid;
 	}
 </style>

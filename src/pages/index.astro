@@ -158,6 +158,14 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Handle page refresh while scrolled - refresh ScrollTrigger after page load
+  // This ensures elements already in viewport are properly shown
+  ScrollTrigger.config({ ignoreMobileResize: true });
+  
+  window.addEventListener('load', () => {
+    ScrollTrigger.refresh();
+  });
+
   // ═══════════════════════════════════════════════════════════════════════════
   // HERO ENTRANCE ANIMATION — Name, subtitle, and nav reveal after intro
   // ═══════════════════════════════════════════════════════════════════════════
@@ -343,6 +351,7 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
             trigger: header,
             start: 'top 85%',
             toggleActions: 'play none none reverse',
+            invalidateOnRefresh: true,
           }
         })
         .to(number, { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' })

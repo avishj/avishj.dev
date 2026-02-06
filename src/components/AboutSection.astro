@@ -358,15 +358,36 @@
 
 	.company-link {
 		cursor: pointer;
-		text-decoration-line: underline;
-		text-decoration-style: dotted;
-		text-decoration-color: currentColor;
-		text-decoration-thickness: 1px;
-		text-underline-offset: 3px;
-		opacity: 1;
+		position: relative;
+		text-decoration: none;
+		padding-bottom: 2px;
 	}
 
-	.company-link:hover {
-		text-decoration-style: solid;
+	.company-link::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 1px;
+		background-image: repeating-linear-gradient(
+			to right,
+			currentColor 0px,
+			currentColor 2px,
+			transparent 2px,
+			transparent 6px
+		);
+		background-size: 6px 1px;
+		opacity: 0.5;
+	}
+
+	.company-link:hover::after {
+		opacity: 0.9;
+		animation: dotScroll 400ms linear infinite;
+	}
+
+	@keyframes dotScroll {
+		from { background-position: 0 0; }
+		to { background-position: 6px 0; }
 	}
 </style>

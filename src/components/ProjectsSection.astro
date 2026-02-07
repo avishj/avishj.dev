@@ -132,41 +132,17 @@ const sizeClasses = {
 
 <script>
   import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
 
   async function initProjectAnimations() {
+    const { scrollReveal, presets } = await import('../utils/scroll-animations');
     const cards = document.querySelectorAll('.project-card');
-    
-    // Custom staggered entrance animation
-    // Start from scale(0.95) not scale(0) per web-animation-design skill
-    gsap.fromTo(cards, 
-      { 
-        opacity: 0, 
-        y: 20, 
-        scale: 0.95 
-      },
-      { 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-        duration: 0.5,
-        ease: 'expo.out',
-        stagger: 0.06,
-        scrollTrigger: {
-          trigger: '.bento-grid',
-          start: 'top 85%',
-          once: true
-        }
-      }
-    );
+    scrollReveal(cards, presets.fadeUpScale);
   }
 
   // Wait for intro to complete before setting up animations
   window.addEventListener('intro-complete', () => initProjectAnimations(), { once: true });
 
-  // Group hover opacity fade effect (pqoqubbw style)
+  // Group hover opacity fade effect (pqoqubbw style) with GSAP smoothing
   const grid = document.querySelector('.bento-grid');
   const projectCards = document.querySelectorAll('.project-card');
   
@@ -218,8 +194,10 @@ const sizeClasses = {
     }
 
     .project-card:active {
-      transform: scale(0.97);
-      transition: transform 50ms ease;
+      transform: scale(0.95);
+      filter: brightness(0.9);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 50ms ease, filter 50ms ease, box-shadow 50ms ease;
     }
 
     .project-card:hover .tech-pill {

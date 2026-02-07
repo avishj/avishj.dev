@@ -66,10 +66,9 @@ const sizeClasses = {
       <span class="text-5xl text-white/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">03</span>
       <h2 class="text-5xl italic text-white md:text-6xl" style="font-family: 'Instrument Serif', serif;">Projects</h2>
     </div>
-  </div>
 
-  <!-- Bento Grid -->
-  <div class="bento-grid group mx-auto grid max-w-(--max-width) gap-4 px-6 md:grid-cols-3 md:gap-6">
+    <!-- Bento Grid -->
+    <div class="bento-grid group grid gap-4 md:grid-cols-3 md:gap-6">
     {projects.map((project, index) => (
       <article 
         class={`project-card relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-200 ${sizeClasses[project.size]}`}
@@ -127,6 +126,7 @@ const sizeClasses = {
         )}
       </article>
     ))}
+    </div>
   </div>
 </section>
 

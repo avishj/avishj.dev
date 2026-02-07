@@ -118,7 +118,9 @@ export function scrollRevealTimeline(
   const inView = rect.top < viewportHeight - margin && rect.bottom > margin;
   
   if (inView) {
-    tl.progress(1);
+    // Play timeline instead of progress(1) - ensures staggered tweens properly
+    // complete through their "play" lifecycle for reverse() to work later
+    tl.play(0);
     htmlTrigger.dataset.scrollState = 'visible';
   } else {
     htmlTrigger.dataset.scrollState = 'hidden';

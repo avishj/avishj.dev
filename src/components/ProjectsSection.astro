@@ -72,17 +72,17 @@ const sizeClasses = {
   <div class="bento-grid group mx-auto grid max-w-(--max-width) gap-4 px-6 md:grid-cols-3 md:gap-6">
     {projects.map((project, index) => (
       <article 
-        class={`project-card relative overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-6 transition-all duration-200 ${sizeClasses[project.size]}`}
+        class={`project-card relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-200 ${sizeClasses[project.size]}`}
         data-index={index}
       >
         <!-- Gradient fade overlay at bottom -->
-        <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
+        <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
 
         <!-- Content -->
         <div class="relative flex h-full flex-col">
           <!-- Title with external link -->
           <div class="mb-3 flex items-start justify-between gap-2">
-            <h3 class="font-display text-xl font-medium tracking-tight md:text-2xl">
+            <h3 class="font-display text-xl font-medium tracking-tight text-white md:text-2xl">
               {project.title}
             </h3>
             {project.link && (
@@ -90,7 +90,7 @@ const sizeClasses = {
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="project-link-icon flex-shrink-0 text-black/40 transition-colors duration-200"
+                class="project-link-icon flex-shrink-0 text-white/40 transition-all duration-200"
                 aria-label={`View ${project.title} on GitHub`}
               >
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -101,14 +101,14 @@ const sizeClasses = {
           </div>
 
           <!-- Description -->
-          <p class="mb-4 flex-grow text-sm leading-relaxed text-black/60">
+          <p class="mb-4 flex-grow text-sm leading-relaxed text-white/60">
             {project.description}
           </p>
 
           <!-- Tech stack pills -->
           <div class="mt-auto flex flex-wrap gap-2">
             {project.tech.map((tech) => (
-              <span class="rounded-full bg-black/5 px-3 py-1 font-mono text-xs text-black/70">
+              <span class="tech-pill rounded-full bg-white/[0.08] px-3 py-1 font-mono text-xs text-white/70 transition-all duration-150">
                 {tech}
               </span>
             ))}
@@ -117,7 +117,7 @@ const sizeClasses = {
 
         <!-- Corner decoration for large cards -->
         {project.size === 'large' && (
-          <div class="pointer-events-none absolute right-4 top-4 opacity-5">
+          <div class="pointer-events-none absolute right-4 top-4 text-white opacity-[0.03]">
             <svg class="h-24 w-24" viewBox="0 0 100 100" fill="currentColor">
               <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" fill="none" />
               <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="1" fill="none" />
@@ -165,18 +165,24 @@ const sizeClasses = {
 
 <style>
   .project-card {
-    transition: opacity 50ms ease, transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+    transition: opacity 50ms ease, transform 200ms var(--ease-out-expo), border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+    will-change: transform;
   }
 
   /* Touch device protection - only apply hover on devices with pointer */
   @media (hover: hover) and (pointer: fine) {
     .project-card:hover {
-      border-color: rgba(0, 0, 0, 0.2);
-      box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.15);
+      background-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+    }
+
+    .project-card:hover .tech-pill {
+      background-color: rgba(255, 255, 255, 0.12);
     }
 
     .project-link-icon:hover {
-      color: black;
+      color: white;
     }
   }
 </style>

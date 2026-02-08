@@ -294,17 +294,59 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 </section>
 
 <script>
+  import gsap from 'gsap';
+
   async function initResearchAnimations() {
     const { scrollReveal, presets } = await import('../utils/scroll-animations');
 
     const pubItems = document.querySelectorAll('.publication-item');
-    scrollReveal(pubItems, presets.fadeLeft);
+    scrollReveal(pubItems, {
+      from: { y: 20, opacity: 0, scale: 0.98 },
+      to: { y: 0, opacity: 1, scale: 1, stagger: 0.06 },
+    });
 
     const serviceItems = document.querySelectorAll('.service-item');
     scrollReveal(serviceItems, presets.fadeUp);
+
+    const statsBar = document.querySelector('.stats-bar');
+    if (statsBar) {
+      scrollReveal(statsBar, { from: { y: 12, opacity: 0 }, to: { y: 0, opacity: 1 } });
+    }
   }
 
   window.addEventListener('intro-complete', () => initResearchAnimations(), { once: true });
+
+  // Group hover opacity fade (matching projects section pattern)
+  const pubList = document.querySelector('.publications-list');
+  const pubItems = document.querySelectorAll('.publication-item');
+
+  if (pubList) {
+    function resetAll() {
+      pubItems.forEach((item) => {
+        gsap.to(item, { opacity: 1, duration: 0.2, ease: 'power2.out', overwrite: true });
+      });
+    }
+
+    pubItems.forEach((item) => {
+      item.addEventListener('mouseenter', () => {
+        pubItems.forEach((other) => {
+          gsap.to(other, {
+            opacity: other === item ? 1 : 0.4,
+            duration: 0.15,
+            ease: 'power2.out',
+            overwrite: true,
+          });
+        });
+      });
+
+      item.addEventListener('mouseleave', (e) => {
+        const related = (e as MouseEvent).relatedTarget as Element | null;
+        if (!related || !related.closest('.publication-item')) {
+          resetAll();
+        }
+      });
+    });
+  }
 </script>
 
 <style>

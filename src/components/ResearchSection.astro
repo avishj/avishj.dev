@@ -1,55 +1,125 @@
 ---
-// Research & Publications Section
-// Clean list with external link arrows and tabular numbers
-
 interface Publication {
-  venue: string;
-  venueType: 'IEEE' | 'Springer' | 'Elsevier';
   title: string;
-  year: string;
+  authors: string[];
+  highlightAuthor: string;
+  venue: string;
+  venueType: 'IEEE' | 'Springer' | 'Preprint';
+  year: number;
+  citations: number;
+  doi?: string;
   link: string;
-  tech?: string;
+  status: 'published' | 'accepted' | 'preprint';
+  isFirstAuthor?: boolean;
+}
+
+interface AcademicService {
+  role: string;
+  conference: string;
+  abbreviation: string;
+  organizers: string[];
+  year: number;
+  location: string;
+  dates: string;
+  details: string;
+  invitedBy?: string;
 }
 
 const publications: Publication[] = [
   {
-    venue: 'IEEE · 7th CSI-TSS',
-    venueType: 'IEEE',
+    title: 'Addressing Background Genomic and Environmental Effects on Health through Accelerated Computing and Machine Learning: Results from the 2025 Hackathon at Carnegie Mellon University',
+    authors: ['S Sabata', 'J Kubica', 'R Gupta', 'LW Ericson', 'HC Atanda', 'G Subramaniam', 'AG Moller', 'RO Abolade', 'A Banka', 'S Blechman', 'R Brenner', 'M Chikina', 'LC Chong', 'NP Cooley', 'D Chang', 'P Greer', 'A Gupta', 'A Jha', 'E Kacar', 'N Kubota', 'W Lu', 'L Luo', 'T Ly', 'R Mondal', "C O'Donoghue", 'AM Phyo', 'P Qiu', 'G Ross-Dolan', 'A Saadat', 'S Sadasivan', 'R Satterwhite', 'S Shirolkar', 'Y Zheng', 'H Wang', 'M Gainey', 'B Busby'],
+    highlightAuthor: 'A Jha',
+    venue: 'CMU-DNAnexus Hackathon',
+    venueType: 'Preprint',
+    year: 2025,
+    citations: 1,
+    doi: 'https://doi.org/10.37044/osf.io/3a8cn_v1',
+    link: 'https://doi.org/10.37044/osf.io/3a8cn_v1',
+    status: 'preprint',
+    isFirstAuthor: false,
+  },
+  {
     title: 'Harnessing Creative Methods for EEG Feature Extraction and Modeling in Neurological Disorder Diagnoses',
-    year: '2023',
-    link: '#',
-    tech: 'Python, TensorFlow',
+    authors: ['A Jha', 'N Kuruvilla', 'P Garg', 'A Victor'],
+    highlightAuthor: 'A Jha',
+    venue: '7th CSITSS',
+    venueType: 'IEEE',
+    year: 2023,
+    citations: 7,
+    doi: 'https://doi.org/10.1109/CSITSS60515.2023.10334244',
+    link: 'https://doi.org/10.1109/CSITSS60515.2023.10334244',
+    status: 'published',
+    isFirstAuthor: true,
   },
   {
-    venue: 'IEEE · 7th CSI-TSS',
-    venueType: 'IEEE',
     title: 'Enhancing Visibility: Multiresolution Dark Channel Prior for Dehazing and Fog Removal in Images',
-    year: '2023',
-    link: '#',
-    tech: 'Python, OpenCV',
-  },
-  {
-    venue: 'Springer · 4th ICICIT',
-    venueType: 'Springer',
-    title: 'Randomised Analysis of Backtracking-based Search Algorithms in Elucidating Sudoku Puzzles',
-    year: '2022',
-    link: 'https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21',
-    tech: 'Python, Various Libraries',
-  },
-  {
-    venue: 'IEEE · ic-ETITE',
+    authors: ['P Garg', 'A Jha', 'SK Jindal'],
+    highlightAuthor: 'A Jha',
+    venue: '7th CSITSS',
     venueType: 'IEEE',
+    year: 2023,
+    citations: 2,
+    doi: 'https://doi.org/10.1109/CSITSS60515.2023.10334128',
+    link: 'https://doi.org/10.1109/CSITSS60515.2023.10334128',
+    status: 'published',
+    isFirstAuthor: false,
+  },
+  {
+    title: 'Randomised Analysis of Backtracking-based Search Algorithms in Elucidating Sudoku Puzzles Using a Dual Serial/Parallel Approach',
+    authors: ['P Garg', 'A Jha', 'A Shukla'],
+    highlightAuthor: 'A Jha',
+    venue: '4th ICICIT · LNNS vol. 336',
+    venueType: 'Springer',
+    year: 2022,
+    citations: 2,
+    doi: 'https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21',
+    link: 'https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21',
+    status: 'published',
+    isFirstAuthor: false,
+  },
+  {
     title: 'Automated Detection Of Driving Pathway Using Image Processing',
-    year: '2020',
+    authors: ['P Priyadarshini', 'A Jha', 'M Raj'],
+    highlightAuthor: 'A Jha',
+    venue: 'ic-ETITE',
+    venueType: 'IEEE',
+    year: 2020,
+    citations: 0,
+    doi: 'https://ieeexplore.ieee.org/document/9077722',
     link: 'https://ieeexplore.ieee.org/document/9077722',
-    tech: 'Python, Embedded C, Arduino, Raspberry Pi',
+    status: 'published',
+    isFirstAuthor: false,
   },
 ];
 
-const venueColors = {
+const academicService: AcademicService[] = [
+  {
+    role: 'Programme Committee Member',
+    conference: '17th International Conference on Swarm Intelligence',
+    abbreviation: 'ICSI 2026',
+    organizers: ['IASEI', 'Sichuan University', 'Peking University', 'IEEE CIS'],
+    year: 2026,
+    location: 'Chengdu, China',
+    dates: 'Jul 11 · 14, 2026',
+    details: 'Review 2-5 papers · Proceedings in Springer LNCS',
+    invitedBy: 'Prof. Yuhui Shi',
+  },
+];
+
+const totalCitations = publications.reduce((sum, p) => sum + p.citations, 0);
+const hIndex = 2;
+
+const venueColors: Record<string, string> = {
   IEEE: '#00629B',
   Springer: '#333333',
-  Elsevier: '#FF6B00',
+  Preprint: '#2ea44f',
+};
+
+const venueLabels: Record<string, string> = {
+  IEEE: 'IEEE',
+  Springer: 'Springer',
+  Preprint: 'BioHackrXiv',
 };
 ---
 

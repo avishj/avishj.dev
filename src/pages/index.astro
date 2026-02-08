@@ -146,12 +146,13 @@ import { base, url } from '../utils/url';
 
   ScrollTrigger.config({ ignoreMobileResize: true });
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // ═══════════════════════════════════════════════════════════════════════════
   // HERO ENTRANCE ANIMATION — Name, subtitle, and nav reveal after intro
   // ═══════════════════════════════════════════════════════════════════════════
   // Nav links reveal (triggered when fire reaches header)
   function animateNavReveal() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     const heroNavLinks = document.querySelectorAll('#hero-nav .header-link');
@@ -171,7 +172,6 @@ import { base, url } from '../utils/url';
 
   // Name + subtitle reveal (triggered when fire reaches name area)
   function animateNameReveal() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     const heroTitle = document.querySelector('.hero-title');
@@ -206,7 +206,6 @@ import { base, url } from '../utils/url';
 
   // Set initial hidden state for hero elements (before animation)
   function setHeroInitialState() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     gsap.set('.hero-title', { y: 40, opacity: 0, filter: 'blur(8px)' });
@@ -325,7 +324,6 @@ import { base, url } from '../utils/url';
   // SECTION HEADER ENTRANCE ANIMATION — Number then title stagger in
   // ═══════════════════════════════════════════════════════════════════════════
   async function initSectionHeaderAnimations() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
     
     const { scrollRevealTimeline } = await import('../utils/scroll-animations');

@@ -164,7 +164,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
     </div>
 
     <!-- Aggregate stats bar -->
-    <div class="mb-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-6">
+    <div class="stats-bar mb-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-6">
       <span class="font-mono text-base tabular-nums text-white/80">
         <span class="text-white font-medium">{publications.length}</span> Publications
       </span>
@@ -199,7 +199,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
             href={pub.link}
             target="_blank"
             rel="noopener noreferrer"
-            class="publication-item group flex gap-4 border-b border-white/[0.06] py-5 transition-colors duration-200 md:gap-6"
+            class="publication-item group flex gap-4 border-b border-white/[0.06] py-5 md:gap-6"
             data-index={index}
           >
             {/* Year */}

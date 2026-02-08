@@ -75,6 +75,22 @@ import SectionHeader from './SectionHeader.astro';
 	let wordSpans: HTMLSpanElement[] = [];
 	let currentLineY = -1;
 
+	const companyColors: Record<string, string> = {
+		'hw-snap': 'var(--color-accent-snap)',
+		'hw-siemens': 'var(--color-accent-siemens)',
+		'hw-addverb': 'var(--color-accent-addverb)',
+		'hw-mitacs': 'var(--color-accent-mitacs)',
+		'hw-ey': 'var(--color-accent-ey)',
+		'hw-tata': 'var(--color-accent-tata)',
+	};
+
+	function getAccentColor(el: HTMLElement): string | null {
+		for (const [cls, cssVar] of Object.entries(companyColors)) {
+			if (el.classList.contains(cls)) return cssVar;
+		}
+		return null;
+	}
+
 	// Wrap text nodes in word spans for line detection (skip highlights)
 	function wrapWords() {
 		paras.forEach((para) => {
@@ -189,19 +205,10 @@ import SectionHeader from './SectionHeader.astro';
 
 			const distance = Math.abs(hwLineIndex - closestIndex);
 			const dimAmount = Math.max(0.4, 1 - distance * 0.2);
+			const accent = getAccentColor(el);
 
-			if (el.classList.contains("hw-snap")) {
-				el.style.color = distance === 0 ? "var(--color-accent-snap)" : `color-mix(in srgb, var(--color-accent-snap) ${dimAmount * 100}%, transparent)`;
-			} else if (el.classList.contains("hw-siemens")) {
-				el.style.color = distance === 0 ? "var(--color-accent-siemens)" : `color-mix(in srgb, var(--color-accent-siemens) ${dimAmount * 100}%, transparent)`;
-			} else if (el.classList.contains("hw-addverb")) {
-				el.style.color = distance === 0 ? "var(--color-accent-addverb)" : `color-mix(in srgb, var(--color-accent-addverb) ${dimAmount * 100}%, transparent)`;
-			} else if (el.classList.contains("hw-mitacs")) {
-				el.style.color = distance === 0 ? "var(--color-accent-mitacs)" : `color-mix(in srgb, var(--color-accent-mitacs) ${dimAmount * 100}%, transparent)`;
-			} else if (el.classList.contains("hw-ey")) {
-				el.style.color = distance === 0 ? "var(--color-accent-ey)" : `color-mix(in srgb, var(--color-accent-ey) ${dimAmount * 100}%, transparent)`;
-			} else if (el.classList.contains("hw-tata")) {
-				el.style.color = distance === 0 ? "var(--color-accent-tata)" : `color-mix(in srgb, var(--color-accent-tata) ${dimAmount * 100}%, transparent)`;
+			if (accent) {
+				el.style.color = distance === 0 ? accent : `color-mix(in srgb, ${accent} ${dimAmount * 100}%, transparent)`;
 			} else {
 				el.style.color = `rgba(255, 255, 255, ${distance === 0 ? 1 : Math.max(0.45, 0.9 - distance * 0.15)})`;
 			}
@@ -216,21 +223,7 @@ import SectionHeader from './SectionHeader.astro';
 
 		document.querySelectorAll(".hw").forEach((hw) => {
 			const el = hw as HTMLElement;
-			if (el.classList.contains("hw-snap")) {
-				el.style.color = "var(--color-accent-snap)";
-			} else if (el.classList.contains("hw-siemens")) {
-				el.style.color = "var(--color-accent-siemens)";
-			} else if (el.classList.contains("hw-addverb")) {
-				el.style.color = "var(--color-accent-addverb)";
-			} else if (el.classList.contains("hw-mitacs")) {
-				el.style.color = "var(--color-accent-mitacs)";
-			} else if (el.classList.contains("hw-ey")) {
-				el.style.color = "var(--color-accent-ey)";
-			} else if (el.classList.contains("hw-tata")) {
-				el.style.color = "var(--color-accent-tata)";
-			} else {
-				el.style.color = "rgba(255, 255, 255, 1)";
-			}
+			el.style.color = getAccentColor(el) ?? "rgba(255, 255, 255, 1)";
 		});
 	}
 

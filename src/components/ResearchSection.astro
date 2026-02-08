@@ -294,15 +294,18 @@ const venueLabels: Record<string, string> = {
 <script>
   async function initResearchAnimations() {
     const { scrollReveal, presets } = await import('../utils/scroll-animations');
-    const items = document.querySelectorAll('.publication-item');
-    scrollReveal(items, presets.fadeLeft);
+
+    const pubItems = document.querySelectorAll('.publication-item');
+    scrollReveal(pubItems, presets.fadeLeft);
+
+    const serviceItems = document.querySelectorAll('.service-item');
+    scrollReveal(serviceItems, presets.fadeUp);
   }
 
   window.addEventListener('intro-complete', () => initResearchAnimations(), { once: true });
 </script>
 
 <style>
-  /* Touch device protection - only apply hover on devices with pointer */
   @media (hover: hover) and (pointer: fine) {
     .publication-item:hover {
       background: rgba(255, 255, 255, 0.02);
@@ -313,7 +316,7 @@ const venueLabels: Record<string, string> = {
     }
 
     .publication-item:hover .pub-arrow {
-      transform: translateX(4px);
+      transform: translate(3px, -3px);
       color: white;
     }
 
@@ -322,7 +325,24 @@ const venueLabels: Record<string, string> = {
     }
 
     .scholar-link:hover .scholar-arrow {
-      transform: translateX(4px);
+      transform: translate(3px, -3px);
     }
+
+    .scholar-stats-link:hover {
+      color: white;
+    }
+
+    .scholar-stats-link:hover .scholar-stats-arrow {
+      transform: translate(2px, -2px);
+    }
+
+    .service-item:hover {
+      border-color: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  .service-item {
+    transition: border-color 0.2s, background 0.2s;
   }
 </style>

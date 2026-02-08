@@ -36,6 +36,7 @@
   
   /* Font families */
   --font-display: 'Instrument Serif', Georgia, serif;
+  --font-number: 'Viaoda Libre', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
@@ -110,6 +111,10 @@ body {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+.font-number {
+  font-family: var(--font-number);
 }
 
 /* Tabular numbers for dates/metrics */

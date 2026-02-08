@@ -2,6 +2,7 @@
 // Projects Bento Grid with group hover opacity fade
 // Inspired by pqoqubbw.dev + Shopify Editions card patterns
 import ArrowIcon from './ArrowIcon.astro';
+import SectionHeader from './SectionHeader.astro';
 
 interface Project {
   title: string;
@@ -120,12 +121,8 @@ const sizeClasses = {
 ---
 
 <section id="projects" class="projects-section relative bg-[--color-bg-primary] pt-4 pb-16 text-[--color-text-primary] md:pt-6 md:pb-24">
-  <!-- Section header -->
   <div class="max-w-(--max-width)">
-    <div class="section-header mb-12 flex items-baseline gap-4">
-      <span class="text-5xl text-white/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">03</span>
-      <h2 class="text-5xl italic text-white md:text-6xl" style="font-family: 'Instrument Serif', serif;">Projects</h2>
-    </div>
+    <SectionHeader number="03" title="Projects" class="mb-12" />
 
     <!-- Bento Grid -->
     <div class="bento-grid group grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">

@@ -1,15 +1,12 @@
 ---
 // About Section with cursor-trailing line highlight effect
 // Text trails from white to grey based on distance from cursor
+import SectionHeader from './SectionHeader.astro';
 ---
 
 <section id="about" class="about-section relative bg-[--color-bg-primary] pt-4 pb-16 md:pt-6 md:pb-24">
 	<div class="max-w-(--max-width)">
-		<!-- Section header -->
-		<div class="section-header mb-12 flex items-baseline gap-4">
-			<span class="text-5xl text-white/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">01</span>
-			<h2 class="text-5xl italic md:text-6xl" style="font-family: 'Instrument Serif', serif;">About</h2>
-		</div>
+		<SectionHeader number="01" title="About" class="mb-12" />
 
 		<!-- Bio with cursor-trailing opacity -->
 		<div class="about-content grid gap-12 md:grid-cols-12">

@@ -1,6 +1,7 @@
 ---
 // Skills Section with tech stack pills and hover states
 // Inspired by varshithm + pqoqubbw bordered skill pills
+import SectionHeader from './SectionHeader.astro';
 
 interface SkillCategory {
   name: string;
@@ -38,12 +39,8 @@ const awards = [
 ---
 
 <section id="skills" class="skills-section relative bg-[--color-bg-cream] pt-4 pb-16 text-[--color-text-dark] md:pt-6 md:pb-24">
-  <!-- Section header -->
   <div class="max-w-(--max-width)">
-    <div class="section-header mb-12 flex items-baseline gap-4">
-      <span class="text-5xl text-[--color-text-dark]/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">05</span>
-      <h2 class="text-5xl italic text-[--color-text-dark] md:text-6xl" style="font-family: 'Instrument Serif', serif;">Skills & Recognition</h2>
-    </div>
+    <SectionHeader number="05" title="Skills & Recognition" variant="light" class="mb-12" />
 
     <!-- Skills grid -->
     <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-3">

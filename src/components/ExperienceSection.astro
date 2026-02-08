@@ -1,4 +1,6 @@
 ---
+import SectionHeader from './SectionHeader.astro';
+
 interface Experience {
   company: string;
   role: string;
@@ -91,11 +93,7 @@ const experiences: Experience[] = [
 
 <section id="experience" class="experience-section relative bg-[--color-bg-primary] pt-4 pb-16 md:pt-6 md:pb-24">
   <div class="max-w-(--max-width)">
-    <!-- Section header — matches About section pattern -->
-    <div class="section-header mb-12 flex items-baseline gap-4">
-      <span class="text-5xl text-white/50 md:text-6xl" style="font-family: 'Viaoda Libre', serif;">02</span>
-      <h2 class="text-5xl italic md:text-6xl" style="font-family: 'Instrument Serif', serif;">Experience</h2>
-    </div>
+    <SectionHeader number="02" title="Experience" class="mb-12" />
 
     <!-- Experience list with bullet-based trailing hover -->
     <div class="experience-list">

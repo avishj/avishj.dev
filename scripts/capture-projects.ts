@@ -36,7 +36,7 @@ for (const site of targets) {
   console.log(`\n${site.active ? '●' : '○'} ${site.name} — ${site.url} (${CAPTURE_W}x${CAPTURE_H} @${SCALE}x)`);
 
   const proc = Bun.spawnSync([
-    'pageres', site.url, `${CAPTURE_W}x${CAPTURE_H}`,
+    'bunx', 'pageres', site.url, `${CAPTURE_W}x${CAPTURE_H}`,
     `--scale=${SCALE}`,
     `--filename=${site.name}`,
     '--crop',

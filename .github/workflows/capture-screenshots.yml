@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Install pageres-cli
-        run: bun install -g pageres-cli
-
       - name: Capture active project screenshots
         run: bun run scripts/capture-projects.ts --active-only
 

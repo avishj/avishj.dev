@@ -65,10 +65,7 @@ import SectionHeader from './SectionHeader.astro';
 </section>
 
 <script>
-	import gsap from "gsap";
-	import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-	gsap.registerPlugin(ScrollTrigger);
+	import { gsap } from "../utils/gsap-init";
 
 	const textContainer = document.querySelector(".about-text") as HTMLElement;
 	const paras = document.querySelectorAll(".about-para");

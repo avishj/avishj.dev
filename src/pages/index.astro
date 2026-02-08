@@ -141,11 +141,8 @@ import { base, url } from '../utils/url';
 </BaseLayout>
 
 <script>
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { gsap, ScrollTrigger } from '../utils/gsap-init';
   import lottie from 'lottie-web';
-
-  gsap.registerPlugin(ScrollTrigger);
 
   ScrollTrigger.config({ ignoreMobileResize: true });
 

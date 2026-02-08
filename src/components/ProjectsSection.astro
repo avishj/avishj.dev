@@ -175,27 +175,29 @@ const sizeClasses = {
   const projectCards = document.querySelectorAll('.project-card');
   
   if (grid) {
+    function resetAll() {
+      projectCards.forEach((c) => {
+        gsap.to(c, { opacity: 1, duration: 0.2, ease: 'power2.out', overwrite: true });
+      });
+    }
+
     projectCards.forEach((card) => {
       card.addEventListener('mouseenter', () => {
         projectCards.forEach((otherCard) => {
-          if (otherCard !== card) {
-            gsap.to(otherCard, { 
-              opacity: 0.4, 
-              duration: 0.15, 
-              ease: 'power2.out' 
-            });
-          }
-        });
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        projectCards.forEach((otherCard) => {
           gsap.to(otherCard, { 
-            opacity: 1, 
-            duration: 0.2, 
-            ease: 'power2.out' 
+            opacity: otherCard === card ? 1 : 0.4, 
+            duration: 0.15, 
+            ease: 'power2.out',
+            overwrite: true,
           });
         });
+      });
+
+      card.addEventListener('mouseleave', (e) => {
+        const related = (e as MouseEvent).relatedTarget as Element | null;
+        if (!related || !related.closest('.project-card')) {
+          resetAll();
+        }
       });
     });
   }

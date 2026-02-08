@@ -12,7 +12,7 @@ interface Project {
 }
 
 const projects: Project[] = [
-  // --- Recent projects first ---
+  // --- Personal projects ---
   {
     title: 'ForexRadar',
     description: 'Track historical Visa, Mastercard, and ECB exchange rates with real markup data. Interactive charts, offline-first caching, and 365+ days of history.',
@@ -34,7 +34,7 @@ const projects: Project[] = [
     description: 'macOS menu-bar app for quickly tracking times across multiple timezones across the past, present, and future.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/ephemeris',
-    image: '/projects/ephemeris',
+    // image: '/projects/ephemeris',
     size: '1x2',
   },
   {
@@ -42,20 +42,28 @@ const projects: Project[] = [
     description: 'macOS menu-bar app for tracking token usage quotas across AI providers with friendly reminders to use it or lose it.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/UseItOrLoseIt',
-    image: '/projects/useitOrloseit',
+    // image: '/projects/useitOrloseit',
     size: '2x1',
   },
-  // --- Other projects ---
   {
-    title: 'XR Remote Desktop',
-    description: 'Novel remote desktop streaming for Snap Spectacles AR glasses. Real-time desktop mirroring with hand-tracking interaction in 3D space.',
-    tech: ['C++', 'OpenXR', 'LibVNC'],
+    title: 'avishj.dev',
+    description: 'This portfolio. High-end editorial design with multi-layer parallax, GSAP scroll animations, and responsive bento grid layouts.',
+    tech: ['Astro', 'Tailwind CSS', 'GSAP'],
+    link: 'https://github.com/avishj/avishj.dev',
     size: '1x1',
   },
   {
-    title: 'LLM Log Migration',
-    description: 'Automated migration of 13,000+ legacy loggers to OpenTelemetry using Claude agents and AST parsing.',
-    tech: ['C#', 'Python', 'Claude API'],
+    title: 'WatchPoint',
+    description: 'Parental monitoring app that detects abusive or harmful content in children\'s digital interactions using sentiment analysis and real-time alerts.',
+    tech: ['Python', 'NLP', 'React'],
+    link: 'https://github.com/avishj/WatchPoint',
+    size: '2x1',
+  },
+  {
+    title: 'VTop Bulk Downloader',
+    description: 'Automated bulk downloader for VTop academic portal. Downloads all semesters\' question papers, assignments, and metadata into an organized folder structure.',
+    tech: ['TypeScript', 'Puppeteer'],
+    link: 'https://github.com/avishj/VTopBulkDownloader',
     size: '1x1',
   },
   {
@@ -71,8 +79,21 @@ const projects: Project[] = [
     description: 'Frontend for candidate tests across 5 domains, handling 1200+ applicants with 100+ concurrent tests.',
     tech: ['VueJS', 'Axios', 'Cloudflare'],
     link: 'https://github.com/MFC-VIT/MFC-RecruitmentPortal-Frontend',
-    image: '/projects/mfc-recruitment',
+    // image: '/projects/mfc-recruitment',
     size: '1x2',
+  },
+  // --- From experience ---
+  {
+    title: 'XR Remote Desktop',
+    description: 'Novel remote desktop streaming for Snap Spectacles AR glasses. Real-time desktop mirroring with hand-tracking interaction in 3D space.',
+    tech: ['C++', 'OpenXR', 'LibVNC'],
+    size: '1x1',
+  },
+  {
+    title: 'LLM Log Migration',
+    description: 'Automated migration of 13,000+ legacy loggers to OpenTelemetry using Claude agents and AST parsing.',
+    tech: ['C#', 'Python', 'Claude API'],
+    size: '1x1',
   },
   {
     title: 'Warehouse Simulation Engine',

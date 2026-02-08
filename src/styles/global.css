@@ -134,6 +134,11 @@ body {
   transition-timing-function: var(--ease-out-quint);
 }
 
+@keyframes dotScroll {
+  from { background-position: 0 0; }
+  to { background-position: 6px 0; }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    CANVAS GRAIN TEXTURE OVERLAY
    ═══════════════════════════════════════════════════════════════════════════ */

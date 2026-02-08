@@ -121,6 +121,41 @@ const venueLabels: Record<string, string> = {
   Springer: 'Springer',
   Preprint: 'BioHackrXiv',
 };
+
+const MAX_AUTHORS = 8;
+
+interface DisplayAuthor {
+  name: string;
+  isHighlight: boolean;
+  separator: string;
+}
+
+function getDisplayAuthors(pub: Publication): { authors: DisplayAuthor[]; truncated: boolean } {
+  if (pub.authors.length <= MAX_AUTHORS) {
+    return {
+      authors: pub.authors.map((a, i) => ({
+        name: a,
+        isHighlight: a === pub.highlightAuthor,
+        separator: i < pub.authors.length - 1 ? ', ' : '',
+      })),
+      truncated: false,
+    };
+  }
+  const shown = pub.authors.slice(0, 6);
+  const highlightInShown = shown.includes(pub.highlightAuthor);
+  const result: DisplayAuthor[] = shown.map((a) => ({
+    name: a,
+    isHighlight: a === pub.highlightAuthor,
+    separator: ', ',
+  }));
+  if (!highlightInShown) {
+    result.push({ name: '...', isHighlight: false, separator: ' ' });
+    result.push({ name: pub.highlightAuthor, isHighlight: true, separator: ', ' });
+  }
+  return { authors: result, truncated: true };
+}
+
+const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 ---
 
 <section id="research" class="research-section relative bg-[--color-bg-primary] pt-4 pb-16 md:pt-6 md:pb-24">
@@ -207,16 +242,17 @@ const venueLabels: Record<string, string> = {
 
               {/* Authors */}
               <p class="mt-1.5 text-sm leading-relaxed text-[--color-text-muted]">
-                {pub.authors.map((author, i) => (
-                  <>
-                    {author === pub.highlightAuthor ? (
-                      <span class="font-medium text-white">{author}</span>
+                {pubDisplayAuthors[index].authors.map((da) => (
+                  <Fragment>
+                    {da.isHighlight ? (
+                      <span class="font-medium text-white">{da.name}</span>
                     ) : (
-                      <span>{author}</span>
+                      <span>{da.name}</span>
                     )}
-                    {i < pub.authors.length - 1 && ', '}
-                  </>
+                    {da.separator}
+                  </Fragment>
                 ))}
+                {pubDisplayAuthors[index].truncated && <span class="italic">et al.</span>}
               </p>
             </div>
 
@@ -261,10 +297,10 @@ const venueLabels: Record<string, string> = {
             <span class="text-white/20">·</span>
             <span>{service.dates}</span>
             {service.invitedBy && (
-              <>
+              <Fragment>
                 <span class="text-white/20">·</span>
                 <span>Invited by {service.invitedBy}</span>
-              </>
+              </Fragment>
             )}
           </div>
 

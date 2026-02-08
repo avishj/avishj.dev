@@ -53,17 +53,21 @@ for (const site of targets) {
 
   const srcPng = join(OUT_DIR, `${site.name}.png`);
 
-  for (const w of WIDTHS) {
-    const h = Math.round(w * (9 / 16));
-    const outPath = join(OUT_DIR, `${site.name}-${w}w.webp`);
-    await sharp(srcPng)
-      .resize(w, h, { fit: 'cover' })
-      .webp({ quality: 82 })
-      .toFile(outPath);
-    console.log(`  → ${site.name}-${w}w.webp  (${w}×${h})`);
+  try {
+    for (const w of WIDTHS) {
+      const h = Math.round(w * (9 / 16));
+      const outPath = join(OUT_DIR, `${site.name}-${w}w.webp`);
+      await sharp(srcPng)
+        .resize(w, h, { fit: 'cover' })
+        .webp({ quality: 82 })
+        .toFile(outPath);
+      console.log(`  → ${site.name}-${w}w.webp  (${w}×${h})`);
+    }
+  } catch (err) {
+    console.error(`Error resizing ${site.name}:`, err);
+  } finally {
+    if (await Bun.file(srcPng).exists()) await Bun.$`rm ${srcPng}`;
   }
-
-  await Bun.file(srcPng).exists() && (await Bun.$`rm ${srcPng}`);
 }
 
 console.log('\nDone.');

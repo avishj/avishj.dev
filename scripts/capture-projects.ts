@@ -9,14 +9,30 @@ const SCALE = 2;
 
 const WIDTHS = [400, 800, 1200, 1600, 2560];
 
-const sites = [
-  { url: 'https://avishj.github.io/ForexRadar', name: 'forexradar' },
-  { url: 'https://avishj.github.io/ExplainRFC', name: 'explainrfc' },
-  { url: 'https://sedsindia.github.io', name: 'sedsindia' },
+interface Site {
+  url: string;
+  name: string;
+  active: boolean;
+}
+
+const sites: Site[] = [
+  { url: 'https://avishj.github.io/ForexRadar', name: 'forexradar', active: true },
+  { url: 'https://avishj.github.io/ExplainRFC', name: 'explainrfc', active: true },
+  { url: 'https://sedsindia.github.io', name: 'sedsindia', active: false },
 ];
 
-for (const site of sites) {
-  console.log(`\nCapturing ${site.url} at ${CAPTURE_W}x${CAPTURE_H} @${SCALE}x ...`);
+const activeOnly = Bun.argv.includes('--active-only');
+const targets = activeOnly ? sites.filter((s) => s.active) : sites;
+
+if (targets.length === 0) {
+  console.log('No sites to capture.');
+  process.exit(0);
+}
+
+console.log(`Capturing ${targets.length}/${sites.length} sites${activeOnly ? ' (active only)' : ''} ...`);
+
+for (const site of targets) {
+  console.log(`\n${site.active ? '●' : '○'} ${site.name} — ${site.url} (${CAPTURE_W}x${CAPTURE_H} @${SCALE}x)`);
 
   const proc = Bun.spawnSync([
     'pageres', site.url, `${CAPTURE_W}x${CAPTURE_H}`,

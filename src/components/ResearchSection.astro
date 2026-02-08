@@ -166,7 +166,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
     </div>
 
     <!-- Aggregate stats bar -->
-    <div class="stats-bar mb-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-6">
+    <div class="stats-bar mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-4">
       <span class="font-mono text-base tabular-nums text-white/80">
         <span class="text-white font-medium">{publications.length}</span> Publications
       </span>
@@ -192,8 +192,8 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
     </div>
 
     <!-- Publications subsection -->
-    <div class="mb-8">
-      <h3 class="mb-6 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Publications</h3>
+    <div class="mb-6">
+      <h3 class="mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Publications</h3>
 
       <div class="publications-list space-y-0">
         {publications.map((pub, index) => (
@@ -201,7 +201,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
             href={pub.link}
             target="_blank"
             rel="noopener noreferrer"
-            class="publication-item group flex gap-4 border-b border-white/[0.06] py-5 md:gap-6"
+            class="publication-item group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6"
             data-index={index}
           >
             {/* Year */}
@@ -212,7 +212,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
             {/* Main content */}
             <div class="min-w-0 flex-grow">
               {/* Top row: badge + citation + 1st author tag */}
-              <div class="mb-2 flex flex-wrap items-center gap-2">
+              <div class="mb-1.5 flex flex-wrap items-center gap-2">
                 <span
                   class="rounded px-1.5 py-0.5 font-mono text-xs leading-none"
                   style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}
@@ -269,10 +269,10 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
     <!-- Academic Service subsection -->
     <div>
-      <h3 class="mb-6 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
+      <h3 class="mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
 
       {academicService.map((service) => (
-        <a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item block border-b border-white/[0.06] py-5">
+        <a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item block border-b border-white/[0.06] py-3.5">
           <div class="flex items-start justify-between gap-6">
             <p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
             <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>

@@ -350,6 +350,14 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 </script>
 
 <style>
+  .publication-item {
+    transition:
+      opacity 50ms ease,
+      background-color 200ms ease,
+      transform 200ms var(--ease-out-expo);
+    will-change: transform;
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .publication-item:hover {
       background: rgba(255, 255, 255, 0.02);
@@ -357,6 +365,11 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
     .publication-item:hover .pub-title {
       color: white;
+    }
+
+    .publication-item:active {
+      transform: scale(0.98);
+      transition: transform 50ms ease;
     }
 
     .pub-arrow {
@@ -431,6 +444,22 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .publication-item {
+      transition: none;
+    }
+
+    .publication-item:active {
+      transform: none;
+    }
+
+    .pub-arrow {
+      transition: none;
+    }
+
+    .scholar-stats-arrow {
+      transition: none;
+    }
+
     .highlight-author {
       animation: none;
       border: 1px solid rgba(224, 168, 96, 0.2);

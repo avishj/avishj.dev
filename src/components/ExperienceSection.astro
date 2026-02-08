@@ -254,7 +254,7 @@ const experiences: Experience[] = [
         color: `rgba(255, 255, 255, ${baseOpacity})`,
         duration: 0.2,
         ease: 'power2.out',
-        overwrite: true,
+        overwrite: 'auto',
       });
 
       const dot = bullet.querySelector('.bullet-dot');
@@ -263,7 +263,7 @@ const experiences: Experience[] = [
           opacity: 0.6,
           duration: 0.2,
           ease: 'power2.out',
-          overwrite: true,
+          overwrite: 'auto',
         });
       }
     });

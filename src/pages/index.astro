@@ -7,6 +7,7 @@ import ProjectsSection from '../components/ProjectsSection.astro';
 import ResearchSection from '../components/ResearchSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import PortalBurn from '../components/PortalBurn.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
 
 const base = import.meta.env.BASE_URL;
 const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}${path}`;
@@ -50,33 +51,23 @@ const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}$
             </a>
             <a href={url('blog/')} class="header-link group flex items-center gap-1.5">
               <span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">blog</span>
-              <svg class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
+              <ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
             </a>
             <a href={url('research/')} class="header-link group flex items-center gap-1.5">
               <span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">research</span>
-              <svg class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
+              <ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
             </a>
             <a href="https://github.com/avishj" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 lg:flex">
               <span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">github</span>
-              <svg class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
+              <ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
             </a>
             <a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 lg:flex">
               <span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">scholar</span>
-              <svg class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
+              <ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
             </a>
             <a href="https://linkedin.com/in/avishj" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 lg:flex">
               <span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">linkedin</span>
-              <svg class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
+              <ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
             </a>
           </nav>
         </div>

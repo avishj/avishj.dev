@@ -7,35 +7,34 @@ interface Project {
   description: string;
   tech: string[];
   link?: string;
+  image?: string;
   size: '1x1' | '1x2' | '2x1' | '2x2';
 }
 
 const projects: Project[] = [
+  // --- Recent projects first ---
   {
     title: 'ForexRadar',
     description: 'Track historical Visa, Mastercard, and ECB exchange rates with real markup data. Interactive charts, offline-first caching, and 365+ days of history.',
     tech: ['JavaScript', 'TypeScript', 'Bun'],
     link: 'https://github.com/avishj/ForexRadar',
-    size: '1x2',
+    image: '/projects/forexradar.png',
+    size: '2x1',
   },
   {
     title: 'ExplainRFC',
     description: 'Interactive 3D visualizations that explain how the internet works. Each IETF RFC becomes an explorable exhibit with guided walkthroughs.',
     tech: ['TypeScript', 'Astro', 'React', 'Three.js'],
     link: 'https://github.com/avishj/ExplainRFC',
-    size: '1x1',
+    image: '/projects/explainrfc.png',
+    size: '1x2',
   },
   {
     title: 'Ephemeris',
     description: 'macOS menu-bar app for quickly tracking times across multiple timezones across the past, present, and future.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/ephemeris',
-    size: '1x1',
-  },
-  {
-    title: 'XR Remote Desktop',
-    description: 'Novel remote desktop streaming for Snap Spectacles AR glasses. Real-time desktop mirroring with hand-tracking interaction in 3D space.',
-    tech: ['C++', 'OpenXR', 'LibVNC'],
+    image: '/projects/ephemeris.png',
     size: '1x2',
   },
   {
@@ -43,25 +42,20 @@ const projects: Project[] = [
     description: 'macOS menu-bar app for tracking token usage quotas across AI providers with friendly reminders to use it or lose it.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/UseItOrLoseIt',
+    image: '/projects/useitOrloseit.png',
+    size: '2x1',
+  },
+  // --- Other projects ---
+  {
+    title: 'XR Remote Desktop',
+    description: 'Novel remote desktop streaming for Snap Spectacles AR glasses. Real-time desktop mirroring with hand-tracking interaction in 3D space.',
+    tech: ['C++', 'OpenXR', 'LibVNC'],
     size: '1x1',
   },
   {
     title: 'LLM Log Migration',
     description: 'Automated migration of 13,000+ legacy loggers to OpenTelemetry using Claude agents and AST parsing.',
     tech: ['C#', 'Python', 'Claude API'],
-    size: '1x2',
-  },
-  {
-    title: 'MFC Recruitment Portal',
-    description: 'Frontend for candidate tests across 5 domains, handling 1200+ applicants with 100+ concurrent tests.',
-    tech: ['VueJS', 'Axios', 'Cloudflare'],
-    link: 'https://github.com/MFC-VIT/MFC-RecruitmentPortal-Frontend',
-    size: '1x1',
-  },
-  {
-    title: 'Warehouse Simulation Engine',
-    description: 'GTP simulation and order orchestration system. Optimized pick face efficiency from 32hr to 12.5hr runtime.',
-    tech: ['Java', 'SpringBoot', 'Analytics'],
     size: '1x1',
   },
   {
@@ -69,7 +63,22 @@ const projects: Project[] = [
     description: 'Unified 4 portals, managed 7 websites, 180+ emails, and 3+ domains. Reduced OpEx by 40%.',
     tech: ['JavaScript', 'jQuery', 'Netlify'],
     link: 'https://github.com/sedsindia/sedsindia.github.io',
+    image: '/projects/sedsindia.png',
+    size: '2x1',
+  },
+  {
+    title: 'MFC Recruitment Portal',
+    description: 'Frontend for candidate tests across 5 domains, handling 1200+ applicants with 100+ concurrent tests.',
+    tech: ['VueJS', 'Axios', 'Cloudflare'],
+    link: 'https://github.com/MFC-VIT/MFC-RecruitmentPortal-Frontend',
+    image: '/projects/mfc-recruitment.png',
     size: '1x2',
+  },
+  {
+    title: 'Warehouse Simulation Engine',
+    description: 'GTP simulation and order orchestration system. Optimized pick face efficiency from 32hr to 12.5hr runtime.',
+    tech: ['Java', 'SpringBoot', 'Analytics'],
+    size: '1x1',
   },
   {
     title: 'Multi-Modal Learning Framework',
@@ -97,17 +106,28 @@ const sizeClasses = {
     </div>
 
     <!-- Bento Grid -->
-    <div class="bento-grid group grid gap-4 md:grid-cols-3 md:gap-6">
+    <div class="bento-grid group grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
     {projects.map((project, index) => (
       <article 
         class={`project-card relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-200 ${sizeClasses[project.size]}`}
         data-index={index}
       >
+        {project.image && (
+          <div class="project-image mb-4 overflow-hidden rounded-lg">
+            <img
+              src={project.image}
+              alt={`${project.title} screenshot`}
+              class="h-full w-full object-cover transition-transform duration-500"
+              loading="lazy"
+            />
+          </div>
+        )}
+
         <!-- Gradient fade overlay at bottom -->
         <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
 
         <!-- Content -->
-        <div class="relative flex h-full flex-col">
+        <div class={`relative flex flex-col ${project.image ? '' : 'h-full'}`}>
           <!-- Title with external link -->
           <div class="mb-3 flex items-start justify-between gap-2">
             <h3 class="font-display text-xl font-medium tracking-tight text-white md:text-2xl">
@@ -233,6 +253,10 @@ const sizeClasses = {
 
     .project-card:hover .tech-pill {
       background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .project-card:hover .project-image img {
+      transform: scale(1.05);
     }
 
     .project-link-icon {

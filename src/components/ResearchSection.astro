@@ -132,22 +132,22 @@ const venueLabels: Record<string, string> = {
 
     <!-- Aggregate stats bar -->
     <div class="mb-12 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-6">
-      <span class="font-mono text-sm tabular-nums text-white/80">
+      <span class="font-mono text-base tabular-nums text-white/80">
         <span class="text-white font-medium">{publications.length}</span> Publications
       </span>
       <span class="text-white/20">·</span>
-      <span class="font-mono text-sm tabular-nums text-white/80">
+      <span class="font-mono text-base tabular-nums text-white/80">
         <span class="text-white font-medium">{totalCitations}</span> Citations
       </span>
       <span class="text-white/20">·</span>
-      <span class="font-mono text-sm tabular-nums text-white/80">
+      <span class="font-mono text-base tabular-nums text-white/80">
         h-index <span class="text-white font-medium">{hIndex}</span>
       </span>
       <a
         href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ"
         target="_blank"
         rel="noopener noreferrer"
-        class="scholar-stats-link ml-auto flex items-center gap-1.5 font-mono text-xs text-[--color-text-muted] transition-colors duration-200"
+        class="scholar-stats-link ml-auto flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200"
       >
         <span>Google Scholar</span>
         <svg class="scholar-stats-arrow h-3 w-3 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -179,19 +179,19 @@ const venueLabels: Record<string, string> = {
               {/* Top row: badge + citation + 1st author tag */}
               <div class="mb-2 flex flex-wrap items-center gap-2">
                 <span
-                  class="rounded px-1.5 py-0.5 font-mono text-[10px] leading-none"
+                  class="rounded px-1.5 py-0.5 font-mono text-xs leading-none"
                   style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}
                 >
                   {venueLabels[pub.venueType]}
                 </span>
-                <span class="font-mono text-[10px] text-[--color-text-muted]">{pub.venue}</span>
+                <span class="font-mono text-xs text-[--color-text-muted]">{pub.venue}</span>
                 {pub.isFirstAuthor && (
-                  <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-[10px] leading-none text-white/50">
+                  <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-xs leading-none text-white/50">
                     1st Author
                   </span>
                 )}
                 {pub.citations > 0 && (
-                  <span class="ml-auto flex items-center gap-1 font-mono text-[10px] tabular-nums text-[--color-text-muted]">
+                  <span class="ml-auto flex items-center gap-1 font-mono text-xs tabular-nums text-[--color-text-muted]">
                     <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                     </svg>
@@ -201,12 +201,12 @@ const venueLabels: Record<string, string> = {
               </div>
 
               {/* Title */}
-              <p class="pub-title text-sm leading-relaxed text-white/80 transition-colors duration-200 md:text-base">
+              <p class="pub-title text-base leading-relaxed text-white/80 transition-colors duration-200 md:text-lg">
                 {pub.title}
               </p>
 
               {/* Authors */}
-              <p class="mt-1.5 text-xs leading-relaxed text-[--color-text-muted]">
+              <p class="mt-1.5 text-sm leading-relaxed text-[--color-text-muted]">
                 {pub.authors.map((author, i) => (
                   <>
                     {author === pub.highlightAuthor ? (
@@ -238,25 +238,25 @@ const venueLabels: Record<string, string> = {
       {academicService.map((service) => (
         <div class="service-item rounded-lg border border-white/[0.06] bg-white/[0.02] p-5 md:p-6">
           {/* Role */}
-          <p class="text-sm font-medium text-white md:text-base">{service.role}</p>
+          <p class="text-base font-medium text-white md:text-lg">{service.role}</p>
 
           {/* Conference */}
-          <p class="mt-1 text-sm text-white/70">
+          <p class="mt-1 text-base text-white/70">
             {service.conference}
-            <span class="ml-2 font-mono text-xs text-[--color-text-muted]">{service.abbreviation}</span>
+            <span class="ml-2 font-mono text-sm text-[--color-text-muted]">{service.abbreviation}</span>
           </p>
 
           {/* Organizer pills */}
           <div class="mt-3 flex flex-wrap gap-1.5">
             {service.organizers.map((org) => (
-              <span class="rounded bg-white/[0.06] px-2 py-0.5 font-mono text-[10px] text-white/50">
+              <span class="rounded bg-white/[0.06] px-2 py-0.5 font-mono text-xs text-white/50">
                 {org}
               </span>
             ))}
           </div>
 
           {/* Meta row */}
-          <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-[--color-text-muted]">
+          <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-sm text-[--color-text-muted]">
             <span>{service.location}</span>
             <span class="text-white/20">·</span>
             <span>{service.dates}</span>
@@ -269,7 +269,7 @@ const venueLabels: Record<string, string> = {
           </div>
 
           {/* Details */}
-          <p class="mt-2 font-mono text-xs text-[--color-text-muted]">{service.details}</p>
+          <p class="mt-2 font-mono text-sm text-[--color-text-muted]">{service.details}</p>
         </div>
       ))}
     </div>

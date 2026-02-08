@@ -109,33 +109,11 @@ const sizeClasses = {
     <div class="bento-grid group grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
     {projects.map((project, index) => (
       <article 
-        class={`project-card relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm transition-all duration-200 ${sizeClasses[project.size]}`}
+        class={`project-card relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-all duration-200 ${sizeClasses[project.size]} ${project.image && project.size === '2x1' ? 'flex flex-col md:flex-row' : 'flex flex-col'}`}
         data-index={index}
       >
-        {project.image && (
-          <div class="project-image mb-4 overflow-hidden rounded-lg">
-            <picture>
-              <source
-                type="image/webp"
-                srcset={`${project.image}-400w.webp 400w, ${project.image}-800w.webp 800w, ${project.image}-1200w.webp 1200w, ${project.image}-1600w.webp 1600w, ${project.image}-2560w.webp 2560w`}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-              />
-              <img
-                src={`${project.image}-800w.webp`}
-                alt={`${project.title} screenshot`}
-                class="h-full w-full object-cover transition-transform duration-500"
-                loading="lazy"
-              />
-            </picture>
-          </div>
-        )}
-
-        <!-- Gradient fade overlay at bottom -->
-        <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
-
-        <!-- Content -->
-        <div class={`relative flex flex-col ${project.image ? '' : 'h-full'}`}>
-          <!-- Title with external link -->
+        {/* --- Content block --- */}
+        <div class={`relative flex flex-col p-6 ${project.image && project.size === '2x1' ? 'md:w-1/2' : ''} ${project.image && project.size === '1x2' ? '' : project.image ? '' : 'h-full'}`}>
           <div class="mb-3 flex items-start justify-between gap-2">
             <h3 class="font-display text-xl font-medium tracking-tight text-white md:text-2xl">
               {project.title}
@@ -155,12 +133,10 @@ const sizeClasses = {
             )}
           </div>
 
-          <!-- Description -->
           <p class="mb-4 flex-grow text-sm leading-relaxed text-white/60">
             {project.description}
           </p>
 
-          <!-- Tech stack pills -->
           <div class="mt-auto flex flex-wrap gap-2">
             {project.tech.map((tech) => (
               <span class="tech-pill rounded-full bg-white/[0.08] px-3 py-1 font-mono text-xs text-white/70 transition-all duration-150">
@@ -170,7 +146,27 @@ const sizeClasses = {
           </div>
         </div>
 
-        <!-- Corner decoration for large cards -->
+        {/* --- Image block --- */}
+        {project.image && (
+          <div class={`project-image overflow-hidden ${project.size === '2x1' ? 'md:w-1/2 min-h-[160px]' : 'min-h-[200px] flex-1'}`}>
+            <picture>
+              <source
+                type="image/webp"
+                srcset={`${project.image}-400w.webp 400w, ${project.image}-800w.webp 800w, ${project.image}-1200w.webp 1200w, ${project.image}-1600w.webp 1600w, ${project.image}-2560w.webp 2560w`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+              />
+              <img
+                src={`${project.image}-800w.webp`}
+                alt={`${project.title} screenshot`}
+                class="h-full w-full object-cover transition-transform duration-500"
+                loading="lazy"
+              />
+            </picture>
+          </div>
+        )}
+
+        <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
+
         {project.size === '2x2' && (
           <div class="pointer-events-none absolute right-4 top-4 text-white opacity-[0.03]">
             <svg class="h-24 w-24" viewBox="0 0 100 100" fill="currentColor">

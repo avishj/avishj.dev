@@ -7,7 +7,7 @@ interface Project {
   description: string;
   tech: string[];
   link?: string;
-  size: 'large' | 'medium' | 'small';
+  size: 'large' | 'wide' | 'medium' | 'small';
 }
 
 const projects: Project[] = [
@@ -82,6 +82,7 @@ const projects: Project[] = [
 // Determine grid classes based on size
 const sizeClasses = {
   large: 'md:col-span-2 md:row-span-2',
+  wide: 'md:col-span-2 md:row-span-1',
   medium: 'md:col-span-1 md:row-span-2',
   small: 'md:col-span-1 md:row-span-1',
 };

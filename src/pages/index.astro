@@ -8,9 +8,7 @@ import ResearchSection from '../components/ResearchSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import PortalBurn from '../components/PortalBurn.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
-
-const base = import.meta.env.BASE_URL;
-const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}${path}`;
+import { base, url } from '../utils/url';
 ---
 
 <BaseLayout>

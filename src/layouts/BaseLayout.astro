@@ -9,8 +9,7 @@ const {
   description = 'CMU MS Software Engineering graduate. Experience at Snap, Siemens Healthineers, Addverb, MITACS. Published researcher (IEEE, Springer, Elsevier).',
 } = Astro.props;
 
-const base = import.meta.env.BASE_URL;
-const url = (path: string) => `${base}${base && !base.endsWith('/') ? '/' : ''}${path}`;
+import { url } from '../utils/url';
 ---
 
 <!doctype html>

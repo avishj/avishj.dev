@@ -333,68 +333,10 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
   window.addEventListener('intro-complete', () => initResearchAnimations(), { once: true });
 
-  // Group hover opacity fade (matching projects section pattern)
-  const pubList = document.querySelector('.publications-list');
-  const pubItems = document.querySelectorAll('.publication-item');
-
-  if (pubList) {
-    function resetAll() {
-      pubItems.forEach((item) => {
-        gsap.to(item, { opacity: 1, duration: 0.2, ease: 'power2.out', overwrite: true });
-      });
-    }
-
-    pubItems.forEach((item) => {
-      item.addEventListener('mouseenter', () => {
-        pubItems.forEach((other) => {
-          gsap.to(other, {
-            opacity: other === item ? 1 : 0.4,
-            duration: 0.15,
-            ease: 'power2.out',
-            overwrite: true,
-          });
-        });
-      });
-
-      item.addEventListener('mouseleave', (e) => {
-        const related = (e as MouseEvent).relatedTarget as Element | null;
-        if (!related || !related.closest('.publication-item')) {
-          resetAll();
-        }
-      });
-    });
-  }
-
-  // Group hover opacity fade for academic service items
-  const serviceItems = document.querySelectorAll('.service-item');
-
-  if (serviceItems.length > 1) {
-    function resetServiceAll() {
-      serviceItems.forEach((item) => {
-        gsap.to(item, { opacity: 1, duration: 0.2, ease: 'power2.out', overwrite: true });
-      });
-    }
-
-    serviceItems.forEach((item) => {
-      item.addEventListener('mouseenter', () => {
-        serviceItems.forEach((other) => {
-          gsap.to(other, {
-            opacity: other === item ? 1 : 0.4,
-            duration: 0.15,
-            ease: 'power2.out',
-            overwrite: true,
-          });
-        });
-      });
-
-      item.addEventListener('mouseleave', (e) => {
-        const related = (e as MouseEvent).relatedTarget as Element | null;
-        if (!related || !related.closest('.service-item')) {
-          resetServiceAll();
-        }
-      });
-    });
-  }
+  // Group hover opacity fade
+  import { groupHoverFade } from '../utils/group-hover';
+  groupHoverFade('.publication-item');
+  groupHoverFade('.service-item');
 </script>
 
 <style>

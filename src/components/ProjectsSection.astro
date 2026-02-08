@@ -208,8 +208,6 @@ const sizeClasses = {
 </section>
 
 <script>
-  import gsap from 'gsap';
-
   async function initProjectAnimations() {
     const { scrollReveal, presets } = await import('../utils/scroll-animations');
     const cards = document.querySelectorAll('.project-card');
@@ -219,37 +217,9 @@ const sizeClasses = {
   // Wait for intro to complete before setting up animations
   window.addEventListener('intro-complete', () => initProjectAnimations(), { once: true });
 
-  // Group hover opacity fade effect with GSAP smoothing
-  const grid = document.querySelector('.bento-grid');
-  const projectCards = document.querySelectorAll('.project-card');
-  
-  if (grid) {
-    function resetAll() {
-      projectCards.forEach((c) => {
-        gsap.to(c, { opacity: 1, duration: 0.2, ease: 'power2.out', overwrite: true });
-      });
-    }
-
-    projectCards.forEach((card) => {
-      card.addEventListener('mouseenter', () => {
-        projectCards.forEach((otherCard) => {
-          gsap.to(otherCard, { 
-            opacity: otherCard === card ? 1 : 0.4, 
-            duration: 0.15, 
-            ease: 'power2.out',
-            overwrite: true,
-          });
-        });
-      });
-
-      card.addEventListener('mouseleave', (e) => {
-        const related = (e as MouseEvent).relatedTarget as Element | null;
-        if (!related || !related.closest('.project-card')) {
-          resetAll();
-        }
-      });
-    });
-  }
+  // Group hover opacity fade effect
+  import { groupHoverFade } from '../utils/group-hover';
+  groupHoverFade('.project-card');
 </script>
 
 <style>

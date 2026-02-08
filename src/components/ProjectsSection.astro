@@ -7,7 +7,7 @@ interface Project {
   description: string;
   tech: string[];
   link?: string;
-  size: 'large' | 'wide' | 'medium' | 'small';
+  size: '1x1' | '1x2' | '2x1' | '2x2';
 }
 
 const projects: Project[] = [
@@ -16,75 +16,75 @@ const projects: Project[] = [
     description: 'Track historical Visa, Mastercard, and ECB exchange rates with real markup data. Interactive charts, offline-first caching, and 365+ days of history.',
     tech: ['JavaScript', 'TypeScript', 'Bun'],
     link: 'https://github.com/avishj/ForexRadar',
-    size: 'medium',
+    size: '1x2',
   },
   {
     title: 'ExplainRFC',
     description: 'Interactive 3D visualizations that explain how the internet works. Each IETF RFC becomes an explorable exhibit with guided walkthroughs.',
     tech: ['TypeScript', 'Astro', 'React', 'Three.js'],
     link: 'https://github.com/avishj/ExplainRFC',
-    size: 'small',
+    size: '1x1',
   },
   {
     title: 'Ephemeris',
     description: 'macOS menu-bar app for quickly tracking times across multiple timezones across the past, present, and future.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/ephemeris',
-    size: 'small',
+    size: '1x1',
   },
   {
     title: 'XR Remote Desktop',
     description: 'Novel remote desktop streaming for Snap Spectacles AR glasses. Real-time desktop mirroring with hand-tracking interaction in 3D space.',
     tech: ['C++', 'OpenXR', 'LibVNC'],
-    size: 'medium',
+    size: '1x2',
   },
   {
     title: 'UseItOrLoseIt',
     description: 'macOS menu-bar app for tracking token usage quotas across AI providers with friendly reminders to use it or lose it.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/UseItOrLoseIt',
-    size: 'small',
+    size: '1x1',
   },
   {
     title: 'LLM Log Migration',
     description: 'Automated migration of 13,000+ legacy loggers to OpenTelemetry using Claude agents and AST parsing.',
     tech: ['C#', 'Python', 'Claude API'],
-    size: 'medium',
+    size: '1x2',
   },
   {
     title: 'MFC Recruitment Portal',
     description: 'Frontend for candidate tests across 5 domains, handling 1200+ applicants with 100+ concurrent tests.',
     tech: ['VueJS', 'Axios', 'Cloudflare'],
     link: 'https://github.com/MFC-VIT/MFC-RecruitmentPortal-Frontend',
-    size: 'small',
+    size: '1x1',
   },
   {
     title: 'Warehouse Simulation Engine',
     description: 'GTP simulation and order orchestration system. Optimized pick face efficiency from 32hr to 12.5hr runtime.',
     tech: ['Java', 'SpringBoot', 'Analytics'],
-    size: 'small',
+    size: '1x1',
   },
   {
     title: 'SEDS India',
     description: 'Unified 4 portals, managed 7 websites, 180+ emails, and 3+ domains. Reduced OpEx by 40%.',
     tech: ['JavaScript', 'jQuery', 'Netlify'],
     link: 'https://github.com/sedsindia/sedsindia.github.io',
-    size: 'medium',
+    size: '1x2',
   },
   {
     title: 'Multi-Modal Learning Framework',
     description: 'Student engagement tracking with 3 deep learning models in AWS MLOps pipeline.',
     tech: ['Python', 'TensorFlow', 'AWS'],
-    size: 'small',
+    size: '1x1',
   },
 ];
 
-// Determine grid classes based on size
+// Determine grid classes based on size (cols x rows)
 const sizeClasses = {
-  large: 'md:col-span-2 md:row-span-2',
-  wide: 'md:col-span-2 md:row-span-1',
-  medium: 'md:col-span-1 md:row-span-2',
-  small: 'md:col-span-1 md:row-span-1',
+  '2x2': 'md:col-span-2 md:row-span-2',
+  '2x1': 'md:col-span-2 md:row-span-1',
+  '1x2': 'md:col-span-1 md:row-span-2',
+  '1x1': 'md:col-span-1 md:row-span-1',
 };
 ---
 
@@ -144,7 +144,7 @@ const sizeClasses = {
         </div>
 
         <!-- Corner decoration for large cards -->
-        {project.size === 'large' && (
+        {project.size === '2x2' && (
           <div class="pointer-events-none absolute right-4 top-4 text-white opacity-[0.03]">
             <svg class="h-24 w-24" viewBox="0 0 100 100" fill="currentColor">
               <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" fill="none" />
@@ -171,7 +171,7 @@ const sizeClasses = {
   // Wait for intro to complete before setting up animations
   window.addEventListener('intro-complete', () => initProjectAnimations(), { once: true });
 
-  // Group hover opacity fade effect (pqoqubbw style) with GSAP smoothing
+  // Group hover opacity fade effect with GSAP smoothing
   const grid = document.querySelector('.bento-grid');
   const projectCards = document.querySelectorAll('.project-card');
   

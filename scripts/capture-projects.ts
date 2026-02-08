@@ -16,10 +16,10 @@ interface Site {
 }
 
 const sites: Site[] = [
-  { url: 'https://avishj.github.io/ForexRadar', name: 'forexradar', active: true },
-  { url: 'https://avishj.github.io/ExplainRFC', name: 'explainrfc', active: true },
-  { url: 'https://sedsindia.github.io', name: 'sedsindia', active: false },
-  { url: 'http://localhost:8080/', name: 'mfcvit', active: false }
+	{ url: "https://avishj.github.io/ForexRadar", name: "forexradar", active: true },
+	{ url: "https://avishj.github.io/ExplainRFC", name: "explainrfc", active: true },
+	{ url: "https://sedsindia.github.io", name: "sedsindia", active: false },
+	{ url: "https://mfcrp-private.netlify.app/", name: "mfcvit", active: false }
 ];
 
 const activeOnly = Bun.argv.includes('--active-only');

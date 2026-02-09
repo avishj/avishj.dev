@@ -18,7 +18,7 @@ import { base, url } from "../utils/url";
        INTRO SPLASH — Calligraphy signature draws in, then swirls away
        ═══════════════════════════════════════════════════════════════════════════ -->
 	<div id="intro-splash" class="fixed inset-0 z-50 flex items-center justify-center bg-[--color-bg-primary]">
-		<div id="lottie-container" data-base-url={base}></div>
+		<div id="lottie-container" class="flex items-center justify-center" data-base-url={base}></div>
 	</div>
 
 	<!-- Three.js Portal Burn Effect -->
@@ -78,37 +78,37 @@ import { base, url } from "../utils/url";
 					<li>
 						<a href="#about" class="nav-link group flex items-center gap-3" data-section="about">
 							<span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
-							<span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">About</span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">About</span>
 						</a>
 					</li>
 					<li>
 						<a href="#experience" class="nav-link group flex items-center gap-3" data-section="experience">
 							<span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
-							<span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Experience</span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Experience</span>
 						</a>
 					</li>
 					<li>
 						<a href="#projects" class="nav-link group flex items-center gap-3" data-section="projects">
 							<span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
-							<span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Projects</span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Projects</span>
 						</a>
 					</li>
 					<li>
 						<a href="#research" class="nav-link group flex items-center gap-3" data-section="research">
 							<span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
-							<span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Research</span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Research</span>
 						</a>
 					</li>
 					<li>
 						<a href="#education" class="nav-link group flex items-center gap-3" data-section="education">
 							<span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
-							<span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Education</span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Education</span>
 						</a>
 					</li>
 					<li>
 						<a href="#skills" class="nav-link group flex items-center gap-3" data-section="skills">
 							<span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
-							<span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Skills</span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Skills</span>
 						</a>
 					</li>
 				</ul>
@@ -397,32 +397,9 @@ import { base, url } from "../utils/url";
 	/* ═══════════════════════════════════════════════════════════════════════════
      LOTTIE CONTAINER
      ═══════════════════════════════════════════════════════════════════════════ */
-	#lottie-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
 	#lottie-container svg {
 		width: 100%;
 		height: auto;
-	}
-
-	/* ═══════════════════════════════════════════════════════════════════════════
-     NAV ACTIVE STATES
-     ═══════════════════════════════════════════════════════════════════════════ */
-	.nav-link.active .nav-line {
-		width: 2.5rem;
-		background-color: rgba(255, 255, 255, 0.8);
-	}
-
-	.nav-link.active .nav-text {
-		color: white;
-	}
-
-	/* Fixed width to prevent layout shift when active section changes */
-	.nav-text {
-		min-width: 5.5rem;
 	}
 
 	/* ═══════════════════════════════════════════════════════════════════════════

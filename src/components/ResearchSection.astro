@@ -16,7 +16,8 @@ interface Publication {
   isFirstAuthor?: boolean;
 }
 
-interface AcademicService {
+interface ConferenceService {
+  type: 'conference';
   role: string;
   conference: string;
   abbreviation: string;
@@ -27,6 +28,21 @@ interface AcademicService {
   details: string;
   link: string;
 }
+
+interface TeachingService {
+  type: 'teaching';
+  role: string;
+  course: string;
+  courseCode: string;
+  department: string;
+  institution: string;
+  year: number;
+  location: string;
+  dates: string;
+  responsibilities: string[];
+}
+
+type AcademicService = ConferenceService | TeachingService;
 
 const publications: Publication[] = [
   {
@@ -98,6 +114,7 @@ const publications: Publication[] = [
 
 const academicService: AcademicService[] = [
   {
+    type: 'conference',
     role: 'Programme Committee Member',
     conference: '17th International Conference on Swarm Intelligence',
     abbreviation: 'ICSI 2026',
@@ -107,6 +124,18 @@ const academicService: AcademicService[] = [
     dates: 'Jul 11 · 14, 2026',
     details: 'Reviewer · Proceedings in Springer LNCS',
     link: 'https://iasei.org/icsi2026/',
+  },
+  {
+    type: 'teaching',
+    role: 'Teaching Assistant',
+    course: 'Formal Methods',
+    courseCode: '17-614',
+    department: 'Software and Societal Systems Department',
+    institution: 'Carnegie Mellon University',
+    year: 2025,
+    location: 'Pittsburgh, PA',
+    dates: 'Fall 2025',
+    responsibilities: ['Grading', 'Office Hours', 'Doubt Clearing'],
   },
 ];
 

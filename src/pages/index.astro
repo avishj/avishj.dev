@@ -9,6 +9,7 @@ import EducationSection from "../components/EducationSection.astro";
 import SkillsSection from "../components/SkillsSection.astro";
 import PortalBurn from "../components/PortalBurn.astro";
 import ArrowIcon from "../components/ArrowIcon.astro";
+import Footer from "../components/Footer.astro";
 import { base, url } from "../utils/url";
 ---
 
@@ -124,14 +125,11 @@ import { base, url } from "../utils/url";
 			</div>
 
 			<!-- Footer -->
-			<footer class="bg-[--color-bg-primary] px-6 py-12 lg:mr-[180px] lg:px-12">
+			<div class="bg-[--color-bg-primary] px-6 lg:mr-[180px] lg:px-12">
 				<div class="px-6">
-					<div class="flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 md:flex-row">
-						<p class="font-mono text-xs text-[--color-text-muted]">© 2025 Avish Jha · Built with intention</p>
-						<p class="font-mono text-xs text-[--color-text-muted]">Pittsburgh, PA</p>
-					</div>
+					<Footer />
 				</div>
-			</footer>
+			</div>
 		</div>
 	</main>
 

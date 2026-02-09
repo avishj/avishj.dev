@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
 import BackButton from "../../components/BackButton.astro";
+import Footer from "../../components/Footer.astro";
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { url } from "../../utils/url";
@@ -62,12 +63,13 @@ const { Content } = await render(post);
 				</div>
 			</article>
 
+			<!-- Back navigation -->
+			<div class="border-t border-white/[0.06] pb-4 pt-8">
+				<a href={url("blog/")} class="font-mono text-sm text-white/50 transition-colors hover:text-white/80"> ← Back to all posts </a>
+			</div>
+
 			<!-- Footer -->
-			<footer class="py-12">
-				<div class="border-t border-white/[0.06] pt-8">
-					<a href={url("blog/")} class="font-mono text-sm text-white/50 transition-colors hover:text-white/80"> ← Back to all posts </a>
-				</div>
-			</footer>
+			<Footer />
 		</div>
 	</div>
 </BaseLayout>

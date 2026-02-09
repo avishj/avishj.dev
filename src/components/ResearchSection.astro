@@ -336,16 +336,16 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
 <script>
 	async function initResearchAnimations() {
-		const { scrollReveal, scrollRevealTimeline } = await import("../utils/scroll-animations");
+		const { scrollReveal, scrollRevealTimeline, presets, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
 
 		const statsBar = document.querySelector(".stats-bar");
 		if (statsBar) {
-			scrollReveal(statsBar, { from: { y: 12, opacity: 0 }, to: { y: 0, opacity: 1 } });
+			scrollReveal(statsBar, presets.fadeUp);
 		}
 
 		const pubHeading = document.querySelector(".publications-heading");
 		if (pubHeading) {
-			scrollReveal(pubHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" } });
+			scrollReveal(pubHeading, presets.fadeUp);
 		}
 
 		const pubItems = document.querySelectorAll(".publication-item");
@@ -354,14 +354,16 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			const content = item.querySelector(":scope > div");
 			const arrow = item.querySelector(".pub-arrow");
 
+			const yearArrow = [year, arrow].filter((el): el is Element => el !== null);
+
 			scrollRevealTimeline(item, (tl) => {
-				tl.fromTo([year, arrow].filter(Boolean), { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out", stagger: 0.04 }).fromTo(content, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, "-=0.3");
+				tl.fromTo(...tlFadeUp(yearArrow, { stagger: 0.04 })).fromTo(...tlFadeUp(content), TIMELINE_OVERLAP);
 			});
 		});
 
 		const serviceHeading = document.querySelector(".service-heading");
 		if (serviceHeading) {
-			scrollReveal(serviceHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" } });
+			scrollReveal(serviceHeading, presets.fadeUp);
 		}
 
 		const serviceItems = document.querySelectorAll(".service-item");
@@ -370,7 +372,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 				const title = item.querySelector(".service-title");
 				const rest = item.querySelectorAll(":scope > div:not(:first-child), :scope > div > p:not(.service-title)");
 
-				tl.fromTo(title, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }).fromTo(rest, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out", stagger: 0.04 }, "-=0.3");
+				tl.fromTo(...tlFadeUp(title)).fromTo(...tlFadeUp(rest, { stagger: 0.04 }), TIMELINE_OVERLAP);
 			});
 		});
 	}

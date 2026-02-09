@@ -7,8 +7,8 @@ interface AnimationConfig {
 }
 
 const defaultConfig = {
-  rootMargin: '-15% 0px -15% 0px',
-  duration: 0.6,
+  rootMargin: '-20% 0px -20% 0px',
+  duration: 0.7,
   ease: 'power4.out',
 };
 
@@ -40,7 +40,7 @@ export function scrollReveal(
         } else {
           // Check if element left from bottom (scrolling up) or top (scrolling down)
           const rect = entry.boundingClientRect;
-          const leftFromBottom = rect.top >= window.innerHeight * 0.85;
+          const leftFromBottom = rect.top >= window.innerHeight * 0.80;
           
           if (leftFromBottom && el.dataset.scrollState === 'visible') {
             // Only animate out when scrolling up (element leaves from bottom)
@@ -58,7 +58,7 @@ export function scrollReveal(
     const htmlEl = el as HTMLElement;
     const rect = el.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const margin = viewportHeight * 0.15;
+    const margin = viewportHeight * 0.20;
     const inView = rect.top < viewportHeight - margin && rect.bottom > margin;
     
     if (inView) {
@@ -100,7 +100,7 @@ export function scrollRevealTimeline(
           }
         } else {
           const rect = entry.boundingClientRect;
-          const leftFromBottom = rect.top >= window.innerHeight * 0.85;
+          const leftFromBottom = rect.top >= window.innerHeight * 0.80;
           
           if (leftFromBottom && htmlTrigger.dataset.scrollState === 'visible') {
             htmlTrigger.dataset.scrollState = 'hidden';
@@ -114,7 +114,7 @@ export function scrollRevealTimeline(
   
   const rect = trigger.getBoundingClientRect();
   const viewportHeight = window.innerHeight;
-  const margin = viewportHeight * 0.15;
+  const margin = viewportHeight * 0.20;
   const inView = rect.top < viewportHeight - margin && rect.bottom > margin;
   
   if (inView) {

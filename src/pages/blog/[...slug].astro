@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
 import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { url } from "../../utils/url";
 import { formatDate } from "../../utils/date";
 
@@ -29,19 +30,19 @@ const { Content } = await render(post);
 	<PortalBurn />
 
 	<div id="main-content" class="invisible min-h-screen bg-[--color-bg-primary] opacity-0">
-		<!-- Header -->
-		<header class="px-6 pb-6 pt-8 lg:px-12 lg:pb-8 lg:pt-12">
-			<a href={url("blog/")} class="group flex items-center gap-2 text-white/50 transition-colors hover:text-white/80">
-				<svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7m0 0H7m10 0v10"></path>
-				</svg>
-				<span class="font-mono text-sm">all posts</span>
-			</a>
-		</header>
+		<div class="mx-auto max-w-2xl px-6 lg:px-8">
+			<!-- Header -->
+			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
+				<a href={url("blog/")} class="group flex items-center gap-2 text-white/50 transition-colors hover:text-white/80">
+					<svg class="h-4 w-4 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7m0 0H7m10 0v10"></path>
+					</svg>
+					<span class="font-mono text-sm">all posts</span>
+				</a>
+			</header>
 
-		<!-- Article -->
-		<article class="px-6 pb-16 lg:px-12">
-			<div class="max-w-2xl">
+			<!-- Article -->
+			<article class="pb-16">
 				<!-- Meta -->
 				<time class="font-mono text-xs tracking-wide text-white/40">
 					{formatDate(post.data.pubDate, { month: "long" })}
@@ -63,17 +64,15 @@ const { Content } = await render(post);
 				<div class="prose-blog mt-12">
 					<Content />
 				</div>
-			</div>
-		</article>
+			</article>
 
-		<!-- Footer -->
-		<footer class="px-6 py-12 lg:px-12">
-			<div class="max-w-2xl">
+			<!-- Footer -->
+			<footer class="py-12">
 				<div class="border-t border-white/[0.06] pt-8">
 					<a href={url("blog/")} class="font-mono text-sm text-white/50 transition-colors hover:text-white/80"> ← Back to all posts </a>
 				</div>
-			</div>
-		</footer>
+			</footer>
+		</div>
 	</div>
 </BaseLayout>
 

@@ -25,22 +25,15 @@ const { Content } = await render(post);
 ---
 
 <BaseLayout title={`${post.data.title} · Avish Jha`} description={post.data.description}>
-	<!-- Intro Splash -->
 	<div id="intro-splash" class="fixed inset-0 z-50 bg-[--color-bg-primary]"></div>
-
-	<!-- Fire Effect -->
 	<PortalBurn />
 
 	<div id="main-content" class="invisible min-h-screen bg-[--color-bg-primary] opacity-0">
 		<div class="mx-auto max-w-2xl px-6 lg:px-8">
-			<!-- Header -->
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
 				<BackButton href={url("blog/")} text="all posts" />
 			</header>
-
-			<!-- Article -->
 			<article class="pb-16">
-				<!-- Meta -->
 				<time class="font-mono text-xs tracking-wide text-white/40">
 					{formatDate(post.data.pubDate, { month: "long" })}
 				</time>
@@ -56,19 +49,10 @@ const { Content } = await render(post);
 						</div>
 					)
 				}
-
-				<!-- Content -->
 				<div class="prose-blog mt-12">
 					<Content />
 				</div>
 			</article>
-
-			<!-- Back navigation -->
-			<div class="border-t border-white/[0.06] pb-4 pt-8">
-				<a href={url("blog/")} class="font-mono text-sm text-white/50 transition-colors hover:text-white/80"> ← Back to all posts </a>
-			</div>
-
-			<!-- Footer -->
 			<Footer />
 		</div>
 	</div>

@@ -343,39 +343,64 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 </section>
 
 <script>
-  import gsap from 'gsap';
-
   async function initResearchAnimations() {
-    const { scrollReveal, presets } = await import('../utils/scroll-animations');
+    const { scrollReveal, scrollRevealTimeline } = await import('../utils/scroll-animations');
+
+    const statsBar = document.querySelector('.stats-bar');
+    if (statsBar) {
+      scrollReveal(statsBar, { from: { y: 12, opacity: 0 }, to: { y: 0, opacity: 1 } });
+    }
 
     const pubHeading = document.querySelector('.publications-heading');
     if (pubHeading) {
       scrollReveal(pubHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' } });
     }
 
+    const pubItems = document.querySelectorAll('.publication-item');
+    pubItems.forEach((item) => {
+      const year = item.querySelector(':scope > span');
+      const content = item.querySelector(':scope > div');
+      const arrow = item.querySelector('.pub-arrow');
+
+      scrollRevealTimeline(item, (tl) => {
+        tl.fromTo([year, arrow].filter(Boolean),
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out', stagger: 0.04 }
+        )
+        .fromTo(content,
+          { y: 12, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' },
+          '-=0.3'
+        );
+      });
+    });
+
     const serviceHeading = document.querySelector('.service-heading');
     if (serviceHeading) {
       scrollReveal(serviceHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' } });
     }
 
-    const pubItems = document.querySelectorAll('.publication-item');
-    scrollReveal(pubItems, {
-      from: { y: 20, opacity: 0, scale: 0.98 },
-      to: { y: 0, opacity: 1, scale: 1, stagger: 0.06 },
-    });
-
     const serviceItems = document.querySelectorAll('.service-item');
-    scrollReveal(serviceItems, presets.fadeUp);
+    serviceItems.forEach((item) => {
+      scrollRevealTimeline(item, (tl) => {
+        const title = item.querySelector('.service-title');
+        const rest = item.querySelectorAll(':scope > div:not(:first-child), :scope > div > p:not(.service-title)');
 
-    const statsBar = document.querySelector('.stats-bar');
-    if (statsBar) {
-      scrollReveal(statsBar, { from: { y: 12, opacity: 0 }, to: { y: 0, opacity: 1 } });
-    }
+        tl.fromTo(title,
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out' }
+        )
+        .fromTo(rest,
+          { y: 8, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out', stagger: 0.04 },
+          '-=0.3'
+        );
+      });
+    });
   }
 
   window.addEventListener('intro-complete', () => initResearchAnimations(), { once: true });
 
-  // Group hover opacity fade
   import { groupHoverFade } from '../utils/group-hover';
   groupHoverFade('.publication-item');
   groupHoverFade('.service-item');
@@ -408,11 +433,21 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
   .publication-item,
   .service-item {
+    transform-origin: left center;
     transition:
       opacity 50ms ease,
       background-color 200ms ease,
       transform 200ms var(--ease-out-expo);
     will-change: transform;
+  }
+
+  .pub-title,
+  .service-title,
+  .publication-item p,
+  .service-item p {
+    transition:
+      filter 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -422,6 +457,10 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
     .publication-item:hover .pub-title {
       color: white;
+    }
+
+    .publication-item:hover p {
+      color: rgba(255, 255, 255, 0.85);
     }
 
     .publication-item:active {
@@ -444,6 +483,10 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
     .service-item:hover .service-title {
       color: white;
+    }
+
+    .service-item:hover p {
+      color: rgba(255, 255, 255, 0.85);
     }
 
     .service-item:active {
@@ -525,12 +568,21 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
   @media (prefers-reduced-motion: reduce) {
     .publication-item,
     .service-item {
+      opacity: 1 !important;
+      transform: none !important;
       transition: none;
     }
 
     .publication-item:active,
     .service-item:active {
       transform: none;
+    }
+
+    .pub-title,
+    .service-title,
+    .publication-item p,
+    .service-item p {
+      transition: none;
     }
 
     .pub-arrow,

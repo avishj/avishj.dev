@@ -17,7 +17,7 @@ const numberColor = variant === 'light' ? 'text-[--color-text-dark]/50' : 'text-
 const titleColor = variant === 'light' ? 'text-[--color-text-dark]' : '';
 ---
 
-<div class:list={['section-header flex items-baseline gap-4', className]}>
+<div class:list={['section-header mb-6 flex items-baseline gap-4', className]}>
   <span class:list={['text-5xl md:text-6xl font-number', numberColor]}>{number}</span>
   <h2 class:list={['text-5xl italic md:text-6xl font-display', titleColor]}>{title}</h2>
 </div>

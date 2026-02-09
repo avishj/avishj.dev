@@ -207,10 +207,20 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			<span class="font-mono text-base tabular-nums text-white/80">
 				h-index <span class="text-white font-medium">{hIndex}</span>
 			</span>
-			<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="scholar-stats-link ml-auto flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
-				<span>Google Scholar</span>
-				<ArrowIcon class="scholar-stats-arrow h-3 w-3 transition-transform duration-200" />
-			</a>
+			<div class="ml-auto flex items-center gap-4">
+				<a href="/research/" class="stats-link group flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
+					<span>More Details</span>
+					<ArrowIcon class="stats-link-arrow h-3 w-3 transition-transform duration-200" />
+				</a>
+				<a href="https://orcid.org/0000-0003-1479-0456" target="_blank" rel="noopener noreferrer" class="stats-link group flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
+					<span>ORCID</span>
+					<ArrowIcon class="stats-link-arrow h-3 w-3 transition-transform duration-200" />
+				</a>
+				<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="stats-link flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
+					<span>Google Scholar</span>
+					<ArrowIcon class="stats-link-arrow h-3 w-3 transition-transform duration-200" />
+				</a>
+			</div>
 		</div>
 
 		<!-- Publications subsection -->
@@ -475,17 +485,17 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transform: rotate(45deg);
 		}
 
-		.scholar-stats-link:hover {
+		.stats-link:hover {
 			color: white;
 		}
 
-		.scholar-stats-arrow {
+		.stats-link-arrow {
 			transition:
 				color 200ms ease,
 				transform 200ms var(--ease-out-expo);
 		}
 
-		.scholar-stats-link:hover .scholar-stats-arrow {
+		.stats-link:hover .stats-link-arrow {
 			transform: rotate(45deg);
 		}
 	}
@@ -558,7 +568,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transition: none;
 		}
 
-		.scholar-stats-arrow {
+		.stats-link-arrow {
 			transition: none;
 		}
 

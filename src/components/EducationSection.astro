@@ -123,17 +123,21 @@ const education: Education[] = [
 
 <script>
 	async function initEducationAnimations() {
-		const { scrollRevealTimeline } = await import("../utils/scroll-animations");
+		const { scrollRevealTimeline, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
 
 		const cards = document.querySelectorAll(".edu-card");
 		cards.forEach((card) => {
 			const institution = card.querySelector(".edu-institution");
-			const degreeRow = card.querySelector(".mt-1.flex.flex-wrap"); // degree + gpa row
-			const mobileDate = card.querySelector(".md\\:hidden"); // mobile date row
+			const degreeRow = card.querySelector(".mt-1.flex.flex-wrap");
+			const mobileDate = card.querySelector(".md\\:hidden");
 			const blocks = card.querySelectorAll(".edu-block");
 
+			const metaElements = [degreeRow, mobileDate].filter((el): el is Element => el !== null);
+
 			scrollRevealTimeline(card, (tl) => {
-				tl.fromTo(institution, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power4.out" }).fromTo([degreeRow, mobileDate].filter(Boolean), { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power4.out", stagger: 0.06 }, "-=0.5").fromTo(blocks, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power4.out", stagger: 0.05 }, "-=0.4");
+				tl.fromTo(...tlFadeUp(institution))
+					.fromTo(...tlFadeUp(metaElements, { stagger: 0.06 }), TIMELINE_OVERLAP)
+					.fromTo(...tlFadeUp(blocks, { stagger: 0.05 }), TIMELINE_OVERLAP);
 			});
 		});
 	}

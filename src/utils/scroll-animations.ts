@@ -130,7 +130,7 @@ export function scrollRevealTimeline(
   return tl;
 }
 
-// Preset animations
+// Preset animations for scrollReveal
 export const presets = {
   fadeUp: { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1 } },
   fadeDown: { from: { y: -20, opacity: 0 }, to: { y: 0, opacity: 1 } },
@@ -139,3 +139,52 @@ export const presets = {
   scaleUp: { from: { scale: 0.9, opacity: 0 }, to: { scale: 1, opacity: 1 } },
   fadeUpScale: { from: { y: 30, opacity: 0, scale: 0.98 }, to: { y: 0, opacity: 1, scale: 1 } },
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TIMELINE HELPERS — Use these inside scrollRevealTimeline callbacks
+// ═══════════════════════════════════════════════════════════════════════════
+
+type TimelineElement = Element | Element[] | NodeListOf<Element> | null;
+interface TweenOptions {
+  stagger?: number;
+}
+
+/**
+ * Helper to create a fadeUp tween config for timeline.fromTo()
+ * Vertical slide up + fade in with default duration/ease
+ */
+export function tlFadeUp(el: TimelineElement, opts: TweenOptions = {}) {
+  return [
+    el,
+    { y: 20, opacity: 0 },
+    { y: 0, opacity: 1, duration: defaultConfig.duration, ease: defaultConfig.ease, ...opts }
+  ] as const;
+}
+
+/**
+ * Helper to create a fadeRight tween config for timeline.fromTo()
+ * Horizontal slide in from left + fade in with default duration/ease
+ */
+export function tlFadeRight(el: TimelineElement, opts: TweenOptions = {}) {
+  return [
+    el,
+    { x: 20, opacity: 0 },
+    { x: 0, opacity: 1, duration: defaultConfig.duration, ease: defaultConfig.ease, ...opts }
+  ] as const;
+}
+
+/**
+ * Helper to create a scaleUp tween config for timeline.fromTo()
+ * Scale up + fade in with default duration/ease
+ */
+export function tlScaleUp(el: TimelineElement, opts: TweenOptions = {}) {
+  return [
+    el,
+    { scale: 0.9, opacity: 0 },
+    { scale: 1, opacity: 1, duration: defaultConfig.duration, ease: defaultConfig.ease, ...opts }
+  ] as const;
+}
+
+/** Default overlap for cascading timeline animations */
+export const TIMELINE_OVERLAP = '-=0.5';
+

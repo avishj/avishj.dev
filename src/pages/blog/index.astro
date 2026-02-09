@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
+import BackButton from "../../components/BackButton.astro";
 import { getCollection } from "astro:content";
 import { url } from "../../utils/url";
 import { formatDate } from "../../utils/date";
@@ -20,12 +21,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, 
 			<!-- Header -->
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
 				<div class="flex items-center gap-4">
-					<a href={url("")} class="group flex items-center gap-3 text-white/50 transition-colors hover:text-white/80">
-						<svg class="h-5 w-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7m0 0H7m10 0v10"></path>
-						</svg>
-						<span class="font-mono text-base">back</span>
-					</a>
+					<BackButton href={url("")} text="back" />
 				</div>
 				<h1 class="mt-8 font-display text-5xl font-medium italic tracking-tight text-white lg:text-6xl">Avish's Blog</h1>
 				<p class="mt-3 font-mono text-sm tracking-wide text-white/40">Thoughts on software engineering, research, and other random musings.</p>

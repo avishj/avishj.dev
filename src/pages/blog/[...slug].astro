@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
+import BackButton from "../../components/BackButton.astro";
 import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { url } from "../../utils/url";
@@ -33,12 +34,7 @@ const { Content } = await render(post);
 		<div class="mx-auto max-w-2xl px-6 lg:px-8">
 			<!-- Header -->
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
-				<a href={url("blog/")} class="group flex items-center gap-3 text-white/50 transition-colors hover:text-white/80">
-					<svg class="h-5 w-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7m0 0H7m10 0v10"></path>
-					</svg>
-					<span class="font-mono text-base">all posts</span>
-				</a>
+				<BackButton href={url("blog/")} text="all posts" />
 			</header>
 
 			<!-- Article -->

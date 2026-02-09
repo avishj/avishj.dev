@@ -163,7 +163,7 @@ const experiences: Experience[] = [
   const allBullets = document.querySelectorAll('.exp-bullet');
   
   async function initExperienceAnimations() {
-    const { scrollRevealTimeline } = await import('../utils/scroll-animations');
+    const { scrollRevealTimeline, tlFadeUp, tlFadeRight, TIMELINE_OVERLAP } = await import('../utils/scroll-animations');
     
     cards.forEach((card) => {
       const company = card.querySelector('.exp-company');
@@ -171,20 +171,9 @@ const experiences: Experience[] = [
       const highlights = card.querySelectorAll('.exp-highlights li');
       
       scrollRevealTimeline(card, (tl) => {
-        tl.fromTo(company, 
-          { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }
-        )
-        .fromTo(meta, 
-          { y: 10, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.06 },
-          '-=0.4'
-        )
-        .fromTo(highlights,
-          { x: 12, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.05 },
-          '-=0.3'
-        );
+        tl.fromTo(...tlFadeUp(company))
+          .fromTo(...tlFadeUp(meta, { stagger: 0.06 }), TIMELINE_OVERLAP)
+          .fromTo(...tlFadeRight(highlights, { stagger: 0.05 }), TIMELINE_OVERLAP);
       });
     });
   }

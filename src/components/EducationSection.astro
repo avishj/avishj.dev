@@ -23,7 +23,7 @@ const education: Education[] = [
     period: 'Aug 2024 · Dec 2025',
     gpa: '4.17',
     gpaLabel: 'QPA / 4.00',
-    accentColor: 'var(--color-accent-cmu)',
+    accentColor: '#C41230',
     coursework: [
       'Cloud Computing',
       'Engineering Data Intensive Scalable Systems',
@@ -44,7 +44,7 @@ const education: Education[] = [
     period: 'Jul 2019 · Aug 2023',
     gpa: '3.82',
     gpaLabel: 'GPA / 4.00',
-    accentColor: 'var(--color-accent-vit)',
+    accentColor: '#1E3A8A',
     coursework: [],
     honors: [
       'Special Achiever\'s Award',
@@ -108,9 +108,9 @@ const education: Education[] = [
                   <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/30">Honors & Activities</p>
                   <ul class="edu-honors space-y-2">
                     {edu.honors.map((honor) => (
-                      <li class="flex gap-3 text-base leading-relaxed text-white/55">
+                      <li class="edu-honor flex gap-3 text-base leading-relaxed text-white/55">
                         <span
-                          class="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
+                          class="honor-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
                           style={`background: ${edu.accentColor}60;`}
                         ></span>
                         <span>{honor}</span>
@@ -130,53 +130,54 @@ const education: Education[] = [
 
 <script>
   async function initEducationAnimations() {
-    const { scrollRevealTimeline } = await import('../utils/scroll-animations');
+    const { scrollReveal, presets } = await import('../utils/scroll-animations');
 
     const cards = document.querySelectorAll('.edu-card');
-    cards.forEach((card) => {
-      const institution = card.querySelector('.edu-institution');
-      const meta = card.querySelectorAll('.edu-institution ~ p, .edu-institution ~ div');
-      const blocks = card.querySelectorAll('.edu-block');
-
-      scrollRevealTimeline(card, (tl) => {
-        tl.fromTo(institution,
-          { y: 15, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }
-        )
-        .fromTo(meta,
-          { y: 10, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.06 },
-          '-=0.4'
-        )
-        .fromTo(blocks,
-          { y: 12, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.08 },
-          '-=0.3'
-        );
-      });
+    scrollReveal(cards, {
+      from: { y: 20, opacity: 0, scale: 0.98 },
+      to: { y: 0, opacity: 1, scale: 1, stagger: 0.06 },
     });
   }
 
   window.addEventListener('intro-complete', () => initEducationAnimations(), { once: true });
+
+  import { groupHoverFade } from '../utils/group-hover';
+  groupHoverFade('.edu-card');
 </script>
 
 <style>
   .edu-card {
-    transform-origin: left center;
+    transition:
+      opacity 50ms ease,
+      background-color 200ms ease,
+      transform 200ms var(--ease-out-expo);
+    will-change: transform;
   }
 
   .gpa-pill {
     backdrop-filter: blur(4px);
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    .edu-card:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .edu-card:hover .edu-institution {
+      filter: brightness(1.3);
+    }
+
+    .edu-card:active {
+      transform: scale(0.98);
+      transition: transform 50ms ease;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .edu-card {
       opacity: 1 !important;
       transform: none !important;
-    }
-    .edu-block {
-      opacity: 1 !important;
-      transform: none !important;
+      transition: none;
     }
   }
 </style>

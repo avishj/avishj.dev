@@ -73,8 +73,8 @@ const education: Education[] = [
               >
                 {edu.institution}
               </h3>
-              <p class="mt-1 text-base text-white/60">{edu.degree} · {edu.field}</p>
-              <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/40">
+              <p class="mt-1 text-base text-white/90">{edu.degree} · {edu.field}</p>
+              <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/60">
                 <span class="tabular-nums">{edu.period}</span>
                 <span class="inline-block h-px w-3 bg-white/25"></span>
                 <span>{edu.location}</span>
@@ -93,10 +93,10 @@ const education: Education[] = [
             <div class="md:col-span-8">
               {edu.coursework.length > 0 && (
                 <div class="edu-block">
-                  <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/30">Relevant Coursework</p>
+                  <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/50">Relevant Coursework</p>
                   <div class="flex flex-wrap gap-1.5">
                     {edu.coursework.map((course) => (
-                      <span class="rounded border border-white/[0.08] px-2.5 py-1 text-sm text-white/55">{course}</span>
+                      <span class="rounded border border-white/10 px-2.5 py-1 text-sm text-white/80">{course}</span>
                     ))}
                   </div>
                 </div>
@@ -104,13 +104,13 @@ const education: Education[] = [
 
               {edu.honors.length > 0 && (
                 <div class:list={['edu-block', { 'mt-4': edu.coursework.length > 0 }]}>
-                  <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/30">Honors & Activities</p>
+                  <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/50">Honors & Activities</p>
                   <ul class="edu-honors space-y-2">
                     {edu.honors.map((honor) => (
-                      <li class="edu-honor flex gap-3 text-base leading-relaxed text-white/55">
+                      <li class="edu-honor flex gap-3 text-base leading-relaxed text-white/80">
                         <span
                           class="honor-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
-                          style="background: color-mix(in srgb, var(--accent) 40%, transparent);"
+                          style="background: color-mix(in srgb, var(--accent) 60%, transparent);"
                         ></span>
                         <span>{honor}</span>
                       </li>

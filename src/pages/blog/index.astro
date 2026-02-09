@@ -3,15 +3,9 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
 import { getCollection } from "astro:content";
 import { url } from "../../utils/url";
+import { formatDate } from "../../utils/date";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const formatDate = (date: Date) =>
-	date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric"
-	});
 ---
 
 <BaseLayout title="Avish Jha · Blog" description="Thoughts on software engineering, research, and more.">
@@ -70,31 +64,8 @@ const formatDate = (date: Date) =>
 	</div>
 
 	<script>
-		const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		const introSplash = document.getElementById("intro-splash");
-		const mainContent = document.getElementById("main-content");
-
-		if (introSplash && mainContent) {
-			if (prefersReducedMotion) {
-				introSplash.remove();
-				mainContent.style.visibility = "visible";
-				mainContent.style.opacity = "1";
-			} else {
-				setTimeout(() => {
-					mainContent.style.visibility = "visible";
-					mainContent.style.opacity = "1";
-
-					const originX = window.innerWidth / 2;
-					const originY = window.innerHeight / 2;
-
-					if ((window as any).initPortalBurn) {
-						(window as any).initPortalBurn(originX, originY, () => introSplash.remove());
-					} else {
-						introSplash.remove();
-					}
-				}, 200);
-			}
-		}
+		import { initPageTransition } from "../../utils/portal-transition";
+		initPageTransition("intro-splash", "main-content");
 	</script>
 
 	<style>

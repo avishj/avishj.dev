@@ -5,6 +5,7 @@ import AboutSection from '../components/AboutSection.astro';
 import ExperienceSection from '../components/ExperienceSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import ResearchSection from '../components/ResearchSection.astro';
+import EducationSection from '../components/EducationSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import PortalBurn from '../components/PortalBurn.astro';
 import ArrowIcon from '../components/ArrowIcon.astro';
@@ -104,6 +105,12 @@ import { base, url } from '../utils/url';
             </a>
           </li>
           <li>
+            <a href="#education" class="nav-link group flex items-center gap-3" data-section="education">
+              <span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
+              <span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Education</span>
+            </a>
+          </li>
+          <li>
             <a href="#skills" class="nav-link group flex items-center gap-3" data-section="skills">
               <span class="nav-line h-px w-6 bg-white/20 transition-all duration-300"></span>
               <span class="nav-text font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Skills</span>
@@ -118,6 +125,7 @@ import { base, url } from '../utils/url';
         <ExperienceSection />
         <ProjectsSection />
         <ResearchSection />
+        <EducationSection />
         <SkillsSection />
       </div>
 
@@ -346,7 +354,7 @@ import { base, url } from '../utils/url';
   // ═══════════════════════════════════════════════════════════════════════════
   // SECTION NAV HIGHLIGHTING — Update active state on scroll
   // ═══════════════════════════════════════════════════════════════════════════
-  const sections = ['about', 'experience', 'projects', 'research', 'skills'];
+  const sections = ['about', 'experience', 'projects', 'research', 'education', 'skills'];
   const navLinks = document.querySelectorAll('.nav-link');
 
   sections.forEach((sectionId) => {

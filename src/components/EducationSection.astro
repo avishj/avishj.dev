@@ -1,0 +1,182 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+interface Education {
+  institution: string;
+  degree: string;
+  field: string;
+  location: string;
+  period: string;
+  gpa: string;
+  gpaLabel: string;
+  accentColor: string;
+  coursework: string[];
+  honors: string[];
+}
+
+const education: Education[] = [
+  {
+    institution: 'Carnegie Mellon University',
+    degree: 'Master of Science',
+    field: 'Computer Software Engineering in Scalable Systems',
+    location: 'Pittsburgh, PA',
+    period: 'Aug 2024 · Dec 2025',
+    gpa: '4.17',
+    gpaLabel: 'QPA / 4.00',
+    accentColor: 'var(--color-accent-cmu)',
+    coursework: [
+      'Cloud Computing',
+      'Engineering Data Intensive Scalable Systems',
+      'Design Patterns',
+      'API Design',
+    ],
+    honors: [
+      'Teaching Assistant: 17-614 Formal Methods',
+      'Treasurer: MSE Leadership Initiative',
+      'Member: Committee on Student Organizations',
+    ],
+  },
+  {
+    institution: 'Vellore Institute of Technology',
+    degree: 'Bachelor of Technology',
+    field: 'Computer Science and Engineering',
+    location: 'Vellore, India',
+    period: 'Jul 2019 · Aug 2023',
+    gpa: '3.82',
+    gpaLabel: 'GPA / 4.00',
+    accentColor: 'var(--color-accent-vit)',
+    coursework: [],
+    honors: [
+      'Special Achiever\'s Award',
+      'Board Chairperson: Mozilla Firefox Club',
+      'Projects Head: Sigma Xi Research Society',
+    ],
+  },
+];
+---
+
+<section id="education" class="education-section relative bg-[--color-bg-primary] pt-2 pb-16 md:pt-3 md:pb-24">
+  <div class="max-w-(--max-width)">
+    <SectionHeader number="05" title="Education" />
+
+    <div class="education-list">
+      {education.map((edu, index) => (
+        <article
+          class="edu-card border-t border-white/[0.06] py-3 md:py-5"
+          data-index={index}
+          style={`--accent: ${edu.accentColor};`}
+        >
+          <div class="grid gap-4 md:grid-cols-12 md:gap-6">
+            <div class="edu-meta md:col-span-4">
+              <h3
+                class="edu-institution font-display text-xl font-medium tracking-tight md:text-2xl"
+                style={`color: ${edu.accentColor};`}
+              >
+                {edu.institution}
+              </h3>
+              <p class="mt-1 text-base text-white/60">{edu.degree} · {edu.field}</p>
+              <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/40">
+                <span class="tabular-nums">{edu.period}</span>
+                <span class="inline-block h-px w-3 bg-white/25"></span>
+                <span>{edu.location}</span>
+              </div>
+
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span
+                  class="gpa-pill rounded-md border px-2.5 py-1 font-mono text-[11px] font-medium leading-none"
+                  style={`color: ${edu.accentColor}; background: ${edu.accentColor}08; border-color: ${edu.accentColor}20;`}
+                >
+                  {edu.gpa} {edu.gpaLabel}
+                </span>
+              </div>
+            </div>
+
+            <div class="md:col-span-8">
+              {edu.coursework.length > 0 && (
+                <div class="edu-block">
+                  <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/30">Relevant Coursework</p>
+                  <div class="flex flex-wrap gap-1.5">
+                    {edu.coursework.map((course) => (
+                      <span class="rounded border border-white/[0.08] px-2.5 py-1 text-sm text-white/55">{course}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {edu.honors.length > 0 && (
+                <div class:list={['edu-block', { 'mt-4': edu.coursework.length > 0 }]}>
+                  <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/30">Honors & Activities</p>
+                  <ul class="edu-honors space-y-2">
+                    {edu.honors.map((honor) => (
+                      <li class="flex gap-3 text-base leading-relaxed text-white/55">
+                        <span
+                          class="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
+                          style={`background: ${edu.accentColor}60;`}
+                        ></span>
+                        <span>{honor}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+      <div class="border-t border-white/[0.06]"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  async function initEducationAnimations() {
+    const { scrollRevealTimeline } = await import('../utils/scroll-animations');
+
+    const cards = document.querySelectorAll('.edu-card');
+    cards.forEach((card) => {
+      const institution = card.querySelector('.edu-institution');
+      const meta = card.querySelectorAll('.edu-institution ~ p, .edu-institution ~ div');
+      const blocks = card.querySelectorAll('.edu-block');
+
+      scrollRevealTimeline(card, (tl) => {
+        tl.fromTo(institution,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' }
+        )
+        .fromTo(meta,
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.06 },
+          '-=0.4'
+        )
+        .fromTo(blocks,
+          { y: 12, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out', stagger: 0.08 },
+          '-=0.3'
+        );
+      });
+    });
+  }
+
+  window.addEventListener('intro-complete', () => initEducationAnimations(), { once: true });
+</script>
+
+<style>
+  .edu-card {
+    transform-origin: left center;
+  }
+
+  .gpa-pill {
+    backdrop-filter: blur(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .edu-card {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .edu-block {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

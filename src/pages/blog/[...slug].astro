@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
 import { getCollection, render } from "astro:content";
 import { url } from "../../utils/url";
+import { formatDate } from "../../utils/date";
 
 export async function getStaticPaths() {
 	const posts = await getCollection("blog");
@@ -12,15 +13,12 @@ export async function getStaticPaths() {
 	}));
 }
 
+interface Props {
+	post: CollectionEntry<"blog">;
+}
+
 const { post } = Astro.props;
 const { Content } = await render(post);
-
-const formatDate = (date: Date) =>
-	date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "long",
-		day: "numeric"
-	});
 ---
 
 <BaseLayout title={`${post.data.title} · Avish Jha`} description={post.data.description}>
@@ -46,7 +44,7 @@ const formatDate = (date: Date) =>
 			<div class="max-w-2xl">
 				<!-- Meta -->
 				<time class="font-mono text-xs tracking-wide text-white/40">
-					{formatDate(post.data.pubDate)}
+					{formatDate(post.data.pubDate, { month: "long" })}
 				</time>
 				<h1 class="mt-2 font-display text-4xl font-medium italic tracking-tight text-white lg:text-5xl">
 					{post.data.title}
@@ -80,31 +78,8 @@ const formatDate = (date: Date) =>
 </BaseLayout>
 
 <script>
-	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-	const introSplash = document.getElementById("intro-splash");
-	const mainContent = document.getElementById("main-content");
-
-	if (introSplash && mainContent) {
-		if (prefersReducedMotion) {
-			introSplash.remove();
-			mainContent.style.visibility = "visible";
-			mainContent.style.opacity = "1";
-		} else {
-			setTimeout(() => {
-				mainContent.style.visibility = "visible";
-				mainContent.style.opacity = "1";
-
-				const originX = window.innerWidth / 2;
-				const originY = window.innerHeight / 2;
-
-				if ((window as any).initPortalBurn) {
-					(window as any).initPortalBurn(originX, originY, () => introSplash.remove());
-				} else {
-					introSplash.remove();
-				}
-			}, 200);
-		}
-	}
+	import { initPageTransition } from "../../utils/portal-transition";
+	initPageTransition("intro-splash", "main-content");
 </script>
 
 <style>

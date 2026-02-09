@@ -1,5 +1,6 @@
 ---
 import SectionHeader from './SectionHeader.astro';
+import ArrowIcon from './ArrowIcon.astro';
 
 interface Education {
   institution: string;
@@ -9,6 +10,7 @@ interface Education {
   period: string;
   gpa: string;
   gpaLabel: string;
+  url: string;
   accentClass: string;
   coursework: string[];
   honors: string[];
@@ -17,12 +19,13 @@ interface Education {
 const education: Education[] = [
   {
     institution: 'Carnegie Mellon University',
-    degree: 'Master of Science',
-    field: 'Computer Software Engineering in Scalable Systems',
+    degree: 'Master of Software Engineering',
+    field: 'Scalable Systems',
     location: 'Pittsburgh, PA',
     period: 'Aug 2024 · Dec 2025',
     gpa: '4.17',
     gpaLabel: 'QPA / 4.00',
+    url: 'https://drive.google.com/file/d/1d9uHBke5_VjxJ3H9HgARBsnbtTBUqvjq/view',
     accentClass: 'accent-cmu',
     coursework: [
       'Cloud Computing',
@@ -44,11 +47,12 @@ const education: Education[] = [
     period: 'Jul 2019 · Aug 2023',
     gpa: '3.82',
     gpaLabel: 'GPA / 4.00',
+    url: 'https://drive.google.com/file/d/1c3wOCMoEZL-CfzIEh23S-cj8k5dQDnOL/view',
     accentClass: 'accent-vit',
     coursework: [],
     honors: [
       'Special Achiever\'s Award',
-      'Board Chairperson: Mozilla Firefox Club',
+      'Executive Board Chairperson: Mozilla Firefox Club',
       'Projects Head: Sigma Xi Research Society',
     ],
   },
@@ -61,53 +65,67 @@ const education: Education[] = [
 
     <div class="education-list">
       {education.map((edu, index) => (
-        <article
-          class:list={['edu-card border-t border-white/[0.06] py-3 md:py-5', edu.accentClass]}
+        <a
+          href={edu.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class:list={['edu-card group/card block border-t border-white/[0.06] py-4 md:py-6', edu.accentClass]}
           data-index={index}
         >
-          <div class="grid gap-4 md:grid-cols-12 md:gap-6">
-            <div class="edu-meta md:col-span-4">
-              <h3
-                class="edu-institution font-display text-xl font-medium tracking-tight md:text-2xl"
-                style="color: var(--accent);"
-              >
-                {edu.institution}
-              </h3>
-              <p class="mt-1 text-base text-white/90">{edu.degree} · {edu.field}</p>
-              <div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/60">
+          <div class="flex items-start justify-between gap-4">
+            <h3
+              class="edu-institution font-display text-xl font-medium tracking-tight md:text-2xl"
+              style="color: var(--accent);"
+            >
+              {edu.institution}
+            </h3>
+            <div class="flex items-center gap-3 flex-shrink-0">
+              <div class="hidden items-center gap-2 font-mono text-xs text-white/50 md:flex">
                 <span class="tabular-nums">{edu.period}</span>
-                <span class="inline-block h-px w-3 bg-white/25"></span>
+                <span class="inline-block h-px w-3 bg-white/20"></span>
                 <span>{edu.location}</span>
               </div>
-
-              <div class="mt-3 flex flex-wrap gap-2">
-                <span
-                  class="gpa-pill rounded-md border px-2.5 py-1 font-mono text-[11px] font-medium leading-none"
-                  style="color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); border-color: color-mix(in srgb, var(--accent) 15%, transparent);"
-                >
-                  {edu.gpaLabel.split('/')[0].trim()} {edu.gpa} / {edu.gpaLabel.split('/')[1].trim()}
-                </span>
-              </div>
+              <span class="edu-arrow flex-shrink-0 text-white/40">
+                <ArrowIcon class="h-4 w-4" />
+              </span>
             </div>
+          </div>
 
-            <div class="md:col-span-8">
+          <div class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p class="text-base text-white/90">{edu.degree} · {edu.field}</p>
+            <span
+              class="gpa-pill rounded-md border px-2 py-0.5 font-mono text-[11px] font-medium leading-none"
+              style="color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); border-color: color-mix(in srgb, var(--accent) 15%, transparent);"
+            >
+              {edu.gpaLabel.split('/')[0].trim()} {edu.gpa} / {edu.gpaLabel.split('/')[1].trim()}
+            </span>
+          </div>
+
+          <div class="mt-1.5 flex items-center gap-2 font-mono text-xs text-white/50 md:hidden">
+            <span class="tabular-nums">{edu.period}</span>
+            <span class="inline-block h-px w-3 bg-white/20"></span>
+            <span>{edu.location}</span>
+          </div>
+
+          {(edu.coursework.length > 0 || edu.honors.length > 0) && (
+            <div class="mt-4 flex flex-col gap-4 md:mt-5 md:flex-row md:gap-8">
               {edu.coursework.length > 0 && (
-                <div class="edu-block">
+                <div class="edu-block md:flex-1">
                   <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/50">Relevant Coursework</p>
                   <div class="flex flex-wrap gap-1.5">
                     {edu.coursework.map((course) => (
-                      <span class="rounded border border-white/10 px-2.5 py-1 text-sm text-white/80">{course}</span>
+                      <span class="rounded border border-white/10 px-2.5 py-1 text-sm text-white/70">{course}</span>
                     ))}
                   </div>
                 </div>
               )}
 
               {edu.honors.length > 0 && (
-                <div class:list={['edu-block', { 'mt-4': edu.coursework.length > 0 }]}>
+                <div class="edu-block md:flex-1">
                   <p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/50">Honors & Activities</p>
-                  <ul class="edu-honors space-y-2">
+                  <ul class="edu-honors space-y-1.5">
                     {edu.honors.map((honor) => (
-                      <li class="edu-honor flex gap-3 text-base leading-relaxed text-white/80">
+                      <li class="edu-honor flex gap-2.5 text-sm leading-relaxed text-white/70">
                         <span
                           class="honor-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
                           style="background: color-mix(in srgb, var(--accent) 60%, transparent);"
@@ -119,8 +137,8 @@ const education: Education[] = [
                 </div>
               )}
             </div>
-          </div>
-        </article>
+          )}
+        </a>
       ))}
       <div class="border-t border-white/[0.06]"></div>
     </div>
@@ -154,11 +172,16 @@ const education: Education[] = [
   }
 
   .edu-card {
+    text-decoration: none;
     transition:
       opacity 50ms ease,
       background-color 200ms ease,
       transform 200ms var(--ease-out-expo);
     will-change: transform;
+  }
+
+  .edu-arrow {
+    transition: transform 200ms var(--ease-out-expo), color 200ms ease;
   }
 
   .gpa-pill {
@@ -172,6 +195,11 @@ const education: Education[] = [
 
     .edu-card:hover .edu-institution {
       filter: brightness(1.3);
+    }
+
+    .edu-card:hover .edu-arrow {
+      transform: translate(2px, -2px);
+      color: var(--accent);
     }
 
     .edu-card:active {

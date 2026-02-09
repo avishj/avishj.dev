@@ -296,27 +296,46 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
     <div>
       <h3 class="service-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
 
-      {academicService.map((service) => (
-        <a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item block border-b border-white/[0.06] py-3.5">
-          <div class="flex items-start justify-between gap-6">
-            <p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-            <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+      {academicService.map((service) =>
+        service.type === 'conference' ? (
+          <a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item block border-b border-white/[0.06] py-3.5">
+            <div class="flex items-start justify-between gap-6">
+              <p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
+              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+            </div>
+            <div class="mt-1 flex items-baseline justify-between gap-6">
+              <p class="flex items-center gap-1.5 text-sm text-white/70">
+                <span>{service.conference} <span class="font-mono text-[--color-text-muted]">({service.abbreviation})</span></span>
+                <span class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]">
+                  <ArrowIcon class="h-3.5 w-3.5" />
+                </span>
+              </p>
+              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+            </div>
+            <div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+              <span>{service.organizers.join(' · ')}</span>
+              <span class="flex-shrink-0 text-right">{service.details}</span>
+            </div>
+          </a>
+        ) : (
+          <div class="service-item block border-b border-white/[0.06] py-3.5">
+            <div class="flex items-start justify-between gap-6">
+              <p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
+              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+            </div>
+            <div class="mt-1 flex items-baseline justify-between gap-6">
+              <p class="text-sm text-white/70">
+                <span>{service.course} <span class="font-mono text-[--color-text-muted]">({service.courseCode})</span></span>
+              </p>
+              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+            </div>
+            <div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+              <span>{service.institution} · {service.department}</span>
+              <span class="flex-shrink-0 text-right">{service.responsibilities.join(' · ')}</span>
+            </div>
           </div>
-          <div class="mt-1 flex items-baseline justify-between gap-6">
-            <p class="flex items-center gap-1.5 text-sm text-white/70">
-              <span>{service.conference} <span class="font-mono text-[--color-text-muted]">({service.abbreviation})</span></span>
-              <span class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]">
-                <ArrowIcon class="h-3.5 w-3.5" />
-              </span>
-            </p>
-            <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
-          </div>
-          <div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
-            <span>{service.organizers.join(' · ')}</span>
-            <span class="flex-shrink-0 text-right">{service.details}</span>
-          </div>
-        </a>
-      ))}
+        )
+      )}
     </div>
 
 

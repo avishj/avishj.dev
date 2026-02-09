@@ -1,7 +1,5 @@
 ---
-// About Section with cursor-trailing line highlight effect
-// Text trails from white to grey based on distance from cursor
-import SectionHeader from './SectionHeader.astro';
+import SectionHeader from "./SectionHeader.astro";
 ---
 
 <section id="about" class="about-section relative bg-[--color-bg-primary] pt-2 pb-16 md:pt-3 md:pb-24">
@@ -15,7 +13,7 @@ import SectionHeader from './SectionHeader.astro';
 				<div class="about-text space-y-6 text-xl leading-relaxed md:text-2xl md:leading-relaxed">
 					<p class="about-para">Hi, I'm <span class="hw">Avish</span>! A software engineer with <span class="hw">1.5 years</span> of industry experience and an <span class="hw">MS Software Engineering</span> from <span class="hw">CMU's School of Computer Science.</span> I love tackling <span class="hw">complex system problems</span> and I'm always looking for something <span class="hw">fun</span> or <span class="hw">challenging :)</span></p>
 					<p class="about-para">Built <span class="hw">XR remote desktop</span> systems at <span class="hw hw-snap">Snap</span> and centralized observability for 120+ modules at <span class="hw hw-siemens">Siemens.</span></p>
-					<p class="about-para">Previously built warehouse simulation engines and real-time conveyor middleware at <span class="hw hw-addverb">Addverb.</span> Published in <span class="hw">IEEE</span> and <span class="hw">Springer,</span> former <span class="hw hw-mitacs">MITACS</span> research intern. Also worked at <span class="hw hw-ey">Ernst & Young</span> and <span class="hw hw-tata">Tata Steel.</span></p>
+					<p class="about-para">Previously built warehouse simulation engines and real-time conveyor middleware at <span class="hw hw-addverb">Addverb.</span> Published in <span class="hw hw-ieee">IEEE</span> and <span class="hw hw-springer">Springer,</span> former <span class="hw hw-mitacs">MITACS</span> research intern. Also worked at <span class="hw hw-ey">Ernst & Young</span> and <span class="hw hw-tata">Tata Steel.</span></p>
 				</div>
 			</div>
 
@@ -73,12 +71,14 @@ import SectionHeader from './SectionHeader.astro';
 	let currentLineY = -1;
 
 	const companyColors: Record<string, string> = {
-		'hw-snap': 'var(--color-accent-snap)',
-		'hw-siemens': 'var(--color-accent-siemens)',
-		'hw-addverb': 'var(--color-accent-addverb)',
-		'hw-mitacs': 'var(--color-accent-mitacs)',
-		'hw-ey': 'var(--color-accent-ey)',
-		'hw-tata': 'var(--color-accent-tata)',
+		"hw-snap": "var(--color-accent-snap)",
+		"hw-siemens": "var(--color-accent-siemens)",
+		"hw-addverb": "var(--color-accent-addverb)",
+		"hw-mitacs": "var(--color-accent-mitacs)",
+		"hw-ey": "var(--color-accent-ey)",
+		"hw-tata": "var(--color-accent-tata)",
+		"hw-ieee": "var(--color-accent-ieee)",
+		"hw-springer": "var(--color-accent-springer)"
 	};
 
 	function getAccentColor(el: HTMLElement): string | null {
@@ -237,26 +237,26 @@ import SectionHeader from './SectionHeader.astro';
 		currentLineY = -1;
 		resetToDefault();
 	});
-    
+
 	const companyMap: Record<string, string> = {
-		'hw-snap': '0',
-		'hw-siemens': '1',
-		'hw-addverb': '2',
-		'hw-mitacs': '3',
-		'hw-ey': '4',
-		'hw-tata': '5'
+		"hw-snap": "0",
+		"hw-siemens": "1",
+		"hw-addverb": "2",
+		"hw-mitacs": "3",
+		"hw-ey": "4",
+		"hw-tata": "5"
 	};
 
 	Object.entries(companyMap).forEach(([className, dataIndex]) => {
 		document.querySelectorAll(`.${className}`).forEach((el) => {
-			el.classList.add('company-link');
-			el.addEventListener('click', () => {
+			el.classList.add("company-link");
+			el.addEventListener("click", () => {
 				const targetCard = document.querySelector(`.exp-card[data-index="${dataIndex}"]`);
 				if (targetCard) {
-					targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
 					// Flash highlight
-					targetCard.classList.add('flash-highlight');
-					setTimeout(() => targetCard.classList.remove('flash-highlight'), 1200);
+					targetCard.classList.add("flash-highlight");
+					setTimeout(() => targetCard.classList.remove("flash-highlight"), 1200);
 				}
 			});
 		});
@@ -264,7 +264,7 @@ import SectionHeader from './SectionHeader.astro';
 
 	// Paragraph and status card animations - wait for intro
 	async function initAboutAnimations() {
-		const { scrollReveal, presets } = await import('../utils/scroll-animations');
+		const { scrollReveal, presets } = await import("../utils/scroll-animations");
 		const statusCard = document.querySelector(".status-card");
 
 		scrollReveal(paras, presets.fadeUp);
@@ -273,7 +273,7 @@ import SectionHeader from './SectionHeader.astro';
 		}
 	}
 
-	window.addEventListener('intro-complete', () => initAboutAnimations(), { once: true });
+	window.addEventListener("intro-complete", () => initAboutAnimations(), { once: true });
 </script>
 
 <style>
@@ -315,6 +315,14 @@ import SectionHeader from './SectionHeader.astro';
 		color: var(--color-accent-tata);
 	}
 
+	.hw-ieee {
+		color: var(--color-accent-ieee);
+	}
+
+	.hw-springer {
+		color: var(--color-accent-springer);
+	}
+
 	.company-link {
 		cursor: pointer;
 		position: relative;
@@ -323,19 +331,13 @@ import SectionHeader from './SectionHeader.astro';
 	}
 
 	.company-link::after {
-		content: '';
+		content: "";
 		position: absolute;
 		left: 0;
 		bottom: 0;
 		width: 100%;
 		height: 1px;
-		background-image: repeating-linear-gradient(
-			to right,
-			currentColor 0px,
-			currentColor 2px,
-			transparent 2px,
-			transparent 6px
-		);
+		background-image: repeating-linear-gradient(to right, currentColor 0px, currentColor 2px, transparent 2px, transparent 6px);
 		background-size: 6px 1px;
 		opacity: 0.5;
 	}

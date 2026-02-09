@@ -1,605 +1,573 @@
 ---
-import ArrowIcon from './ArrowIcon.astro';
-import SectionHeader from './SectionHeader.astro';
+import ArrowIcon from "./ArrowIcon.astro";
+import SectionHeader from "./SectionHeader.astro";
 
 interface Publication {
-  title: string;
-  authors: string[];
-  highlightAuthor: string;
-  venue: string;
-  venueType: 'IEEE' | 'Springer' | 'Preprint';
-  year: number;
-  citations: number;
-  doi?: string;
-  link: string;
-  status: 'published' | 'accepted' | 'preprint';
-  isFirstAuthor?: boolean;
+	title: string;
+	authors: string[];
+	highlightAuthor: string;
+	venue: string;
+	venueType: "IEEE" | "Springer" | "Preprint";
+	year: number;
+	citations: number;
+	doi?: string;
+	link: string;
+	status: "published" | "accepted" | "preprint";
+	isFirstAuthor?: boolean;
 }
 
 interface ConferenceService {
-  type: 'conference';
-  role: string;
-  conference: string;
-  abbreviation: string;
-  organizers: string[];
-  year: number;
-  location: string;
-  dates: string;
-  details: string;
-  link: string;
+	type: "conference";
+	role: string;
+	conference: string;
+	abbreviation: string;
+	organizers: string[];
+	year: number;
+	location: string;
+	dates: string;
+	details: string;
+	link: string;
 }
 
 interface TeachingService {
-  type: 'teaching';
-  role: string;
-  course: string;
-  courseCode: string;
-  department: string;
-  institution: string;
-  year: number;
-  location: string;
-  dates: string;
-  responsibilities: string[];
+	type: "teaching";
+	role: string;
+	course: string;
+	courseCode: string;
+	department: string;
+	institution: string;
+	year: number;
+	location: string;
+	dates: string;
+	responsibilities: string[];
 }
 
 type AcademicService = ConferenceService | TeachingService;
 
 const publications: Publication[] = [
-  {
-    title: 'Addressing Background Genomic and Environmental Effects on Health through Accelerated Computing and Machine Learning: Results from the 2025 Hackathon at Carnegie Mellon University',
-    authors: ['S. Sabata', 'J. Kubica', 'R. Gupta', 'L.W. Ericson', 'H.C. Atanda', 'G. Subramaniam', 'A.G. Moller', 'R.O. Abolade', 'A. Banka', 'S. Blechman', 'R. Brenner', 'M. Chikina', 'L.C. Chong', 'N.P. Cooley', 'D. Chang', 'P. Greer', 'A. Gupta', 'A. Jha', 'E. Kacar', 'N. Kubota', 'W. Lu', 'L. Luo', 'T. Ly', 'R. Mondal', "C. O'Donoghue", 'A.M. Phyo', 'P. Qiu', 'G. Ross-Dolan', 'A. Saadat', 'S. Sadasivan', 'R. Satterwhite', 'S. Shirolkar', 'Y. Zheng', 'H. Wang', 'M. Gainey', 'B. Busby'],
-    highlightAuthor: 'A. Jha',
-    venue: 'CMU-DNAnexus Hackathon',
-    venueType: 'Preprint',
-    year: 2025,
-    citations: 1,
-    doi: 'https://doi.org/10.37044/osf.io/3a8cn_v1',
-    link: 'https://doi.org/10.37044/osf.io/3a8cn_v1',
-    status: 'preprint',
-    isFirstAuthor: false,
-  },
-  {
-    title: 'Harnessing Creative Methods for EEG Feature Extraction and Modeling in Neurological Disorder Diagnoses',
-    authors: ['A. Jha', 'N. Kuruvilla', 'P. Garg', 'A. Victor'],
-    highlightAuthor: 'A. Jha',
-    venue: '7th CSITSS',
-    venueType: 'IEEE',
-    year: 2023,
-    citations: 7,
-    doi: 'https://doi.org/10.1109/CSITSS60515.2023.10334244',
-    link: 'https://doi.org/10.1109/CSITSS60515.2023.10334244',
-    status: 'published',
-    isFirstAuthor: true,
-  },
-  {
-    title: 'Enhancing Visibility: Multiresolution Dark Channel Prior for Dehazing and Fog Removal in Images',
-    authors: ['P. Garg', 'A. Jha', 'S.K. Jindal'],
-    highlightAuthor: 'A. Jha',
-    venue: '7th CSITSS',
-    venueType: 'IEEE',
-    year: 2023,
-    citations: 2,
-    doi: 'https://doi.org/10.1109/CSITSS60515.2023.10334128',
-    link: 'https://doi.org/10.1109/CSITSS60515.2023.10334128',
-    status: 'published',
-    isFirstAuthor: false,
-  },
-  {
-    title: 'Randomised Analysis of Backtracking-based Search Algorithms in Elucidating Sudoku Puzzles Using a Dual Serial/Parallel Approach',
-    authors: ['P. Garg', 'A. Jha', 'A. Shukla'],
-    highlightAuthor: 'A. Jha',
-    venue: '4th ICICIT · LNNS vol. 336',
-    venueType: 'Springer',
-    year: 2022,
-    citations: 2,
-    doi: 'https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21',
-    link: 'https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21',
-    status: 'published',
-    isFirstAuthor: false,
-  },
-  {
-    title: 'Automated Detection Of Driving Pathway Using Image Processing',
-    authors: ['P. Priyadarshini', 'A. Jha', 'M. Raj'],
-    highlightAuthor: 'A. Jha',
-    venue: 'ic-ETITE',
-    venueType: 'IEEE',
-    year: 2020,
-    citations: 0,
-    doi: 'https://ieeexplore.ieee.org/document/9077722',
-    link: 'https://ieeexplore.ieee.org/document/9077722',
-    status: 'published',
-    isFirstAuthor: false,
-  },
+	{
+		title: "Addressing Background Genomic and Environmental Effects on Health through Accelerated Computing and Machine Learning: Results from the 2025 Hackathon at Carnegie Mellon University",
+		authors: ["S. Sabata", "J. Kubica", "R. Gupta", "L.W. Ericson", "H.C. Atanda", "G. Subramaniam", "A.G. Moller", "R.O. Abolade", "A. Banka", "S. Blechman", "R. Brenner", "M. Chikina", "L.C. Chong", "N.P. Cooley", "D. Chang", "P. Greer", "A. Gupta", "A. Jha", "E. Kacar", "N. Kubota", "W. Lu", "L. Luo", "T. Ly", "R. Mondal", "C. O'Donoghue", "A.M. Phyo", "P. Qiu", "G. Ross-Dolan", "A. Saadat", "S. Sadasivan", "R. Satterwhite", "S. Shirolkar", "Y. Zheng", "H. Wang", "M. Gainey", "B. Busby"],
+		highlightAuthor: "A. Jha",
+		venue: "CMU-DNAnexus Hackathon",
+		venueType: "Preprint",
+		year: 2025,
+		citations: 1,
+		doi: "https://doi.org/10.37044/osf.io/3a8cn_v1",
+		link: "https://doi.org/10.37044/osf.io/3a8cn_v1",
+		status: "preprint",
+		isFirstAuthor: false
+	},
+	{
+		title: "Harnessing Creative Methods for EEG Feature Extraction and Modeling in Neurological Disorder Diagnoses",
+		authors: ["A. Jha", "N. Kuruvilla", "P. Garg", "A. Victor"],
+		highlightAuthor: "A. Jha",
+		venue: "7th CSITSS",
+		venueType: "IEEE",
+		year: 2023,
+		citations: 7,
+		doi: "https://doi.org/10.1109/CSITSS60515.2023.10334244",
+		link: "https://doi.org/10.1109/CSITSS60515.2023.10334244",
+		status: "published",
+		isFirstAuthor: true
+	},
+	{
+		title: "Enhancing Visibility: Multiresolution Dark Channel Prior for Dehazing and Fog Removal in Images",
+		authors: ["P. Garg", "A. Jha", "S.K. Jindal"],
+		highlightAuthor: "A. Jha",
+		venue: "7th CSITSS",
+		venueType: "IEEE",
+		year: 2023,
+		citations: 2,
+		doi: "https://doi.org/10.1109/CSITSS60515.2023.10334128",
+		link: "https://doi.org/10.1109/CSITSS60515.2023.10334128",
+		status: "published",
+		isFirstAuthor: false
+	},
+	{
+		title: "Randomised Analysis of Backtracking-based Search Algorithms in Elucidating Sudoku Puzzles Using a Dual Serial/Parallel Approach",
+		authors: ["P. Garg", "A. Jha", "A. Shukla"],
+		highlightAuthor: "A. Jha",
+		venue: "4th ICICIT · LNNS vol. 336",
+		venueType: "Springer",
+		year: 2022,
+		citations: 2,
+		doi: "https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21",
+		link: "https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21",
+		status: "published",
+		isFirstAuthor: false
+	},
+	{
+		title: "Automated Detection Of Driving Pathway Using Image Processing",
+		authors: ["P. Priyadarshini", "A. Jha", "M. Raj"],
+		highlightAuthor: "A. Jha",
+		venue: "ic-ETITE",
+		venueType: "IEEE",
+		year: 2020,
+		citations: 0,
+		doi: "https://ieeexplore.ieee.org/document/9077722",
+		link: "https://ieeexplore.ieee.org/document/9077722",
+		status: "published",
+		isFirstAuthor: false
+	}
 ];
 
 const academicService: AcademicService[] = [
-  {
-    type: 'conference',
-    role: 'Programme Committee Member',
-    conference: '17th International Conference on Swarm Intelligence',
-    abbreviation: 'ICSI 2026',
-    organizers: ['IASEI', 'Sichuan University', 'Peking University', 'IEEE CIS'],
-    year: 2026,
-    location: 'Chengdu, China',
-    dates: 'Jul 11 · 14, 2026',
-    details: 'Reviewer · Proceedings in Springer LNCS',
-    link: 'https://iasei.org/icsi2026/',
-  },
-  {
-    type: 'teaching',
-    role: 'Teaching Assistant',
-    course: 'Formal Methods',
-    courseCode: '17-614',
-    department: 'Software and Societal Systems Department',
-    institution: 'Carnegie Mellon University',
-    year: 2025,
-    location: 'Pittsburgh, PA',
-    dates: 'Fall 2025',
-    responsibilities: ['Grading', 'Office Hours', 'Doubt Clearing'],
-  },
+	{
+		type: "conference",
+		role: "Programme Committee Member",
+		conference: "17th International Conference on Swarm Intelligence",
+		abbreviation: "ICSI 2026",
+		organizers: ["IASEI", "Sichuan University", "Peking University", "IEEE CIS"],
+		year: 2026,
+		location: "Chengdu, China",
+		dates: "Jul 11 · 14, 2026",
+		details: "Reviewer · Proceedings in Springer LNCS",
+		link: "https://iasei.org/icsi2026/"
+	},
+	{
+		type: "teaching",
+		role: "Teaching Assistant",
+		course: "Formal Methods",
+		courseCode: "17-614",
+		department: "Software and Societal Systems Department",
+		institution: "Carnegie Mellon University",
+		year: 2025,
+		location: "Pittsburgh, PA",
+		dates: "Fall 2025",
+		responsibilities: ["Grading", "Office Hours", "Doubt Clearing"]
+	}
 ];
 
 const totalCitations = publications.reduce((sum, p) => sum + p.citations, 0);
 const hIndex = 2;
 
 const venueColors: Record<string, string> = {
-  IEEE: '#5BA3CF',
-  Springer: '#98D6A8',
-  Preprint: '#2ea44f',
+	IEEE: "var(--color-accent-ieee)",
+	Springer: "var(--color-accent-springer)",
+	Preprint: "#2ea44f"
 };
 
 const venueLabels: Record<string, string> = {
-  IEEE: 'IEEE',
-  Springer: 'Springer',
-  Preprint: 'BioHackrXiv',
+	IEEE: "IEEE",
+	Springer: "Springer",
+	Preprint: "BioHackrXiv"
 };
 
 const MAX_AUTHORS = 8;
 
 interface DisplayAuthor {
-  name: string;
-  isHighlight: boolean;
-  separator: string;
+	name: string;
+	isHighlight: boolean;
+	separator: string;
 }
 
 function getDisplayAuthors(pub: Publication): { authors: DisplayAuthor[]; truncated: boolean } {
-  if (pub.authors.length <= MAX_AUTHORS) {
-    return {
-      authors: pub.authors.map((a, i) => ({
-        name: a,
-        isHighlight: a === pub.highlightAuthor,
-        separator: i < pub.authors.length - 1 ? ', ' : '',
-      })),
-      truncated: false,
-    };
-  }
-  const shown = pub.authors.slice(0, 6);
-  const highlightInShown = shown.includes(pub.highlightAuthor);
-  const result: DisplayAuthor[] = shown.map((a) => ({
-    name: a,
-    isHighlight: a === pub.highlightAuthor,
-    separator: ', ',
-  }));
-  if (!highlightInShown) {
-    result.push({ name: '...', isHighlight: false, separator: ' ' });
-    result.push({ name: pub.highlightAuthor, isHighlight: true, separator: ', ' });
-  }
-  return { authors: result, truncated: true };
+	if (pub.authors.length <= MAX_AUTHORS) {
+		return {
+			authors: pub.authors.map((a, i) => ({
+				name: a,
+				isHighlight: a === pub.highlightAuthor,
+				separator: i < pub.authors.length - 1 ? ", " : ""
+			})),
+			truncated: false
+		};
+	}
+	const shown = pub.authors.slice(0, 6);
+	const highlightInShown = shown.includes(pub.highlightAuthor);
+	const result: DisplayAuthor[] = shown.map((a) => ({
+		name: a,
+		isHighlight: a === pub.highlightAuthor,
+		separator: ", "
+	}));
+	if (!highlightInShown) {
+		result.push({ name: "...", isHighlight: false, separator: " " });
+		result.push({ name: pub.highlightAuthor, isHighlight: true, separator: ", " });
+	}
+	return { authors: result, truncated: true };
 }
 
 const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 ---
 
 <section id="research" class="research-section relative bg-[--color-bg-primary] pt-2 pb-16 md:pt-3 md:pb-24">
-  <div class="max-w-(--max-width)">
-    <SectionHeader number="04" title="Research" />
+	<div class="max-w-(--max-width)">
+		<SectionHeader number="04" title="Research" />
 
-    <!-- Aggregate stats bar -->
-    <div class="stats-bar mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-4">
-      <span class="font-mono text-base tabular-nums text-white/80">
-        <span class="text-white font-medium">{publications.length}</span> Publications
-      </span>
-      <span class="text-white/20">·</span>
-      <span class="font-mono text-base tabular-nums text-white/80">
-        <span class="text-white font-medium">{totalCitations}</span> Citations
-      </span>
-      <span class="text-white/20">·</span>
-      <span class="font-mono text-base tabular-nums text-white/80">
-        h-index <span class="text-white font-medium">{hIndex}</span>
-      </span>
-      <a
-        href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="scholar-stats-link ml-auto flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200"
-      >
-        <span>Google Scholar</span>
-        <ArrowIcon class="scholar-stats-arrow h-3 w-3 transition-transform duration-200" />
-      </a>
-    </div>
+		<!-- Aggregate stats bar -->
+		<div class="stats-bar mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-4">
+			<span class="font-mono text-base tabular-nums text-white/80">
+				<span class="text-white font-medium">{publications.length}</span> Publications
+			</span>
+			<span class="text-white/20">·</span>
+			<span class="font-mono text-base tabular-nums text-white/80">
+				<span class="text-white font-medium">{totalCitations}</span> Citations
+			</span>
+			<span class="text-white/20">·</span>
+			<span class="font-mono text-base tabular-nums text-white/80">
+				h-index <span class="text-white font-medium">{hIndex}</span>
+			</span>
+			<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="scholar-stats-link ml-auto flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
+				<span>Google Scholar</span>
+				<ArrowIcon class="scholar-stats-arrow h-3 w-3 transition-transform duration-200" />
+			</a>
+		</div>
 
-    <!-- Publications subsection -->
-    <div class="mb-6">
-      <h3 class="publications-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Publications</h3>
+		<!-- Publications subsection -->
+		<div class="mb-6">
+			<h3 class="publications-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Publications</h3>
 
-      <div class="publications-list space-y-0">
-        {publications.map((pub, index) => (
-          <a
-            href={pub.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="publication-item group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6"
-            data-index={index}
-          >
-            {/* Year */}
-            <span class="w-10 flex-shrink-0 pt-0.5 font-mono text-sm tabular-nums text-[--color-text-muted]">
-              {pub.year}
-            </span>
+			<div class="publications-list space-y-0">
+				{
+					publications.map((pub, index) => (
+						<a href={pub.link} target="_blank" rel="noopener noreferrer" class="publication-item group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6" data-index={index}>
+							{/* Year */}
+							<span class="w-10 flex-shrink-0 pt-0.5 font-mono text-sm tabular-nums text-[--color-text-muted]">{pub.year}</span>
 
-            {/* Main content */}
-            <div class="min-w-0 flex-grow">
-              {/* Top row: badge + citation + 1st author tag */}
-              <div class="mb-1.5 flex flex-wrap items-center gap-2">
-                <span
-                  class="rounded px-1.5 py-0.5 font-mono text-sm leading-none"
-                  style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}
-                >
-                  {venueLabels[pub.venueType]}
-                </span>
-                <span class="font-mono text-sm text-[--color-text-muted]">{pub.venue}</span>
-                {pub.isFirstAuthor && (
-                  <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">
-                    1st Author
-                  </span>
-                )}
-                {pub.citations > 0 && (
-                  <span class="citation-badge relative ml-auto flex cursor-default items-center gap-1 border-b border-dotted border-white/40 font-mono text-sm tabular-nums text-[--color-text-muted]" data-tooltip={`${pub.citations} citation${pub.citations !== 1 ? 's' : ''}`}>
-                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                    </svg>
-                    {pub.citations}
-                  </span>
-                )}
-              </div>
+							{/* Main content */}
+							<div class="min-w-0 flex-grow">
+								{/* Top row: badge + citation + 1st author tag */}
+								<div class="mb-1.5 flex flex-wrap items-center gap-2">
+									<span class="rounded px-1.5 py-0.5 font-mono text-sm leading-none" style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}>
+										{venueLabels[pub.venueType]}
+									</span>
+									<span class="font-mono text-sm text-[--color-text-muted]">{pub.venue}</span>
+									{pub.isFirstAuthor && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">1st Author</span>}
+									{pub.citations > 0 && (
+										<span class="citation-badge relative ml-auto flex cursor-default items-center gap-1 border-b border-dotted border-white/40 font-mono text-sm tabular-nums text-[--color-text-muted]" data-tooltip={`${pub.citations} citation${pub.citations !== 1 ? "s" : ""}`}>
+											<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+											</svg>
+											{pub.citations}
+										</span>
+									)}
+								</div>
 
-              {/* Title */}
-              <p class="pub-title text-base leading-relaxed text-white/80 transition-colors duration-200 md:truncate md:text-lg">
-                {pub.title}
-              </p>
+								{/* Title */}
+								<p class="pub-title text-base leading-relaxed text-white/80 transition-colors duration-200 md:truncate md:text-lg">{pub.title}</p>
 
-              {/* Authors */}
-              <p class="mt-1.5 text-sm leading-relaxed text-[--color-text-muted]">
-                {pubDisplayAuthors[index].authors.map((da) => (
-                  <Fragment>
-                    {da.isHighlight ? (
-                      <span class="highlight-author font-semibold">{da.name}</span>
-                    ) : (
-                      <span>{da.name}</span>
-                    )}
-                    {da.separator}
-                  </Fragment>
-                ))}
-                {pubDisplayAuthors[index].truncated && <span class="italic">et al.</span>}
-              </p>
-            </div>
+								{/* Authors */}
+								<p class="mt-1.5 text-sm leading-relaxed text-[--color-text-muted]">
+									{pubDisplayAuthors[index].authors.map((da) => (
+										<Fragment>
+											{da.isHighlight ? <span class="highlight-author font-semibold">{da.name}</span> : <span>{da.name}</span>}
+											{da.separator}
+										</Fragment>
+									))}
+									{pubDisplayAuthors[index].truncated && <span class="italic">et al.</span>}
+								</p>
+							</div>
 
-            {/* External link arrow */}
-            <div class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-[--color-text-muted]">
-              <ArrowIcon />
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
+							{/* External link arrow */}
+							<div class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-[--color-text-muted]">
+								<ArrowIcon />
+							</div>
+						</a>
+					))
+				}
+			</div>
+		</div>
 
-    <!-- Academic Service subsection -->
-    <div>
-      <h3 class="service-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
+		<!-- Academic Service subsection -->
+		<div>
+			<h3 class="service-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
 
-      {academicService.map((service) =>
-        service.type === 'conference' ? (
-          <a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item block border-b border-white/[0.06] py-3.5">
-            <div class="flex items-start justify-between gap-6">
-              <p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
-            </div>
-            <div class="mt-1 flex items-baseline justify-between gap-6">
-              <p class="flex items-center gap-1.5 text-sm text-white/70">
-                <span>{service.conference} <span class="font-mono text-[--color-text-muted]">({service.abbreviation})</span></span>
-                <span class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]">
-                  <ArrowIcon class="h-3.5 w-3.5" />
-                </span>
-              </p>
-              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
-            </div>
-            <div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
-              <span>{service.organizers.join(' · ')}</span>
-              <span class="flex-shrink-0 text-right">{service.details}</span>
-            </div>
-          </a>
-        ) : (
-          <div class="service-item block border-b border-white/[0.06] py-3.5">
-            <div class="flex items-start justify-between gap-6">
-              <p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
-            </div>
-            <div class="mt-1 flex items-baseline justify-between gap-6">
-              <p class="text-sm text-white/70">
-                <span>{service.course} <span class="font-mono text-[--color-text-muted]">({service.courseCode})</span></span>
-              </p>
-              <p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
-            </div>
-            <div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
-              <span>{service.institution} · {service.department}</span>
-              <span class="flex-shrink-0 text-right">{service.responsibilities.join(' · ')}</span>
-            </div>
-          </div>
-        )
-      )}
-    </div>
-
-
-  </div>
+			{
+				academicService.map((service) =>
+					service.type === "conference" ? (
+						<a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item block border-b border-white/[0.06] py-3.5">
+							<div class="flex items-start justify-between gap-6">
+								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+							</div>
+							<div class="mt-1 flex items-baseline justify-between gap-6">
+								<p class="flex items-center gap-1.5 text-sm text-white/70">
+									<span>
+										{service.conference} <span class="font-mono text-[--color-text-muted]">({service.abbreviation})</span>
+									</span>
+									<span class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]">
+										<ArrowIcon class="h-3.5 w-3.5" />
+									</span>
+								</p>
+								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+							</div>
+							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+								<span>{service.organizers.join(" · ")}</span>
+								<span class="flex-shrink-0 text-right">{service.details}</span>
+							</div>
+						</a>
+					) : (
+						<div class="service-item block border-b border-white/[0.06] py-3.5">
+							<div class="flex items-start justify-between gap-6">
+								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+							</div>
+							<div class="mt-1 flex items-baseline justify-between gap-6">
+								<p class="text-sm text-white/70">
+									<span>
+										{service.course} <span class="font-mono text-[--color-text-muted]">({service.courseCode})</span>
+									</span>
+								</p>
+								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+							</div>
+							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+								<span>
+									{service.institution} · {service.department}
+								</span>
+								<span class="flex-shrink-0 text-right">{service.responsibilities.join(" · ")}</span>
+							</div>
+						</div>
+					)
+				)
+			}
+		</div>
+	</div>
 </section>
 
 <script>
-  async function initResearchAnimations() {
-    const { scrollReveal, scrollRevealTimeline } = await import('../utils/scroll-animations');
+	async function initResearchAnimations() {
+		const { scrollReveal, scrollRevealTimeline } = await import("../utils/scroll-animations");
 
-    const statsBar = document.querySelector('.stats-bar');
-    if (statsBar) {
-      scrollReveal(statsBar, { from: { y: 12, opacity: 0 }, to: { y: 0, opacity: 1 } });
-    }
+		const statsBar = document.querySelector(".stats-bar");
+		if (statsBar) {
+			scrollReveal(statsBar, { from: { y: 12, opacity: 0 }, to: { y: 0, opacity: 1 } });
+		}
 
-    const pubHeading = document.querySelector('.publications-heading');
-    if (pubHeading) {
-      scrollReveal(pubHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' } });
-    }
+		const pubHeading = document.querySelector(".publications-heading");
+		if (pubHeading) {
+			scrollReveal(pubHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" } });
+		}
 
-    const pubItems = document.querySelectorAll('.publication-item');
-    pubItems.forEach((item) => {
-      const year = item.querySelector(':scope > span');
-      const content = item.querySelector(':scope > div');
-      const arrow = item.querySelector('.pub-arrow');
+		const pubItems = document.querySelectorAll(".publication-item");
+		pubItems.forEach((item) => {
+			const year = item.querySelector(":scope > span");
+			const content = item.querySelector(":scope > div");
+			const arrow = item.querySelector(".pub-arrow");
 
-      scrollRevealTimeline(item, (tl) => {
-        tl.fromTo([year, arrow].filter(Boolean),
-          { y: 10, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out', stagger: 0.04 }
-        )
-        .fromTo(content,
-          { y: 12, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' },
-          '-=0.3'
-        );
-      });
-    });
+			scrollRevealTimeline(item, (tl) => {
+				tl.fromTo([year, arrow].filter(Boolean), { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out", stagger: 0.04 }).fromTo(content, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, "-=0.3");
+			});
+		});
 
-    const serviceHeading = document.querySelector('.service-heading');
-    if (serviceHeading) {
-      scrollReveal(serviceHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: 'power4.out' } });
-    }
+		const serviceHeading = document.querySelector(".service-heading");
+		if (serviceHeading) {
+			scrollReveal(serviceHeading, { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" } });
+		}
 
-    const serviceItems = document.querySelectorAll('.service-item');
-    serviceItems.forEach((item) => {
-      scrollRevealTimeline(item, (tl) => {
-        const title = item.querySelector('.service-title');
-        const rest = item.querySelectorAll(':scope > div:not(:first-child), :scope > div > p:not(.service-title)');
+		const serviceItems = document.querySelectorAll(".service-item");
+		serviceItems.forEach((item) => {
+			scrollRevealTimeline(item, (tl) => {
+				const title = item.querySelector(".service-title");
+				const rest = item.querySelectorAll(":scope > div:not(:first-child), :scope > div > p:not(.service-title)");
 
-        tl.fromTo(title,
-          { y: 10, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out' }
-        )
-        .fromTo(rest,
-          { y: 8, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: 'power4.out', stagger: 0.04 },
-          '-=0.3'
-        );
-      });
-    });
-  }
+				tl.fromTo(title, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out" }).fromTo(rest, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out", stagger: 0.04 }, "-=0.3");
+			});
+		});
+	}
 
-  window.addEventListener('intro-complete', () => initResearchAnimations(), { once: true });
+	window.addEventListener("intro-complete", () => initResearchAnimations(), { once: true });
 
-  import { groupHoverFade } from '../utils/group-hover';
-  groupHoverFade('.publication-item');
-  groupHoverFade('.service-item');
+	import { groupHoverFade } from "../utils/group-hover";
+	groupHoverFade(".publication-item");
+	groupHoverFade(".service-item");
 </script>
 
 <style>
-  .citation-badge::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%) scale(0.95);
-    white-space: nowrap;
-    font-size: 0.75rem;
-    line-height: 1;
-    padding: 4px 8px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    color: white;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 100ms ease, transform 100ms ease;
-  }
+	.citation-badge::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: calc(100% + 6px);
+		left: 50%;
+		transform: translateX(-50%) scale(0.95);
+		white-space: nowrap;
+		font-size: 0.75rem;
+		line-height: 1;
+		padding: 4px 8px;
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(8px);
+		color: white;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity 100ms ease,
+			transform 100ms ease;
+	}
 
-  .citation-badge:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-  }
+	.citation-badge:hover::after {
+		opacity: 1;
+		transform: translateX(-50%) scale(1);
+	}
 
-  .publication-item,
-  .service-item {
-    transform-origin: left center;
-    transition:
-      opacity 50ms ease,
-      background-color 200ms ease,
-      transform 200ms var(--ease-out-expo);
-    will-change: transform;
-  }
+	.publication-item,
+	.service-item {
+		transform-origin: left center;
+		transition:
+			opacity 50ms ease,
+			background-color 200ms ease,
+			transform 200ms var(--ease-out-expo);
+		will-change: transform;
+	}
 
-  .pub-title,
-  .service-title,
-  .publication-item p,
-  .service-item p {
-    transition:
-      filter 0.15s cubic-bezier(0.16, 1, 0.3, 1),
-      color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+	.pub-title,
+	.service-title,
+	.publication-item p,
+	.service-item p {
+		transition:
+			filter 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+			color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+	}
 
-  @media (hover: hover) and (pointer: fine) {
-    .publication-item:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
+	@media (hover: hover) and (pointer: fine) {
+		.publication-item:hover {
+			background: rgba(255, 255, 255, 0.02);
+		}
 
-    .publication-item:hover .pub-title {
-      color: white;
-    }
+		.publication-item:hover .pub-title {
+			color: white;
+		}
 
-    .publication-item:hover p {
-      color: rgba(255, 255, 255, 0.85);
-    }
+		.publication-item:hover p {
+			color: rgba(255, 255, 255, 0.85);
+		}
 
-    .publication-item:active {
-      transform: scale(0.98);
-      transition: transform 50ms ease;
-    }
+		.publication-item:active {
+			transform: scale(0.98);
+			transition: transform 50ms ease;
+		}
 
-    .pub-arrow {
-      transition: color 200ms ease, transform 200ms var(--ease-out-expo);
-    }
+		.pub-arrow {
+			transition:
+				color 200ms ease,
+				transform 200ms var(--ease-out-expo);
+		}
 
-    .publication-item:hover .pub-arrow {
-      color: white;
-      transform: rotate(45deg);
-    }
+		.publication-item:hover .pub-arrow {
+			color: white;
+			transform: rotate(45deg);
+		}
 
-    .service-item:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
+		.service-item:hover {
+			background: rgba(255, 255, 255, 0.02);
+		}
 
-    .service-item:hover .service-title {
-      color: white;
-    }
+		.service-item:hover .service-title {
+			color: white;
+		}
 
-    .service-item:hover p {
-      color: rgba(255, 255, 255, 0.85);
-    }
+		.service-item:hover p {
+			color: rgba(255, 255, 255, 0.85);
+		}
 
-    .service-item:active {
-      transform: scale(0.98);
-      transition: transform 50ms ease;
-    }
+		.service-item:active {
+			transform: scale(0.98);
+			transition: transform 50ms ease;
+		}
 
-    .service-arrow {
-      transition: color 200ms ease, transform 200ms var(--ease-out-expo);
-    }
+		.service-arrow {
+			transition:
+				color 200ms ease,
+				transform 200ms var(--ease-out-expo);
+		}
 
-    .service-item:hover .service-arrow {
-      color: white;
-      transform: rotate(45deg);
-    }
+		.service-item:hover .service-arrow {
+			color: white;
+			transform: rotate(45deg);
+		}
 
-    .scholar-stats-link:hover {
-      color: white;
-    }
+		.scholar-stats-link:hover {
+			color: white;
+		}
 
-    .scholar-stats-arrow {
-      transition: color 200ms ease, transform 200ms var(--ease-out-expo);
-    }
+		.scholar-stats-arrow {
+			transition:
+				color 200ms ease,
+				transform 200ms var(--ease-out-expo);
+		}
 
-    .scholar-stats-link:hover .scholar-stats-arrow {
-      transform: rotate(45deg);
-    }
-  }
+		.scholar-stats-link:hover .scholar-stats-arrow {
+			transform: rotate(45deg);
+		}
+	}
 
-  @property --border-angle {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: false;
-  }
+	@property --border-angle {
+		syntax: "<angle>";
+		initial-value: 0deg;
+		inherits: false;
+	}
 
-  .highlight-author {
-    --glow: #e0a860;
-    position: relative;
-    color: var(--glow);
-    padding: 1px 6px;
-    border-radius: 4px;
-    background: linear-gradient(
-      var(--border-angle),
-      rgba(224, 168, 96, 0.1) 0%,
-      rgba(224, 168, 96, 0.03) 50%,
-      rgba(224, 168, 96, 0.1) 100%
-    );
-    border: 1px solid transparent;
-    background-clip: padding-box;
-    animation: rotate-border 3s linear infinite;
-  }
+	.highlight-author {
+		--glow: #e0a860;
+		position: relative;
+		color: var(--glow);
+		padding: 1px 6px;
+		border-radius: 4px;
+		background: linear-gradient(var(--border-angle), rgba(224, 168, 96, 0.1) 0%, rgba(224, 168, 96, 0.03) 50%, rgba(224, 168, 96, 0.1) 100%);
+		border: 1px solid transparent;
+		background-clip: padding-box;
+		animation: rotate-border 3s linear infinite;
+	}
 
-  .highlight-author::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 5px;
-    padding: 1px;
-    background: conic-gradient(
-      from var(--border-angle),
-      rgba(224, 168, 96, 0.06),
-      rgba(224, 168, 96, 0.35),
-      rgba(224, 168, 96, 0.06)
-    );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: rotate-border 3s linear infinite;
-    will-change: --border-angle;
-  }
+	.highlight-author::before {
+		content: "";
+		position: absolute;
+		inset: -1px;
+		border-radius: 5px;
+		padding: 1px;
+		background: conic-gradient(from var(--border-angle), rgba(224, 168, 96, 0.06), rgba(224, 168, 96, 0.35), rgba(224, 168, 96, 0.06));
+		-webkit-mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		-webkit-mask-composite: xor;
+		mask-composite: exclude;
+		animation: rotate-border 3s linear infinite;
+		will-change: --border-angle;
+	}
 
-  @keyframes rotate-border {
-    to {
-      --border-angle: 360deg;
-    }
-  }
+	@keyframes rotate-border {
+		to {
+			--border-angle: 360deg;
+		}
+	}
 
-  @media (prefers-reduced-motion: reduce) {
-    .publication-item,
-    .service-item {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none;
-    }
+	@media (prefers-reduced-motion: reduce) {
+		.publication-item,
+		.service-item {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none;
+		}
 
-    .publication-item:active,
-    .service-item:active {
-      transform: none;
-    }
+		.publication-item:active,
+		.service-item:active {
+			transform: none;
+		}
 
-    .pub-title,
-    .service-title,
-    .publication-item p,
-    .service-item p {
-      transition: none;
-    }
+		.pub-title,
+		.service-title,
+		.publication-item p,
+		.service-item p {
+			transition: none;
+		}
 
-    .pub-arrow,
-    .service-arrow {
-      transition: none;
-    }
+		.pub-arrow,
+		.service-arrow {
+			transition: none;
+		}
 
-    .scholar-stats-arrow {
-      transition: none;
-    }
+		.scholar-stats-arrow {
+			transition: none;
+		}
 
-    .highlight-author {
-      animation: none;
-      border: 1px solid rgba(224, 168, 96, 0.2);
-    }
-    .highlight-author::before {
-      animation: none;
-    }
-  }
+		.highlight-author {
+			animation: none;
+			border: 1px solid rgba(224, 168, 96, 0.2);
+		}
+		.highlight-author::before {
+			animation: none;
+		}
+	}
 </style>

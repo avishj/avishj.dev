@@ -297,16 +297,21 @@ import { base, url } from '../utils/url';
     });
 
     // Fallback if animation takes too long or fails
+    function fallbackReveal() {
+      introSplash?.remove();
+      document.body.style.overflow = '';
+      gsap.set(mainContent, { visibility: 'visible', opacity: 1 });
+      animateNavReveal();
+      animateNameReveal();
+      window.dispatchEvent(new CustomEvent('intro-complete'));
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    }
+
     anim.addEventListener('data_failed', () => {
       gsap.to(introSplash, {
         opacity: 0,
         duration: 0.5,
-        onComplete: () => {
-          introSplash.remove();
-          document.body.style.overflow = '';
-          gsap.set(mainContent, { visibility: 'visible', opacity: 1 });
-          animateHeroEntrance();
-        }
+        onComplete: fallbackReveal,
       });
     });
 
@@ -317,12 +322,7 @@ import { base, url } from '../utils/url';
         gsap.to(introSplash, {
           opacity: 0,
           duration: 0.5,
-          onComplete: () => {
-            introSplash.remove();
-            document.body.style.overflow = '';
-            gsap.set(mainContent, { visibility: 'visible', opacity: 1 });
-            animateHeroEntrance();
-          }
+          onComplete: fallbackReveal,
         });
       }
     }, 6000);

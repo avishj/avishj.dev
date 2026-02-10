@@ -1,6 +1,7 @@
 ---
 import SectionHeader from "./SectionHeader.astro";
 import ArrowIcon from "./ArrowIcon.astro";
+import { url } from "../utils/url";
 
 interface Education {
 	institution: string;
@@ -10,7 +11,7 @@ interface Education {
 	period: string;
 	gpa: string;
 	gpaLabel: string;
-	url: string;
+	href: string;
 	accentClass: string;
 	coursework: string[];
 	honors: string[];
@@ -25,7 +26,7 @@ const education: Education[] = [
 		period: "Aug 2024 · Dec 2025",
 		gpa: "4.17",
 		gpaLabel: "QPA / 4.00",
-		url: "https://drive.google.com/file/d/1d9uHBke5_VjxJ3H9HgARBsnbtTBUqvjq/view",
+		href: url("view/cmu"),
 		accentClass: "accent-cmu",
 		coursework: ["Cloud Computing", "Engineering Data Intensive Scalable Systems", "Design Patterns", "API Design"],
 		honors: ["Teaching Assistant: 17-614 Formal Methods", "Treasurer: MSE Leadership Initiative", "Member: Committee on Student Organizations"]
@@ -38,7 +39,7 @@ const education: Education[] = [
 		period: "Jul 2019 · Aug 2023",
 		gpa: "3.82",
 		gpaLabel: "GPA / 4.00",
-		url: "https://drive.google.com/file/d/1c3wOCMoEZL-CfzIEh23S-cj8k5dQDnOL/view",
+		href: url("view/vit"),
 		accentClass: "accent-vit",
 		coursework: [],
 		honors: ["Special Achiever's Award", "Executive Board Chairperson: Mozilla Firefox Club", "Projects Head: Sigma Xi Research Society"]
@@ -53,7 +54,7 @@ const education: Education[] = [
 		<div class="education-list">
 			{
 				education.map((edu, index) => (
-					<a href={edu.url} target="_blank" rel="noopener noreferrer" class:list={["edu-card group/card block border-t border-white/[0.06] py-4 md:py-6", edu.accentClass]} data-index={index}>
+					<a href={edu.href} class:list={["edu-card group/card block border-t border-white/[0.06] py-4 md:py-6", edu.accentClass]} data-index={index}>
 						<div class="flex items-start justify-between gap-4">
 							<h3 class="edu-institution font-display text-xl font-medium tracking-tight md:text-2xl" style="color: var(--accent);">
 								{edu.institution}

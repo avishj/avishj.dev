@@ -8,8 +8,8 @@ import { url } from '../../utils/url';
 export function getStaticPaths() {
   const pdfs: Record<string, { file: string; title: string }> = {
     resume: { file: 'Jha, Avish - Resume.pdf', title: 'Resume' },
-    // vit: { file: 'VIT Record.pdf', title: 'VIT Record' },
-    // cmu: { file: 'CMU Record.pdf', title: 'CMU Record' },
+    cmu: { file: 'Jha, Avish - CMU Record.pdf', title: 'CMU Record' },
+    vit: { file: 'Jha, Avish - VIT Record.pdf', title: 'VIT Record' },
   };
 
   return Object.entries(pdfs).map(([slug, data]) => ({

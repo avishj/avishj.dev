@@ -4,6 +4,8 @@
 import ArrowIcon from './ArrowIcon.astro';
 import SectionHeader from './SectionHeader.astro';
 
+const baseUrl = import.meta.env.BASE_URL;
+
 interface Project {
   title: string;
   description: string;
@@ -20,7 +22,7 @@ const projects: Project[] = [
     description: 'Track historical Visa, Mastercard, and ECB exchange rates with real markup data. Interactive charts, offline-first caching, and 365+ days of history.',
     tech: ['JavaScript', 'TypeScript', 'Bun'],
     link: 'https://github.com/avishj/ForexRadar',
-    image: '/projects/forexradar',
+    image: 'projects/forexradar',
     size: '2x1',
   },
   {
@@ -28,7 +30,7 @@ const projects: Project[] = [
     description: 'Interactive 3D visualizations that explain how the internet works. Each IETF RFC becomes an explorable exhibit with guided walkthroughs.',
     tech: ['TypeScript', 'Astro', 'React', 'Three.js'],
     link: 'https://github.com/avishj/ExplainRFC',
-    image: '/projects/explainrfc',
+    image: 'projects/explainrfc',
     size: '1x2',
   },
   {
@@ -36,7 +38,7 @@ const projects: Project[] = [
     description: 'macOS menu-bar app for quickly tracking times across multiple timezones across the past, present, and future.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/ephemeris',
-    // image: '/projects/ephemeris',
+    // image: 'projects/ephemeris',
     size: '1x2',
   },
   {
@@ -44,7 +46,7 @@ const projects: Project[] = [
     description: 'macOS menu-bar app for tracking token usage quotas across AI providers with friendly reminders to use it or lose it.',
     tech: ['Swift', 'SwiftUI'],
     link: 'https://github.com/avishj/UseItOrLoseIt',
-    // image: '/projects/useitorloseit',
+    // image: 'projects/useitorloseit',
     size: '2x1',
   },
   {
@@ -73,7 +75,7 @@ const projects: Project[] = [
     description: 'Unified 4 portals, managed 7 websites, 180+ emails, and 3+ domains. Reduced OpEx by 40%.',
     tech: ['JavaScript', 'jQuery', 'Netlify'],
     link: 'https://github.com/sedsindia/sedsindia.github.io',
-    image: '/projects/sedsindia',
+    image: 'projects/sedsindia',
     size: '2x1',
   },
   {
@@ -81,7 +83,7 @@ const projects: Project[] = [
     description: 'Frontend for candidate tests across 5 domains, handling 1200+ applicants with 100+ concurrent tests.',
     tech: ['VueJS', 'Axios', 'Cloudflare'],
     link: 'https://github.com/MFC-VIT/MFC-RecruitmentPortal-Frontend',
-    image: '/projects/mfcvit',
+    image: 'projects/mfcvit',
     size: '1x2',
   },
   // --- From experience ---
@@ -163,11 +165,11 @@ const sizeClasses = {
             <picture>
               <source
                 type="image/webp"
-                srcset={`${import.meta.env.BASE_URL}${project.image}-400w.webp 400w, ${import.meta.env.BASE_URL}${project.image}-800w.webp 800w, ${import.meta.env.BASE_URL}${project.image}-1200w.webp 1200w, ${import.meta.env.BASE_URL}${project.image}-1600w.webp 1600w, ${import.meta.env.BASE_URL}${project.image}-2560w.webp 2560w`}
+                srcset={`${baseUrl}${project.image}-400w.webp 400w, ${baseUrl}${project.image}-800w.webp 800w, ${baseUrl}${project.image}-1200w.webp 1200w, ${baseUrl}${project.image}-1600w.webp 1600w, ${baseUrl}${project.image}-2560w.webp 2560w`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
               />
               <img
-                src={`${import.meta.env.BASE_URL}${project.image}-800w.webp`}
+                src={`${baseUrl}${project.image}-800w.webp`}
                 alt={`${project.title} screenshot`}
                 class="h-full w-full object-cover transition-transform duration-500"
                 loading="lazy"

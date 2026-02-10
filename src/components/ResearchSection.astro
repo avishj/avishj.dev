@@ -352,7 +352,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		pubItems.forEach((item) => {
 			const year = item.querySelector(":scope > span");
 			const content = item.querySelector(":scope > div");
-			const arrow = item.querySelector(".pub-arrow");
+			const arrow = item.querySelector(".pub-arrow svg");
 
 			const yearArrow = [year, arrow].filter((el): el is Element => el !== null);
 

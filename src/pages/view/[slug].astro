@@ -1,0 +1,298 @@
+---
+import { url } from '../../utils/url';
+
+export function getStaticPaths() {
+  const pdfs: Record<string, { file: string; title: string }> = {
+    resume: { file: 'Jha, Avish - Resume.pdf', title: 'Resume' },
+    // vit: { file: 'VIT Record.pdf', title: 'VIT Record' },
+    // cmu: { file: 'CMU Record.pdf', title: 'CMU Record' },
+  };
+
+  return Object.entries(pdfs).map(([slug, data]) => ({
+    params: { slug },
+    props: data,
+  }));
+}
+
+const { file, title } = Astro.props;
+const pdfUrl = url(`files/${file}`);
+const downloadName = file;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        background: #1a1a1a;
+        color: #fff;
+        font-family: 'Inter', system-ui, sans-serif;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.625rem 1rem;
+        background: #111;
+        border-bottom: 1px solid #2a2a2a;
+        flex-shrink: 0;
+        gap: 1rem;
+      }
+
+      .toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+      }
+
+      .toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .back-btn, .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        background: #2a2a2a;
+        border: 1px solid #3a3a3a;
+        border-radius: 6px;
+        color: #ccc;
+        text-decoration: none;
+        font-size: 0.8125rem;
+        transition: background 0.15s, color 0.15s;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .back-btn:hover, .download-btn:hover {
+        background: #3a3a3a;
+        color: #fff;
+      }
+
+      .back-btn svg, .download-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .file-name {
+        font-size: 0.8125rem;
+        color: #888;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .toolbar-center {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .page-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: #2a2a2a;
+        border: 1px solid #3a3a3a;
+        border-radius: 4px;
+        color: #ccc;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .page-btn:hover:not(:disabled) {
+        background: #3a3a3a;
+        color: #fff;
+      }
+
+      .page-btn:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+
+      .page-info {
+        font-size: 0.8125rem;
+        color: #888;
+        min-width: 4rem;
+        text-align: center;
+      }
+
+      .viewer-container {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        padding: 1.5rem 0;
+        background: #1a1a1a;
+      }
+
+      #pdf-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      #pdf-container canvas {
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+        max-width: 100%;
+        height: auto !important;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #666;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <a class="back-btn" id="back-btn" href="javascript:void(0)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+          Back
+        </a>
+        <span class="file-name">{title}</span>
+      </div>
+      <div class="toolbar-center">
+        <button class="page-btn" id="prev-btn" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <span class="page-info" id="page-info">Loading...</span>
+        <button class="page-btn" id="next-btn" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <a class="download-btn" href={pdfUrl} download={downloadName}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          Download
+        </a>
+      </div>
+    </div>
+
+    <div class="viewer-container">
+      <div id="pdf-container">
+        <div class="loading" id="loading">Loading PDF...</div>
+      </div>
+    </div>
+
+    <script is:inline define:vars={{ pdfUrl }}>
+      const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155';
+
+      const script = document.createElement('script');
+      script.src = `${PDFJS_CDN}/pdf.min.mjs`;
+      script.type = 'module';
+      document.head.appendChild(script);
+
+      script.onload = async () => {
+        const pdfjsLib = globalThis.pdfjsLib;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `${PDFJS_CDN}/pdf.worker.min.mjs`;
+
+        const container = document.getElementById('pdf-container');
+        const loading = document.getElementById('loading');
+        const pageInfo = document.getElementById('page-info');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const backBtn = document.getElementById('back-btn');
+
+        backBtn.addEventListener('click', () => {
+          if (document.referrer && new URL(document.referrer).origin === location.origin) {
+            history.back();
+          } else {
+            location.href = pdfUrl.replace(/files\/.*$/, '');
+          }
+        });
+
+        try {
+          const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+          const totalPages = pdf.numPages;
+          let currentPage = 1;
+
+          loading.remove();
+
+          async function renderPage(num) {
+            const page = await pdf.getPage(num);
+            const scale = Math.min(
+              (window.innerWidth - 48) / page.getViewport({ scale: 1 }).width,
+              2
+            );
+            const viewport = page.getViewport({ scale });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width * window.devicePixelRatio;
+            canvas.height = viewport.height * window.devicePixelRatio;
+            canvas.style.width = `${viewport.width}px`;
+            canvas.style.height = `${viewport.height}px`;
+
+            const ctx = canvas.getContext('2d');
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            container.innerHTML = '';
+            container.appendChild(canvas);
+
+            await page.render({ canvasContext: ctx, viewport }).promise;
+
+            pageInfo.textContent = `${num} / ${totalPages}`;
+            prevBtn.disabled = num <= 1;
+            nextBtn.disabled = num >= totalPages;
+          }
+
+          prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) { currentPage--; renderPage(currentPage); }
+          });
+
+          nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) { currentPage++; renderPage(currentPage); }
+          });
+
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentPage > 1) {
+              currentPage--;
+              renderPage(currentPage);
+            } else if (e.key === 'ArrowRight' && currentPage < totalPages) {
+              currentPage++;
+              renderPage(currentPage);
+            }
+          });
+
+          renderPage(1);
+        } catch (err) {
+          loading.textContent = 'Failed to load PDF.';
+          console.error(err);
+        }
+      };
+    </script>
+  </body>
+</html>

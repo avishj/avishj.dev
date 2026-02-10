@@ -12,7 +12,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 			<!-- Main bio text -->
 			<div class="md:col-span-8">
 				<div class="about-text space-y-6 text-xl leading-relaxed md:text-2xl md:leading-relaxed">
-					<p class="about-para">Hi, I'm <span class="hw">Avish</span>! A software engineer with <span class="hw">1.5 years</span> of industry experience and an <span class="hw">MS Software Engineering</span> from <span class="hw">CMU's School of Computer Science.</span> I love tackling <span class="hw">complex system problems</span> and I'm always looking for something <span class="hw">fun</span> or <span class="hw">challenging :)</span></p>
+					<p class="about-para">Hi, I'm <span class="hw">Avish</span>! A software engineer with <span class="hw">1.5 years</span> of industry experience and an <span class="hw">MS Software Engineering</span> from <span class="hw hw-cmu">CMU</span>'s School of Computer Science. I love tackling <span class="hw">complex system problems</span> and I'm always looking for something <span class="hw">fun</span> or <span class="hw">challenging :)</span></p>
 					<p class="about-para">Built <span class="hw">XR remote desktop</span> systems at <span class="hw hw-snap">Snap</span> and centralized observability for 120+ modules at <span class="hw hw-siemens">Siemens.</span></p>
 					<p class="about-para">Previously built warehouse simulation engines and real-time conveyor middleware at <span class="hw hw-addverb">Addverb.</span> Published in <span class="hw hw-ieee">IEEE</span> and <span class="hw hw-springer">Springer,</span> former <span class="hw hw-mitacs">MITACS</span> research intern. Also worked at <span class="hw hw-ey">Ernst & Young</span> and <span class="hw hw-tata">Tata Steel.</span></p>
 				</div>
@@ -72,6 +72,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 	let currentLineY = -1;
 
 	const companyColors: Record<string, string> = {
+		"hw-cmu": "var(--color-accent-cmu)",
 		"hw-snap": "var(--color-accent-snap)",
 		"hw-siemens": "var(--color-accent-siemens)",
 		"hw-addverb": "var(--color-accent-addverb)",
@@ -255,11 +256,23 @@ import ArrowIcon from "./ArrowIcon.astro";
 				const targetCard = document.querySelector(`.exp-card[data-index="${dataIndex}"]`);
 				if (targetCard) {
 					targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
-					// Flash highlight
 					targetCard.classList.add("flash-highlight");
 					setTimeout(() => targetCard.classList.remove("flash-highlight"), 1200);
 				}
 			});
+		});
+	});
+
+	// CMU links to education section
+	document.querySelectorAll(".hw-cmu").forEach((el) => {
+		el.classList.add("company-link");
+		el.addEventListener("click", () => {
+			const targetCard = document.querySelector('.edu-card[data-index="0"]');
+			if (targetCard) {
+				targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
+				targetCard.classList.add("flash-highlight");
+				setTimeout(() => targetCard.classList.remove("flash-highlight"), 1200);
+			}
 		});
 	});
 
@@ -290,6 +303,10 @@ import ArrowIcon from "./ArrowIcon.astro";
 	.hw {
 		font-weight: 500;
 		transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.hw-cmu {
+		color: var(--color-accent-cmu);
 	}
 
 	.hw-snap {

@@ -195,15 +195,15 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		<SectionHeader number="04" title="Research" />
 
 		<!-- Aggregate stats bar -->
-		<div class="stats-bar mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/[0.06] pb-4">
+		<div class="stats-bar mb-6 flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-white/[0.06] pb-4">
 			<span class="font-mono text-base tabular-nums text-white/80">
 				<span class="text-white font-medium">{publications.length}</span> Publications
 			</span>
-			<span class="text-white/20">·</span>
+			<span class="text-white/80 text-4xl leading-none">·</span>
 			<span class="font-mono text-base tabular-nums text-white/80">
 				<span class="text-white font-medium">{totalCitations}</span> Citations
 			</span>
-			<span class="text-white/20">·</span>
+			<span class="text-white/80 text-4xl leading-none">·</span>
 			<span class="font-mono text-base tabular-nums text-white/80">
 				h-index <span class="text-white font-medium">{hIndex}</span>
 			</span>

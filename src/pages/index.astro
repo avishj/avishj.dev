@@ -39,30 +39,30 @@ import { base, url } from "../utils/url";
 
 					<!-- Navigation links -->
 					<nav id="hero-nav" class="flex items-center gap-5 pt-2 lg:gap-6 lg:pt-3">
-						<a href={url("files/Jha, Avish - Resume.pdf")} target="_blank" rel="noopener noreferrer" download class="header-link group flex items-center gap-1.5">
-							<span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">resume</span>
+						<a href={url("files/Jha, Avish - Resume.pdf")} target="_blank" rel="noopener noreferrer" download class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">resume</span>
 							<svg class="header-download-icon h-3 w-3 text-white/30 lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
 							</svg>
 						</a>
-						<a href={url("blog/")} class="header-link group flex items-center gap-1.5">
-							<span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">blog</span>
+						<a href={url("blog/")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">blog</span>
 							<ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
 						</a>
-						<a href={url("research/")} class="header-link group flex items-center gap-1.5">
-							<span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">research</span>
+						<a href={url("research/")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">research</span>
 							<ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
 						</a>
-						<a href="https://github.com/avishj" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 lg:flex">
-							<span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">github</span>
+						<a href="https://github.com/avishj" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">github</span>
 							<ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
 						</a>
-						<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 lg:flex">
-							<span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">scholar</span>
+						<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">scholar</span>
 							<ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
 						</a>
-						<a href="https://linkedin.com/in/avishj" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 lg:flex">
-							<span class="header-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">linkedin</span>
+						<a href="https://linkedin.com/in/avishj" target="_blank" rel="noopener noreferrer" class="header-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">linkedin</span>
 							<ArrowIcon class="header-link-icon h-3 w-3 text-white/30 transition-colors duration-150 ease lg:h-3.5 lg:w-3.5" strokeWidth={2} />
 						</a>
 					</nav>
@@ -442,15 +442,6 @@ import { base, url } from "../utils/url";
 		.nav-link:hover .nav-text {
 			color: rgba(255, 255, 255, 0.8);
 		}
-	}
-
-	.header-link:active {
-		transform: scale(0.97);
-	}
-
-	.header-link-text {
-		position: relative;
-		padding-bottom: 3px;
 	}
 
 	.header-link-text::after {

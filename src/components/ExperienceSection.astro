@@ -124,7 +124,7 @@ const experiences: Experience[] = [
                   {exp.metrics.map((metric) => (
                     <span 
                       class="metric-pill rounded-md border px-2.5 py-1 font-mono text-[11px] font-medium leading-none"
-                      style="color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); border-color: color-mix(in srgb, var(--accent) 15%, transparent);"
+                      style="color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: color-mix(in srgb, var(--accent) 20%, transparent);"
                     >
                       {metric}
                     </span>
@@ -137,10 +137,10 @@ const experiences: Experience[] = [
             <div class="md:col-span-8">
               <ul class="exp-highlights space-y-2">
                 {exp.highlights.map((highlight) => (
-                  <li class="exp-bullet flex gap-3 text-base leading-relaxed text-white/55">
+                  <li class="exp-bullet flex gap-3 text-base leading-relaxed text-white/65">
                     <span 
                       class="bullet-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
-                      style="background: color-mix(in srgb, var(--accent) 60%, transparent);"
+                      style="background: color-mix(in srgb, var(--accent) 75%, transparent);"
                     ></span>
                     <span class="bullet-text">{highlight}</span>
                   </li>
@@ -184,9 +184,9 @@ const experiences: Experience[] = [
   // Trailing hover brightness effect
   const bulletArray = Array.from(allBullets);
   const cardsArray = Array.from(cards) as HTMLElement[];
-  const baseOpacity = 0.55;
+  const baseOpacity = 0.65;
   const hoverOpacity = 1;
-  const trailFalloff = [0.85, 0.7]; // opacity for ±1, ±2 neighbors
+  const trailFalloff = [0.9, 0.78]; // opacity for ±1, ±2 neighbors
 
   function applyTrailingHover(hoveredIndex: number) {
     bulletArray.forEach((bullet, i) => {
@@ -244,7 +244,7 @@ const experiences: Experience[] = [
       const dot = bullet.querySelector('.bullet-dot');
       if (dot) {
         gsap.to(dot, {
-          opacity: 0.6,
+          opacity: 0.75,
           duration: 0.2,
           ease: 'power2.out',
           overwrite: 'auto',

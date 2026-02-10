@@ -3,8 +3,7 @@
 // Inspired by pqoqubbw.dev + Shopify Editions card patterns
 import ArrowIcon from './ArrowIcon.astro';
 import SectionHeader from './SectionHeader.astro';
-
-const baseUrl = import.meta.env.BASE_URL;
+import { url } from '../utils/url';
 
 interface Project {
   title: string;
@@ -165,11 +164,11 @@ const sizeClasses = {
             <picture>
               <source
                 type="image/webp"
-                srcset={`${baseUrl}${project.image}-400w.webp 400w, ${baseUrl}${project.image}-800w.webp 800w, ${baseUrl}${project.image}-1200w.webp 1200w, ${baseUrl}${project.image}-1600w.webp 1600w, ${baseUrl}${project.image}-2560w.webp 2560w`}
+                srcset={`${url(`${project.image}-400w.webp`)} 400w, ${url(`${project.image}-800w.webp`)} 800w, ${url(`${project.image}-1200w.webp`)} 1200w, ${url(`${project.image}-1600w.webp`)} 1600w, ${url(`${project.image}-2560w.webp`)} 2560w`}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
               />
               <img
-                src={`${baseUrl}${project.image}-800w.webp`}
+                src={url(`${project.image}-800w.webp`)}
                 alt={`${project.title} screenshot`}
                 class="h-full w-full object-cover transition-transform duration-500"
                 loading="lazy"

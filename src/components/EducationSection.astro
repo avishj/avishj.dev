@@ -135,12 +135,15 @@ const education: Education[] = [
 			const mobileDate = card.querySelector(".md\\:hidden");
 			const blocks = card.querySelectorAll(".edu-block");
 
-			const metaElements = [degreeRow, desktopDate, arrow, mobileDate].filter((el): el is Element => el !== null);
+			const metaElements = [degreeRow, desktopDate, mobileDate].filter((el): el is Element => el !== null);
 
 			scrollRevealTimeline(card, (tl) => {
 				tl.fromTo(...tlFadeUp(institution))
-					.fromTo(...tlFadeUp(metaElements, { stagger: 0.06 }), TIMELINE_OVERLAP)
-					.fromTo(...tlFadeUp(blocks, { stagger: 0.05 }), TIMELINE_OVERLAP);
+					.fromTo(...tlFadeUp(metaElements, { stagger: 0.06 }), TIMELINE_OVERLAP);
+				if (arrow) {
+					tl.fromTo(arrow, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power3.out", clearProps: "transform" }, TIMELINE_OVERLAP);
+				}
+				tl.fromTo(...tlFadeUp(blocks, { stagger: 0.05 }), TIMELINE_OVERLAP);
 			});
 		});
 	}

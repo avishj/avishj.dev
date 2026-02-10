@@ -108,7 +108,7 @@ const experiences: Experience[] = [
             <div class="exp-meta md:col-span-4">
               <h3 
                 class="exp-company font-display text-xl font-medium tracking-tight md:text-2xl"
-                style={`color: ${exp.accentColor};`}
+                style="color: var(--accent);"
               >
                 {exp.company}
               </h3>
@@ -124,7 +124,7 @@ const experiences: Experience[] = [
                   {exp.metrics.map((metric) => (
                     <span 
                       class="metric-pill rounded-md border px-2.5 py-1 font-mono text-[11px] font-medium leading-none"
-                      style={`color: ${exp.accentColor}; background: ${exp.accentColor}08; border-color: ${exp.accentColor}20;`}
+                      style="color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); border-color: color-mix(in srgb, var(--accent) 15%, transparent);"
                     >
                       {metric}
                     </span>
@@ -140,7 +140,7 @@ const experiences: Experience[] = [
                   <li class="exp-bullet flex gap-3 text-base leading-relaxed text-white/55">
                     <span 
                       class="bullet-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
-                      style={`background: ${exp.accentColor}60;`}
+                      style="background: color-mix(in srgb, var(--accent) 60%, transparent);"
                     ></span>
                     <span class="bullet-text">{highlight}</span>
                   </li>

@@ -46,7 +46,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			<div class="publications-list space-y-0">
 				{
 					publications.map((pub, index) => (
-						<a href={pub.link} target="_blank" rel="noopener noreferrer" class="publication-item group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6" data-index={index}>
+						<a href={pub.link} target="_blank" rel="noopener noreferrer" class="publication-item group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6" data-index={index} style={`--accent: ${venueColors[pub.venueType]};`}>
 							{/* Year */}
 							<span class="w-10 flex-shrink-0 pt-0.5 font-mono text-sm tabular-nums text-[--color-text-muted]">{pub.year}</span>
 
@@ -276,7 +276,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		}
 
 		.publication-item:hover .pub-arrow {
-			color: white;
+			color: var(--accent);
 			transform: rotate(45deg);
 		}
 

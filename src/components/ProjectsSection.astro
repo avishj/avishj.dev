@@ -126,7 +126,7 @@ const sizeClasses = {
     <SectionHeader number="03" title="Projects" />
 
     <!-- Bento Grid -->
-    <div class="bento-grid group grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
+    <div class="bento-grid grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
     {projects.map((project, index) => (
       <article 
         class={`project-card group ${sizeClasses[project.size]}`}

@@ -146,6 +146,21 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   CARD BASE TRANSITIONS
+   Shared interactive card pattern: left-anchored scale origin, smooth
+   opacity/bg/transform transitions.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.card-base {
+  transform-origin: center center;
+  transition:
+    opacity 50ms ease,
+    background-color 200ms ease,
+    transform 200ms var(--ease-out-expo);
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    CANVAS GRAIN TEXTURE OVERLAY
    ═══════════════════════════════════════════════════════════════════════════ */
 

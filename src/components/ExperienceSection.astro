@@ -99,7 +99,7 @@ const experiences: Experience[] = [
     <div class="experience-list">
       {experiences.map((exp, index) => (
         <article 
-          class="exp-card group/card border-t border-white/[0.06] py-3 md:py-5"
+          class="exp-card card-base group/card border-t border-white/[0.06] py-3 md:py-5"
           data-index={index}
           style={`--accent: ${exp.accentColor};`}
         >
@@ -275,10 +275,6 @@ const experiences: Experience[] = [
 </script>
 
 <style>
-  .exp-card {
-    transform-origin: left center;
-  }
-
   .exp-card.meta-active .exp-company {
     filter: brightness(1.4);
   }

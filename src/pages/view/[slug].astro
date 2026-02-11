@@ -16,15 +16,13 @@ export function getStaticPaths() {
 		addverb: { file: "Jha, Avish - Experience - Addverb Record.pdf", title: "Addverb Record" },
 		mitacs: { file: "Jha, Avish - Experience - MITACS Record.pdf", title: "MITACS Record" },
 		ey: { file: "Jha, Avish - Experience - Ernst & Young Record.pdf", title: "Ernst & Young Record" },
-		"tata-steel": { file: "Jha, Avish - Experience - Tata Steel Record.pdf", title: "Tata Steel Record" }
+		"tata-steel": { file: "Jha, Avish - Experience - Tata Steel Record.pdf", title: "Tata Steel Record" },
+		"cmu-dnanexus-hackathon-2025": { file: "Jha, Avish - Research Paper - 2025 CMU DNAnexus Hackathon.pdf", title: "CMU-DNAnexus Hackathon 2025" },
+		"eeg-feature-extraction": { file: "Jha, Avish - Research Paper - 2023 EEG.pdf", title: "EEG Feature Extraction" },
+		"multiresolution-dark-channel-dehazing": { file: "Jha, Avish - Research Paper - 2023 Fog Removal.pdf", title: "Fog Removal Dehazing" },
+		"sudoku-backtracking-analysis": { file: "Jha, Avish - Research Paper - 2022 Sudoku.pdf", title: "Sudoku Backtracking Analysis" },
+		"automated-driving-pathway-detection": { file: "Jha, Avish - Research Paper - 2020 Automated Driving.pdf", title: "Automated Driving Pathway" }
 	};
-
-	// Add paper PDFs from publications
-	for (const pub of publications) {
-		if (pub.pdfFile) {
-			pdfs[pub.slug] = { file: pub.pdfFile, title: pub.title };
-		}
-	}
 
 	return Object.entries(pdfs).map(([slug, data]) => ({
 		params: { slug },

@@ -42,15 +42,15 @@ import { base, url } from "../utils/url";
 					<nav id="hero-nav" class="flex items-center gap-5 pt-2 lg:gap-6 lg:pt-3">
 						<a href={url("view/resume")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
 							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">resume</span>
-							<ArrowIcon class="header-arrow-icon h-4 w-4 text-white/60 transition-colors duration-150 ease lg:h-5 lg:w-5" strokeWidth={2} />
+							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />
 						</a>
 						<a href={url("blog/")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
 							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">blog</span>
-							<ArrowIcon class="header-arrow-icon h-4 w-4 text-white/60 transition-colors duration-150 ease lg:h-5 lg:w-5" strokeWidth={2} />
+							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />
 						</a>
 						<a href={url("research/")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
 							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">research</span>
-							<ArrowIcon class="header-arrow-icon h-4 w-4 text-white/60 transition-colors duration-150 ease lg:h-5 lg:w-5" strokeWidth={2} />
+							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />
 						</a>
 						<a href="https://github.com/avishj" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="header-link ext-profile-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
 							<SocialIcon variant="github" size="h-4 w-4 lg:h-5 lg:w-5" class="text-white/60 transition-colors duration-150 ease" />
@@ -419,11 +419,6 @@ import { base, url } from "../utils/url";
 			animation: dotScroll 400ms linear infinite;
 		}
 
-		.header-link:hover :global(.header-arrow-icon) {
-			color: rgba(255, 255, 255, 1);
-			transform: rotate(45deg);
-		}
-
 		#hero-nav .ext-profile-link:hover :global(.social-icon) {
 			color: rgba(255, 255, 255, 1);
 		}
@@ -452,14 +447,6 @@ import { base, url } from "../utils/url";
 		background-image: repeating-linear-gradient(to right, rgba(255, 255, 255, 0.3) 0px, rgba(255, 255, 255, 0.3) 2px, transparent 2px, transparent 6px);
 		background-size: 6px 1px;
 		will-change: background-position;
-	}
-
-	/* Arrow icon rotation on hover */
-	.header-link :global(.header-arrow-icon) {
-		transition:
-			color 200ms ease,
-			transform 200ms var(--ease-out-expo);
-		will-change: transform;
 	}
 
 	/* ═══════════════════════════════════════════════════════════════════════════
@@ -493,8 +480,7 @@ import { base, url } from "../utils/url";
 		.header-link-text::after {
 			animation: none;
 		}
-		.header-link,
-		.header-link :global(.header-arrow-icon) {
+		.header-link {
 			transition: none;
 		}
 	}

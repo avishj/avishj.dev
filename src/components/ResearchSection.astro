@@ -29,7 +29,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		</div>
 
 		<!-- Research CTA -->
-		<a href="research/" class="research-cta group flex items-center justify-between rounded-lg border border-white/[0.06] px-5 py-4 mb-8">
+		<a href="research/" class="research-cta press-scale group flex items-center justify-between rounded-lg border border-white/[0.06] px-5 py-4 mb-8">
 			<div>
 				<span class="font-display text-lg italic text-white/90 transition-colors duration-200">Explore Research</span>
 				<span class="ml-3 font-mono text-sm text-[--color-text-muted]">Abstracts, key findings, full papers, citations, and more.</span>
@@ -241,11 +241,6 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			color: rgba(255, 255, 255, 0.85);
 		}
 
-		.publication-item:active {
-			transform: scale(0.98);
-			transition: transform 50ms ease;
-		}
-
 		.service-item:hover {
 			background: rgba(255, 255, 255, 0.02);
 		}
@@ -256,11 +251,6 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
 		.service-item:hover p {
 			color: rgba(255, 255, 255, 0.85);
-		}
-
-		.service-item:active {
-			transform: scale(0.98);
-			transition: transform 50ms ease;
 		}
 
 		.research-cta {
@@ -279,10 +269,6 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 		}
 
-		.research-cta:active {
-			transform: scale(0.98);
-			transition: transform 50ms ease;
-		}
 	}
 
 	@property --border-angle {

@@ -158,6 +158,14 @@ body {
   will-change: transform;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .card-base:active,
+  .press-scale:active {
+    transform: scale(0.98);
+    transition: transform var(--duration-fast) ease;
+  }
+}
+
 .hover-text-brighten,
 .card-base :is(h3, p, li, .gpa-pill, .metric-pill) {
   transition:

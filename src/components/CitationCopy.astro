@@ -1,0 +1,131 @@
+---
+interface Props {
+	bibtex: string;
+}
+
+const { bibtex } = Astro.props;
+---
+
+<div class="citation-copy relative">
+	<button class="cite-toggle flex items-center gap-1.5 rounded border border-white/[0.06] px-3 py-1.5 font-mono text-sm text-[--color-text-muted]" data-bibtex={bibtex}>
+		<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"></path>
+		</svg>
+		<span>Cite</span>
+		<svg class="cite-chevron h-3 w-3 transition-transform duration-150" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+		</svg>
+	</button>
+
+	<div class="cite-dropdown absolute right-0 top-full z-10 mt-1.5 hidden min-w-[140px] rounded-lg border border-white/[0.08] bg-[#111] p-1.5 shadow-lg">
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="bibtex">BibTeX</button>
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="apa">APA</button>
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="vancouver">IEEE</button>
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="mla">MLA</button>
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="chicago">Chicago</button>
+	</div>
+
+	<!-- Toast -->
+	<div class="cite-toast pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-white/[0.08] bg-[#111] px-4 py-2 font-mono text-xs text-white opacity-0 shadow-lg transition-all duration-200">Copied to clipboard</div>
+</div>
+
+<script>
+	import Cite from "citation-js";
+
+	document.querySelectorAll(".citation-copy").forEach((root) => {
+		const toggle = root.querySelector(".cite-toggle") as HTMLButtonElement;
+		const dropdown = root.querySelector(".cite-dropdown") as HTMLElement;
+		const chevron = root.querySelector(".cite-chevron") as HTMLElement;
+		const toast = root.querySelector(".cite-toast") as HTMLElement;
+		const bibtex = toggle?.dataset.bibtex || "";
+
+		if (!toggle || !dropdown) return;
+
+		// Toggle dropdown
+		toggle.addEventListener("click", () => {
+			const isOpen = !dropdown.classList.contains("hidden");
+			dropdown.classList.toggle("hidden", isOpen);
+			chevron?.style.setProperty("transform", isOpen ? "" : "rotate(180deg)");
+		});
+
+		// Close on outside click
+		document.addEventListener("click", (e) => {
+			if (!root.contains(e.target as Node)) {
+				dropdown.classList.add("hidden");
+				chevron?.style.setProperty("transform", "");
+			}
+		});
+
+		// Format buttons
+		root.querySelectorAll(".cite-format-btn").forEach((btn) => {
+			btn.addEventListener("click", async () => {
+				const format = (btn as HTMLElement).dataset.format;
+				let text = "";
+
+				if (format === "bibtex") {
+					text = bibtex;
+				} else if (bibtex) {
+					try {
+						const cite = new Cite(bibtex);
+						const templateMap: Record<string, string> = {
+							apa: "apa",
+							vancouver: "vancouver",
+							mla: "modern-language-association",
+							chicago: "chicago-fullnote-bibliography"
+						};
+						text = cite.format("bibliography", {
+							format: "text",
+							template: templateMap[format || "apa"],
+							lang: "en-US"
+						});
+					} catch {
+						text = bibtex;
+					}
+				}
+
+				if (text) {
+					await navigator.clipboard.writeText(text.trim());
+					dropdown.classList.add("hidden");
+					chevron?.style.setProperty("transform", "");
+
+					// Show toast
+					toast.style.opacity = "1";
+					toast.style.transform = "translateX(-50%) translateY(0)";
+					setTimeout(() => {
+						toast.style.opacity = "0";
+						toast.style.transform = "translateX(-50%) translateY(8px)";
+					}, 1500);
+				}
+			});
+		});
+	});
+</script>
+
+<style>
+	.cite-toggle {
+		transition:
+			background-color 200ms ease,
+			border-color 200ms ease,
+			color 200ms ease;
+	}
+
+	.cite-toast {
+		transform: translateX(-50%) translateY(8px);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.cite-toggle:hover {
+			background: rgba(255, 255, 255, 0.03);
+			border-color: rgba(255, 255, 255, 0.12);
+			color: white;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cite-toggle,
+		.cite-chevron,
+		.cite-toast {
+			transition: none;
+		}
+	}
+</style>

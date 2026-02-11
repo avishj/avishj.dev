@@ -129,75 +129,77 @@ const sizeClasses = {
     <div class="bento-grid group grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
     {projects.map((project, index) => (
       <article 
-        class={`project-card relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-all duration-200 ${sizeClasses[project.size]} ${project.image && project.size === '2x1' ? 'flex flex-col md:flex-row' : 'flex flex-col'}`}
+        class={`project-card ${sizeClasses[project.size]}`}
         data-index={index}
       >
-        {/* --- Content block --- */}
-        <div class={`relative flex flex-col p-6 ${project.image && project.size === '2x1' ? 'md:w-1/2' : ''} ${project.image && project.size === '1x2' ? '' : project.image ? '' : 'h-full'}`}>
-          <div class="mb-3 flex items-start justify-between gap-2">
-            <h3 class="font-display text-xl font-medium tracking-tight text-white md:text-2xl">
-              {project.title}
-            </h3>
-            {project.link && (
-              <span class="project-link-icon flex-shrink-0 text-white/40 transition-all duration-200">
-                <ArrowIcon class="h-5 w-5" />
-              </span>
-            )}
+        <div class={`card-inner relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm ${project.image && project.size === '2x1' ? 'flex flex-col md:flex-row' : 'flex flex-col'}`}>
+          {/* --- Content block --- */}
+          <div class={`relative flex flex-col p-6 ${project.image && project.size === '2x1' ? 'md:w-1/2' : ''} ${project.image && project.size === '1x2' ? '' : project.image ? '' : 'h-full'}`}>
+            <div class="mb-3 flex items-start justify-between gap-2">
+              <h3 class="font-display text-xl font-medium tracking-tight text-white md:text-2xl">
+                {project.title}
+              </h3>
+              {project.link && (
+                <span class="project-link-icon flex-shrink-0 text-white/40 transition-all duration-200">
+                  <ArrowIcon class="h-5 w-5" />
+                </span>
+              )}
+            </div>
+
+            <p class="mb-4 flex-grow text-sm leading-relaxed text-white/60">
+              {project.description}
+            </p>
+
+            <div class="mt-auto flex flex-wrap gap-2">
+              {project.tech.map((tech) => (
+                <span class="tech-pill rounded-full bg-white/[0.08] px-3 py-1 font-mono text-xs text-white/70 transition-all duration-150">
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
 
-          <p class="mb-4 flex-grow text-sm leading-relaxed text-white/60">
-            {project.description}
-          </p>
+          {/* --- Image block --- */}
+          {project.image && (
+            <div class={`project-image overflow-hidden ${project.size === '2x1' ? 'md:w-1/2 min-h-[160px]' : 'min-h-[200px] flex-1'}`}>
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset={`${url(`${project.image}-400w.webp`)} 400w, ${url(`${project.image}-800w.webp`)} 800w, ${url(`${project.image}-1200w.webp`)} 1200w, ${url(`${project.image}-1600w.webp`)} 1600w, ${url(`${project.image}-2560w.webp`)} 2560w`}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                />
+                <img
+                  src={url(`${project.image}-800w.webp`)}
+                  alt={`${project.title} screenshot`}
+                  class="h-full w-full object-cover transition-transform duration-500"
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+          )}
 
-          <div class="mt-auto flex flex-wrap gap-2">
-            {project.tech.map((tech) => (
-              <span class="tech-pill rounded-full bg-white/[0.08] px-3 py-1 font-mono text-xs text-white/70 transition-all duration-150">
-                {tech}
-              </span>
-            ))}
-          </div>
+          <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
+
+          {project.size === '2x2' && (
+            <div class="pointer-events-none absolute right-4 top-4 text-white opacity-[0.03]">
+              <svg class="h-24 w-24" viewBox="0 0 100 100" fill="currentColor">
+                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" fill="none" />
+                <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="1" fill="none" />
+                <circle cx="50" cy="50" r="15" stroke="currentColor" stroke-width="1" fill="none" />
+              </svg>
+            </div>
+          )}
+
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="absolute inset-0 z-10"
+              aria-label={`View ${project.title} on GitHub`}
+            />
+          )}
         </div>
-
-        {/* --- Image block --- */}
-        {project.image && (
-          <div class={`project-image overflow-hidden ${project.size === '2x1' ? 'md:w-1/2 min-h-[160px]' : 'min-h-[200px] flex-1'}`}>
-            <picture>
-              <source
-                type="image/webp"
-                srcset={`${url(`${project.image}-400w.webp`)} 400w, ${url(`${project.image}-800w.webp`)} 800w, ${url(`${project.image}-1200w.webp`)} 1200w, ${url(`${project.image}-1600w.webp`)} 1600w, ${url(`${project.image}-2560w.webp`)} 2560w`}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
-              />
-              <img
-                src={url(`${project.image}-800w.webp`)}
-                alt={`${project.title} screenshot`}
-                class="h-full w-full object-cover transition-transform duration-500"
-                loading="lazy"
-              />
-            </picture>
-          </div>
-        )}
-
-        <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
-
-        {project.size === '2x2' && (
-          <div class="pointer-events-none absolute right-4 top-4 text-white opacity-[0.03]">
-            <svg class="h-24 w-24" viewBox="0 0 100 100" fill="currentColor">
-              <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" fill="none" />
-              <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="1" fill="none" />
-              <circle cx="50" cy="50" r="15" stroke="currentColor" stroke-width="1" fill="none" />
-            </svg>
-          </div>
-        )}
-
-        {project.link && (
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="absolute inset-0 z-10"
-            aria-label={`View ${project.title} on GitHub`}
-          />
-        )}
       </article>
     ))}
     </div>
@@ -207,7 +209,7 @@ const sizeClasses = {
 <script>
   async function initProjectAnimations() {
     const { scrollReveal, presets } = await import('../utils/scroll-animations');
-    const cards = document.querySelectorAll('.project-card');
+    const cards = document.querySelectorAll('.project-card .card-inner');
     scrollReveal(cards, presets.fadeUpScale);
   }
 
@@ -221,8 +223,11 @@ const sizeClasses = {
 
 <style>
   .project-card {
+    transition: opacity 50ms ease;
+  }
+
+  .card-inner {
     transition: 
-      opacity 50ms ease, 
       transform 200ms var(--ease-out-expo), 
       border-color 200ms ease, 
       box-shadow 200ms ease, 
@@ -232,16 +237,16 @@ const sizeClasses = {
 
   /* Touch device protection - only apply hover on devices with pointer */
   @media (hover: hover) and (pointer: fine) {
-    .project-card:hover {
+    .project-card:hover .card-inner {
       border-color: rgba(255, 255, 255, 0.15);
       background-color: rgba(255, 255, 255, 0.06);
       box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
-      transform: translateY(-4px) !important;
+      transform: translateY(-4px);
     }
 
-    .project-card:active,
-    .project-card:has(:active) {
-      transform: translateY(-4px) scale(0.95) !important;
+    .project-card:active .card-inner,
+    .project-card:has(:active) .card-inner {
+      transform: translateY(-4px) scale(0.95);
       filter: brightness(0.9);
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: transform 50ms ease, filter 50ms ease, box-shadow 50ms ease;
@@ -270,9 +275,13 @@ const sizeClasses = {
     .project-card {
       transition: none;
     }
+
+    .card-inner {
+      transition: none;
+    }
     
-    .project-card:hover,
-    .project-card:active {
+    .project-card:hover .card-inner,
+    .project-card:active .card-inner {
       transform: none;
     }
 

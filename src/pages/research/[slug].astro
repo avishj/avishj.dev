@@ -18,7 +18,7 @@ export function getStaticPaths() {
 const { publication: pub } = Astro.props;
 const displayAuthors = getDisplayAuthors(pub);
 // If link points to our internal viewer, we have a PDF
-const hasPdf = pub.link.includes("/view/");
+const hasPdf = pub.link.includes("view/");
 ---
 
 <BaseLayout title={`${pub.title} · Avish Jha`} description={pub.abstract || pub.title}>

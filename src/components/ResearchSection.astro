@@ -228,15 +228,6 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		transform: translateX(-50%) scale(1);
 	}
 
-	.pub-title,
-	.service-title,
-	.publication-item p,
-	.service-item p {
-		transition:
-			filter 0.15s cubic-bezier(0.16, 1, 0.3, 1),
-			color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-
 	@media (hover: hover) and (pointer: fine) {
 		.publication-item:hover {
 			background: rgba(255, 255, 255, 0.02);

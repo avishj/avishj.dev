@@ -158,6 +158,13 @@ body {
   will-change: transform;
 }
 
+.hover-text-brighten,
+.card-base :is(h3, p, li, .gpa-pill, .metric-pill) {
+  transition:
+    filter 0.15s var(--ease-out-expo),
+    color 0.15s var(--ease-out-expo);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    CANVAS GRAIN TEXTURE OVERLAY
    ═══════════════════════════════════════════════════════════════════════════ */

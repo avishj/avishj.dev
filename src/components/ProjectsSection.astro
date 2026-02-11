@@ -129,7 +129,7 @@ const sizeClasses = {
     <div class="bento-grid group grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
     {projects.map((project, index) => (
       <article 
-        class={`project-card ${sizeClasses[project.size]}`}
+        class={`project-card group ${sizeClasses[project.size]}`}
         data-index={index}
       >
         <div class={`card-inner relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm ${project.image && project.size === '2x1' ? 'flex flex-col md:flex-row' : 'flex flex-col'}`}>
@@ -140,9 +140,7 @@ const sizeClasses = {
                 {project.title}
               </h3>
               {project.link && (
-                <span class="project-link-icon flex-shrink-0 text-white/40 transition-all duration-200">
-                  <ArrowIcon class="h-5 w-5" />
-                </span>
+                <ArrowIcon class="h-5 w-5 flex-shrink-0 text-white/40" hover="white" />
               )}
             </div>
 
@@ -260,14 +258,6 @@ const sizeClasses = {
       transform: scale(1.05);
     }
 
-    .project-link-icon {
-      transition: color 200ms ease, transform 200ms var(--ease-out-expo);
-    }
-
-    .project-card:hover .project-link-icon {
-      color: white;
-      transform: rotate(45deg);
-    }
   }
 
   /* Reduced motion - disable all animations */
@@ -282,14 +272,6 @@ const sizeClasses = {
     
     .project-card:hover .card-inner,
     .project-card:active .card-inner {
-      transform: none;
-    }
-
-    .project-link-icon {
-      transition: none;
-    }
-
-    .project-link-icon:hover {
       transform: none;
     }
 

@@ -51,11 +51,9 @@ import ArrowIcon from "./ArrowIcon.astro";
 					</div>
 
 					<!-- Resume link -->
-					<a href="mailto:avishj@cs.cmu.edu" class="status-cta mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 py-3 text-sm active:scale-[0.97]">
+					<a href="mailto:avishj@cs.cmu.edu" class="status-cta group mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 py-3 text-sm active:scale-[0.97]">
 						<span>Get in touch</span>
-						<span class="status-cta-arrow">
-							<ArrowIcon class="h-4 w-4" />
-						</span>
+						<ArrowIcon class="h-4 w-4" hover="white" />
 					</a>
 				</div>
 			</div>
@@ -366,13 +364,6 @@ import ArrowIcon from "./ArrowIcon.astro";
 			background 200ms ease;
 	}
 
-	.status-cta-arrow {
-		display: inline-flex;
-		transition:
-			color 200ms ease,
-			transform 200ms var(--ease-out-expo);
-	}
-
 	/* Touch device protection - only apply hover on devices with pointer */
 	@media (hover: hover) and (pointer: fine) {
 		.company-link:hover::after {
@@ -384,16 +375,10 @@ import ArrowIcon from "./ArrowIcon.astro";
 			border-color: rgba(255, 255, 255, 0.4);
 			background: rgba(255, 255, 255, 0.05);
 		}
-
-		.status-cta:hover .status-cta-arrow {
-			color: white;
-			transform: rotate(45deg);
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.status-cta,
-		.status-cta-arrow {
+		.status-cta {
 			transition: none;
 		}
 	}

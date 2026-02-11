@@ -1,8 +1,10 @@
 ---
 import SectionHeader from './SectionHeader.astro';
+import ArrowIcon from './ArrowIcon.astro';
 
 interface Experience {
   company: string;
+  slug: string;
   role: string;
   location: string;
   period: string;
@@ -14,6 +16,7 @@ interface Experience {
 const experiences: Experience[] = [
   {
     company: 'Snap Inc.',
+    slug: 'snap',
     role: 'Software Engineering Intern · Practicum',
     location: 'Pittsburgh, PA',
     period: 'Aug 2025 · Dec 2025',
@@ -28,6 +31,7 @@ const experiences: Experience[] = [
   },
   {
     company: 'Siemens Healthineers',
+    slug: 'siemens',
     role: 'Software Development Engineer Intern',
     location: 'Issaquah, WA',
     period: 'Jun 2025 · Aug 2025',
@@ -42,6 +46,7 @@ const experiences: Experience[] = [
   },
   {
     company: 'Addverb Technologies',
+    slug: 'addverb',
     role: 'Software Engineer · Simulations & Analytics',
     location: 'Delhi NCR, India',
     period: 'Jan 2023 · Jul 2024',
@@ -56,6 +61,7 @@ const experiences: Experience[] = [
   },
   {
     company: 'MITACS · Athabasca University',
+    slug: 'mitacs',
     role: 'Graduate Research Intern',
     location: 'Edmonton, Canada',
     period: 'May 2022 · Aug 2022',
@@ -68,6 +74,7 @@ const experiences: Experience[] = [
   },
   {
     company: 'Ernst & Young',
+    slug: 'ey',
     role: 'Technology Consulting Intern',
     location: 'Kolkata, India',
     period: 'Jan 2022 · Apr 2022',
@@ -79,6 +86,7 @@ const experiences: Experience[] = [
   },
   {
     company: 'Tata Steel',
+    slug: 'tata-steel',
     role: 'Intern · Vocational Trainee',
     location: 'Jamshedpur, India',
     period: 'Jun 2021 · Aug 2021',
@@ -97,21 +105,27 @@ const experiences: Experience[] = [
 
     <!-- Experience list with bullet-based trailing hover -->
     <div class="experience-list">
+    <!-- Experience list with bullet-based trailing hover -->
+    <div class="experience-list">
       {experiences.map((exp, index) => (
-        <article 
-          class="exp-card card-base group/card border-t border-white/[0.06] py-3 md:py-5"
+        <a 
+          href={`/view/${exp.slug}`}
+          class="exp-card card-base group block border-t border-white/[0.06] py-3 md:py-5"
           data-index={index}
           style={`--accent: ${exp.accentColor};`}
         >
           <div class="grid gap-4 md:grid-cols-12 md:gap-6">
             <!-- Left column: meta -->
             <div class="exp-meta md:col-span-4">
-              <h3 
-                class="exp-company font-display text-xl font-medium tracking-tight md:text-2xl"
-                style="color: var(--accent);"
-              >
-                {exp.company}
-              </h3>
+              <div class="exp-header-row flex items-center gap-2">
+                <h3 
+                  class="exp-company font-display text-xl font-medium tracking-tight md:text-2xl"
+                  style="color: var(--accent);"
+                >
+                  {exp.company}
+                </h3>
+                <ArrowIcon class="h-5 w-5 md:h-6 md:w-6 text-[--color-text-muted]" hover="accent" />
+              </div>
               <p class="mt-1 text-base text-white/60">{exp.role}</p>
               <div class="hover-text-brighten mt-2 flex items-center gap-2 font-mono text-xs text-white/40">
                 <span class="tabular-nums">{exp.period}</span>
@@ -148,7 +162,7 @@ const experiences: Experience[] = [
               </ul>
             </div>
           </div>
-        </article>
+        </a>
       ))}
       <!-- Bottom border -->
       <div class="border-t border-white/[0.06]"></div>
@@ -166,12 +180,12 @@ const experiences: Experience[] = [
     const { scrollRevealTimeline, tlFadeUp, tlFadeRight, TIMELINE_OVERLAP } = await import('../utils/scroll-animations');
     
     cards.forEach((card) => {
-      const company = card.querySelector('.exp-company');
-      const meta = card.querySelectorAll('.exp-company ~ p, .exp-company ~ div');
+      const headerRow = card.querySelector('.exp-header-row');
+      const meta = card.querySelectorAll('.exp-meta > p, .exp-meta > div:not(.exp-header-row)');
       const highlights = card.querySelectorAll('.exp-highlights li');
       
       scrollRevealTimeline(card, (tl) => {
-        tl.fromTo(...tlFadeUp(company))
+        tl.fromTo(...tlFadeUp(headerRow))
           .fromTo(...tlFadeUp(meta, { stagger: 0.06 }), TIMELINE_OVERLAP)
           .fromTo(...tlFadeRight(highlights, { stagger: 0.05 }), TIMELINE_OVERLAP);
       });

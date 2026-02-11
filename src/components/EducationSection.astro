@@ -54,7 +54,7 @@ const education: Education[] = [
 		<div class="education-list">
 			{
 				education.map((edu, index) => (
-					<a href={edu.href} class:list={["edu-card card-base group/card block border-t border-white/[0.06] py-4 md:py-6", edu.accentClass]} data-index={index}>
+					<a href={edu.href} class:list={["edu-card card-base group group/card block border-t border-white/[0.06] py-4 md:py-6", edu.accentClass]} data-index={index}>
 						<div class="flex items-start justify-between gap-4">
 							<h3 class="edu-institution font-display text-xl font-medium tracking-tight md:text-2xl" style="color: var(--accent);">
 								{edu.institution}
@@ -65,9 +65,7 @@ const education: Education[] = [
 									<span class="inline-block h-px w-3 bg-white/20" />
 									<span>{edu.location}</span>
 								</div>
-								<span class="edu-arrow flex-shrink-0 text-white/40">
-									<ArrowIcon class="h-4 w-4" />
-								</span>
+								<ArrowIcon class="h-4 w-4 flex-shrink-0 text-white/40" hover="accent" />
 							</div>
 						</div>
 
@@ -124,14 +122,14 @@ const education: Education[] = [
 
 <script>
 	async function initEducationAnimations() {
-		const { scrollRevealTimeline, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
+		const { scrollRevealTimeline, tlFadeIn, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
 
 		const cards = document.querySelectorAll(".edu-card");
 		cards.forEach((card) => {
 			const institution = card.querySelector(".edu-institution");
 			const degreeRow = card.querySelector(".mt-1.flex.flex-wrap");
 			const desktopDate = card.querySelector(".hidden.md\\:flex");
-			const arrow = card.querySelector(".edu-arrow");
+			const arrow = card.querySelector("svg.arrow-hover");
 			const mobileDate = card.querySelector(".md\\:hidden");
 			const blocks = card.querySelectorAll(".edu-block");
 
@@ -141,7 +139,7 @@ const education: Education[] = [
 				tl.fromTo(...tlFadeUp(institution))
 					.fromTo(...tlFadeUp(metaElements, { stagger: 0.06 }), TIMELINE_OVERLAP);
 				if (arrow) {
-					tl.fromTo(arrow, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power3.out", clearProps: "transform" }, TIMELINE_OVERLAP);
+					tl.fromTo(...tlFadeIn(arrow), TIMELINE_OVERLAP);
 				}
 				tl.fromTo(...tlFadeUp(blocks, { stagger: 0.05 }), TIMELINE_OVERLAP);
 			});
@@ -176,12 +174,6 @@ const education: Education[] = [
 			color 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.edu-arrow {
-		transition:
-			color 200ms ease,
-			transform 200ms var(--ease-out-expo);
-	}
-
 	.gpa-pill {
 		backdrop-filter: blur(4px);
 	}
@@ -209,11 +201,6 @@ const education: Education[] = [
 
 		.edu-card:hover .honor-dot {
 			opacity: 1;
-		}
-
-		.edu-card:hover .edu-arrow {
-			color: var(--accent);
-			transform: rotate(45deg);
 		}
 
 		.edu-card:active {
@@ -244,10 +231,6 @@ const education: Education[] = [
 
 		.edu-card:active {
 			transform: none;
-		}
-
-		.edu-arrow {
-			transition: none;
 		}
 
 		.edu-institution,

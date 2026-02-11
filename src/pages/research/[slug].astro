@@ -137,9 +137,7 @@ const pdfViewSlug = pub.slug;
 
 					<a href={pub.link} target="_blank" rel="noopener noreferrer" class="action-link group flex items-center gap-1.5 rounded border border-white/[0.06] px-3 py-1.5 font-mono text-sm text-[--color-text-muted]">
 						<span>Publisher</span>
-						<span class="action-link-arrow inline-block">
-							<ArrowIcon class="h-3 w-3" />
-						</span>
+						<ArrowIcon class="h-3 w-3 inline-block" hover="white" />
 					</a>
 				</div>
 			</main>
@@ -203,16 +201,6 @@ const pdfViewSlug = pub.slug;
 			border-color: rgba(255, 255, 255, 0.12);
 			color: white;
 		}
-
-		.action-link-arrow {
-			transition:
-				color 200ms ease,
-				transform 200ms var(--ease-out-expo);
-		}
-
-		.action-link:hover .action-link-arrow {
-			transform: rotate(45deg);
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -223,8 +211,7 @@ const pdfViewSlug = pub.slug;
 			visibility: visible !important;
 			opacity: 1 !important;
 		}
-		.action-link,
-		.action-link-arrow {
+		.action-link {
 			transition: none;
 		}
 	}

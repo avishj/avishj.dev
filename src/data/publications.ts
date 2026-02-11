@@ -273,10 +273,17 @@ export function getDisplayAuthors(pub: Publication): { authors: DisplayAuthor[];
 	return { authors: result, truncated: true };
 }
 
-/** Get first N sentences of abstract as a preview */
-export function getAbstractPreview(abstract: string, sentences = 2): string {
+/** Get abstract preview trimmed to a character limit at the nearest word boundary */
+export function getAbstractPreview(abstract: string, maxChars = 280): string {
 	if (!abstract) return "";
-	const matches = abstract.match(/[^.!?]+[.!?]+/g);
-	if (!matches) return abstract;
-	return matches.slice(0, sentences).join("").trim();
+	if (abstract.length <= maxChars) return abstract;
+
+	const trimmed = abstract.slice(0, maxChars);
+	const lastSpace = trimmed.lastIndexOf(" ");
+
+	if (lastSpace === -1) {
+		return trimmed + "...";
+	}
+
+	return trimmed.slice(0, lastSpace) + "...";
 }

@@ -9,8 +9,14 @@ import { url } from "../../utils/url";
 export function getStaticPaths() {
 	const pdfs: Record<string, { file: string; title: string }> = {
 		resume: { file: "Jha, Avish - Resume.pdf", title: "Resume" },
-		cmu: { file: "Jha, Avish - CMU Record.pdf", title: "CMU Record" },
-		vit: { file: "Jha, Avish - VIT Record.pdf", title: "VIT Record" }
+		cmu: { file: "Jha, Avish - Education - CMU Record.pdf", title: "CMU Record" },
+		vit: { file: "Jha, Avish - Education - VIT Record.pdf", title: "VIT Record" },
+		snap: { file: "Jha, Avish - Experience - Snap Record.pdf", title: "Snap Inc. Record" },
+		siemens: { file: "Jha, Avish - Experience - Siemens Healthineers Record.pdf", title: "Siemens Healthineers Record" },
+		addverb: { file: "Jha, Avish - Experience - Addverb Record.pdf", title: "Addverb Record" },
+		mitacs: { file: "Jha, Avish - Experience - MITACS Record.pdf", title: "MITACS Record" },
+		ey: { file: "Jha, Avish - Experience - Ernst & Young Record.pdf", title: "Ernst & Young Record" },
+		"tata-steel": { file: "Jha, Avish - Experience - Tata Steel Record.pdf", title: "Tata Steel Record" }
 	};
 
 	// Add paper PDFs from publications

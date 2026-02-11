@@ -34,9 +34,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 				<span class="font-display text-lg italic text-white/90 transition-colors duration-200">Explore Research</span>
 				<span class="ml-3 font-mono text-sm text-[--color-text-muted]">Abstracts, key findings, full papers, citations, and more.</span>
 			</div>
-			<span class="research-cta-arrow h-4 w-4 text-[--color-text-muted]">
-				<ArrowIcon class="h-4 w-4" />
-			</span>
+			<ArrowIcon class="h-4 w-4 text-[--color-text-muted]" hover="white" />
 		</a>
 
 		<!-- Publications subsection -->
@@ -85,9 +83,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 							</div>
 
 							{/* External link arrow */}
-							<div class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-[--color-text-muted]">
-								<ArrowIcon />
-							</div>
+							<ArrowIcon class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-[--color-text-muted]" hover="accent" />
 						</a>
 					))
 				}
@@ -101,7 +97,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			{
 				academicService.map((service) =>
 					service.type === "conference" ? (
-						<a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item card-base block border-b border-white/[0.06] py-3.5">
+						<a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item card-base group block border-b border-white/[0.06] py-3.5">
 							<div class="flex items-start justify-between gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
 								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
@@ -111,9 +107,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 									<span>
 										{service.conference} <span class="font-mono text-[--color-text-muted]">({service.abbreviation})</span>
 									</span>
-									<span class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]">
-										<ArrowIcon class="h-3.5 w-3.5" />
-									</span>
+									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]" hover="white" />
 								</p>
 								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
 							</div>
@@ -123,7 +117,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 							</div>
 						</a>
 					) : (
-						<div class="service-item card-base block border-b border-white/[0.06] py-3.5">
+						<div class="service-item card-base group block border-b border-white/[0.06] py-3.5">
 							<div class="flex items-start justify-between gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
 								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
@@ -152,7 +146,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 
 <script>
 	async function initResearchAnimations() {
-		const { scrollReveal, scrollRevealTimeline, presets, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
+		const { scrollReveal, scrollRevealTimeline, presets, tlFadeIn, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
 
 		const statsBar = document.querySelector(".stats-bar");
 		if (statsBar) {
@@ -173,12 +167,14 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		pubItems.forEach((item) => {
 			const year = item.querySelector(":scope > span");
 			const content = item.querySelector(":scope > div");
-			const arrow = item.querySelector(".pub-arrow svg");
-
-			const yearArrow = [year, arrow].filter((el): el is Element => el !== null);
+			const arrow = item.querySelector(".pub-arrow");
 
 			scrollRevealTimeline(item, (tl) => {
-				tl.fromTo(...tlFadeUp(yearArrow, { stagger: 0.04 })).fromTo(...tlFadeUp(content), TIMELINE_OVERLAP);
+				tl.fromTo(...tlFadeUp(year));
+				if (arrow) {
+					tl.fromTo(...tlFadeIn(arrow), TIMELINE_OVERLAP);
+				}
+				tl.fromTo(...tlFadeUp(content), TIMELINE_OVERLAP);
 			});
 		});
 
@@ -259,17 +255,6 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transition: transform 50ms ease;
 		}
 
-		.pub-arrow {
-			transition:
-				color 200ms ease,
-				transform 200ms var(--ease-out-expo);
-		}
-
-		.publication-item:hover .pub-arrow {
-			color: var(--accent);
-			transform: rotate(45deg);
-		}
-
 		.service-item:hover {
 			background: rgba(255, 255, 255, 0.02);
 		}
@@ -287,17 +272,6 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transition: transform 50ms ease;
 		}
 
-		.service-arrow {
-			transition:
-				color 200ms ease,
-				transform 200ms var(--ease-out-expo);
-		}
-
-		.service-item:hover .service-arrow {
-			color: white;
-			transform: rotate(45deg);
-		}
-
 		.research-cta {
 			transition:
 				background-color 200ms ease,
@@ -307,22 +281,11 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			will-change: transform;
 		}
 
-		.research-cta-arrow {
-			transition:
-				color 200ms ease,
-				transform 200ms var(--ease-out-expo);
-		}
-
 		.research-cta:hover {
 			background: rgba(255, 255, 255, 0.02);
 			border-color: rgba(255, 255, 255, 0.12);
 			transform: translateY(-2px);
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-		}
-
-		.research-cta:hover .research-cta-arrow {
-			color: white;
-			transform: rotate(45deg);
 		}
 
 		.research-cta:active {
@@ -394,13 +357,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transition: none;
 		}
 
-		.pub-arrow,
-		.service-arrow {
-			transition: none;
-		}
-
-		.research-cta,
-		.research-cta-arrow {
+		.research-cta {
 			transition: none;
 		}
 

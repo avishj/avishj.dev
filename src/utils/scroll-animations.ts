@@ -132,12 +132,12 @@ export function scrollRevealTimeline(
 
 // Preset animations for scrollReveal
 export const presets = {
-  fadeUp: { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1 } },
-  fadeDown: { from: { y: -20, opacity: 0 }, to: { y: 0, opacity: 1 } },
-  fadeLeft: { from: { x: -20, opacity: 0 }, to: { x: 0, opacity: 1 } },
-  fadeRight: { from: { x: 20, opacity: 0 }, to: { x: 0, opacity: 1 } },
-  scaleUp: { from: { scale: 0.9, opacity: 0 }, to: { scale: 1, opacity: 1 } },
-  fadeUpScale: { from: { y: 30, opacity: 0, scale: 0.98 }, to: { y: 0, opacity: 1, scale: 1 } },
+  fadeUp: { from: { y: 20, opacity: 0 }, to: { y: 0, opacity: 1, clearProps: 'transform' } },
+  fadeDown: { from: { y: -20, opacity: 0 }, to: { y: 0, opacity: 1, clearProps: 'transform' } },
+  fadeLeft: { from: { x: -20, opacity: 0 }, to: { x: 0, opacity: 1, clearProps: 'transform' } },
+  fadeRight: { from: { x: 20, opacity: 0 }, to: { x: 0, opacity: 1, clearProps: 'transform' } },
+  scaleUp: { from: { scale: 0.9, opacity: 0 }, to: { scale: 1, opacity: 1, clearProps: 'transform' } },
+  fadeUpScale: { from: { y: 30, opacity: 0, scale: 0.98 }, to: { y: 0, opacity: 1, scale: 1, clearProps: 'transform' } },
 };
 
 // ═══════════════════════════════════════════════════════════════════════════

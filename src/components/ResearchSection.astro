@@ -1,191 +1,10 @@
 ---
 import ArrowIcon from "./ArrowIcon.astro";
 import SectionHeader from "./SectionHeader.astro";
-
-interface Publication {
-	title: string;
-	authors: string[];
-	highlightAuthor: string;
-	venue: string;
-	venueType: "IEEE" | "Springer" | "Preprint";
-	year: number;
-	citations: number;
-	doi?: string;
-	link: string;
-	status: "published" | "accepted" | "preprint";
-	isFirstAuthor?: boolean;
-}
-
-interface ConferenceService {
-	type: "conference";
-	role: string;
-	conference: string;
-	abbreviation: string;
-	organizers: string[];
-	year: number;
-	location: string;
-	dates: string;
-	details: string;
-	link: string;
-}
-
-interface TeachingService {
-	type: "teaching";
-	role: string;
-	course: string;
-	courseCode: string;
-	department: string;
-	institution: string;
-	year: number;
-	location: string;
-	dates: string;
-	responsibilities: string[];
-}
-
-type AcademicService = ConferenceService | TeachingService;
-
-const publications: Publication[] = [
-	{
-		title: "Addressing Background Genomic and Environmental Effects on Health through Accelerated Computing and Machine Learning: Results from the 2025 Hackathon at Carnegie Mellon University",
-		authors: ["S. Sabata", "J. Kubica", "R. Gupta", "L.W. Ericson", "H.C. Atanda", "G. Subramaniam", "A.G. Moller", "R.O. Abolade", "A. Banka", "S. Blechman", "R. Brenner", "M. Chikina", "L.C. Chong", "N.P. Cooley", "D. Chang", "P. Greer", "A. Gupta", "A. Jha", "E. Kacar", "N. Kubota", "W. Lu", "L. Luo", "T. Ly", "R. Mondal", "C. O'Donoghue", "A.M. Phyo", "P. Qiu", "G. Ross-Dolan", "A. Saadat", "S. Sadasivan", "R. Satterwhite", "S. Shirolkar", "Y. Zheng", "H. Wang", "M. Gainey", "B. Busby"],
-		highlightAuthor: "A. Jha",
-		venue: "CMU-DNAnexus Hackathon",
-		venueType: "Preprint",
-		year: 2025,
-		citations: 1,
-		doi: "https://doi.org/10.37044/osf.io/3a8cn_v1",
-		link: "https://doi.org/10.37044/osf.io/3a8cn_v1",
-		status: "preprint",
-		isFirstAuthor: false
-	},
-	{
-		title: "Harnessing Creative Methods for EEG Feature Extraction and Modeling in Neurological Disorder Diagnoses",
-		authors: ["A. Jha", "N. Kuruvilla", "P. Garg", "A. Victor"],
-		highlightAuthor: "A. Jha",
-		venue: "7th CSITSS",
-		venueType: "IEEE",
-		year: 2023,
-		citations: 7,
-		doi: "https://doi.org/10.1109/CSITSS60515.2023.10334244",
-		link: "https://doi.org/10.1109/CSITSS60515.2023.10334244",
-		status: "published",
-		isFirstAuthor: true
-	},
-	{
-		title: "Enhancing Visibility: Multiresolution Dark Channel Prior for Dehazing and Fog Removal in Images",
-		authors: ["P. Garg", "A. Jha", "S.K. Jindal"],
-		highlightAuthor: "A. Jha",
-		venue: "7th CSITSS",
-		venueType: "IEEE",
-		year: 2023,
-		citations: 2,
-		doi: "https://doi.org/10.1109/CSITSS60515.2023.10334128",
-		link: "https://doi.org/10.1109/CSITSS60515.2023.10334128",
-		status: "published",
-		isFirstAuthor: false
-	},
-	{
-		title: "Randomised Analysis of Backtracking-based Search Algorithms in Elucidating Sudoku Puzzles Using a Dual Serial/Parallel Approach",
-		authors: ["P. Garg", "A. Jha", "A. Shukla"],
-		highlightAuthor: "A. Jha",
-		venue: "4th ICICIT · LNNS vol. 336",
-		venueType: "Springer",
-		year: 2022,
-		citations: 2,
-		doi: "https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21",
-		link: "https://link.springer.com/chapter/10.1007/978-981-16-6723-7_21",
-		status: "published",
-		isFirstAuthor: false
-	},
-	{
-		title: "Automated Detection Of Driving Pathway Using Image Processing",
-		authors: ["P. Priyadarshini", "A. Jha", "M. Raj"],
-		highlightAuthor: "A. Jha",
-		venue: "ic-ETITE",
-		venueType: "IEEE",
-		year: 2020,
-		citations: 0,
-		doi: "https://ieeexplore.ieee.org/document/9077722",
-		link: "https://ieeexplore.ieee.org/document/9077722",
-		status: "published",
-		isFirstAuthor: false
-	}
-];
-
-const academicService: AcademicService[] = [
-	{
-		type: "conference",
-		role: "Programme Committee Member",
-		conference: "17th International Conference on Swarm Intelligence",
-		abbreviation: "ICSI 2026",
-		organizers: ["IASEI", "Sichuan University", "Peking University", "IEEE CIS"],
-		year: 2026,
-		location: "Chengdu, China",
-		dates: "Jul 11 · 14, 2026",
-		details: "Reviewer · Proceedings in Springer LNCS",
-		link: "https://iasei.org/icsi2026/"
-	},
-	{
-		type: "teaching",
-		role: "Teaching Assistant",
-		course: "Formal Methods",
-		courseCode: "17-614",
-		department: "Software and Societal Systems Department",
-		institution: "Carnegie Mellon University",
-		year: 2025,
-		location: "Pittsburgh, PA",
-		dates: "Fall 2025",
-		responsibilities: ["Grading", "Office Hours", "Doubt Clearing"]
-	}
-];
+import { publications, academicService, venueColors, venueLabels, getDisplayAuthors } from "../data/publications";
 
 const totalCitations = publications.reduce((sum, p) => sum + p.citations, 0);
 const hIndex = 2;
-
-const venueColors: Record<string, string> = {
-	IEEE: "var(--color-accent-ieee)",
-	Springer: "var(--color-accent-springer)",
-	Preprint: "#2ea44f"
-};
-
-const venueLabels: Record<string, string> = {
-	IEEE: "IEEE",
-	Springer: "Springer",
-	Preprint: "BioHackrXiv"
-};
-
-const MAX_AUTHORS = 8;
-
-interface DisplayAuthor {
-	name: string;
-	isHighlight: boolean;
-	separator: string;
-}
-
-function getDisplayAuthors(pub: Publication): { authors: DisplayAuthor[]; truncated: boolean } {
-	if (pub.authors.length <= MAX_AUTHORS) {
-		return {
-			authors: pub.authors.map((a, i) => ({
-				name: a,
-				isHighlight: a === pub.highlightAuthor,
-				separator: i < pub.authors.length - 1 ? ", " : ""
-			})),
-			truncated: false
-		};
-	}
-	const shown = pub.authors.slice(0, 6);
-	const highlightInShown = shown.includes(pub.highlightAuthor);
-	const result: DisplayAuthor[] = shown.map((a) => ({
-		name: a,
-		isHighlight: a === pub.highlightAuthor,
-		separator: ", "
-	}));
-	if (!highlightInShown) {
-		result.push({ name: "...", isHighlight: false, separator: " " });
-		result.push({ name: pub.highlightAuthor, isHighlight: true, separator: ", " });
-	}
-	return { authors: result, truncated: true };
-}
 
 const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 ---
@@ -207,21 +26,16 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			<span class="font-mono text-base tabular-nums text-white/80">
 				h-index <span class="text-white font-medium">{hIndex}</span>
 			</span>
-			<div class="ml-auto flex items-center gap-4">
-				<a href="/research/" class="stats-link group flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
-					<span>More Details</span>
-					<ArrowIcon class="stats-link-arrow h-3 w-3 transition-transform duration-200" />
-				</a>
-				<a href="https://orcid.org/0000-0003-1479-0456" target="_blank" rel="noopener noreferrer" class="stats-link group flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
-					<span>ORCID</span>
-					<ArrowIcon class="stats-link-arrow h-3 w-3 transition-transform duration-200" />
-				</a>
-				<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" class="stats-link flex items-center gap-1.5 font-mono text-sm text-[--color-text-muted] transition-colors duration-200">
-					<span>Google Scholar</span>
-					<ArrowIcon class="stats-link-arrow h-3 w-3 transition-transform duration-200" />
-				</a>
-			</div>
 		</div>
+
+		<!-- Research CTA -->
+		<a href="/research/" class="research-cta group flex items-center justify-between rounded-lg border border-white/[0.06] px-5 py-4 mb-8">
+			<div>
+				<span class="font-display text-lg italic text-white/90 transition-colors duration-200">Explore Research</span>
+				<span class="ml-3 font-mono text-sm text-[--color-text-muted]">Abstracts, papers, and citations</span>
+			</div>
+			<ArrowIcon class="research-cta-arrow h-4 w-4 text-[--color-text-muted]" />
+		</a>
 
 		<!-- Publications subsection -->
 		<div class="mb-6">
@@ -341,6 +155,11 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		const statsBar = document.querySelector(".stats-bar");
 		if (statsBar) {
 			scrollReveal(statsBar, presets.fadeUp);
+		}
+
+		const cta = document.querySelector(".research-cta");
+		if (cta) {
+			scrollReveal(cta, presets.fadeUp);
 		}
 
 		const pubHeading = document.querySelector(".publications-heading");
@@ -487,18 +306,36 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transform: rotate(45deg);
 		}
 
-		.stats-link:hover {
-			color: white;
+		.research-cta {
+			transition:
+				background-color 200ms ease,
+				border-color 200ms ease,
+				transform 200ms var(--ease-out-expo),
+				box-shadow 200ms ease;
+			will-change: transform;
 		}
 
-		.stats-link-arrow {
+		.research-cta-arrow {
 			transition:
 				color 200ms ease,
 				transform 200ms var(--ease-out-expo);
 		}
 
-		.stats-link:hover .stats-link-arrow {
+		.research-cta:hover {
+			background: rgba(255, 255, 255, 0.02);
+			border-color: rgba(255, 255, 255, 0.12);
+			transform: translateY(-2px);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+		}
+
+		.research-cta:hover .research-cta-arrow {
+			color: white;
 			transform: rotate(45deg);
+		}
+
+		.research-cta:active {
+			transform: scale(0.98);
+			transition: transform 50ms ease;
 		}
 	}
 
@@ -570,7 +407,8 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			transition: none;
 		}
 
-		.stats-link-arrow {
+		.research-cta,
+		.research-cta-arrow {
 			transition: none;
 		}
 

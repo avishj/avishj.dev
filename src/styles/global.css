@@ -146,9 +146,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CARD BASE TRANSITIONS
-   Shared interactive card pattern: left-anchored scale origin, smooth
-   opacity/bg/transform transitions.
+   SHARED COMPONENT PATTERNS
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .card-base {

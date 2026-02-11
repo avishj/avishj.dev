@@ -254,8 +254,6 @@ import ArrowIcon from "./ArrowIcon.astro";
 				const targetCard = document.querySelector(`.exp-card[data-index="${dataIndex}"]`);
 				if (targetCard) {
 					targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
-					targetCard.classList.add("flash-highlight");
-					setTimeout(() => targetCard.classList.remove("flash-highlight"), 1200);
 				}
 			});
 		});
@@ -268,8 +266,6 @@ import ArrowIcon from "./ArrowIcon.astro";
 			const targetCard = document.querySelector('.edu-card[data-index="0"]');
 			if (targetCard) {
 				targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
-				targetCard.classList.add("flash-highlight");
-				setTimeout(() => targetCard.classList.remove("flash-highlight"), 1200);
 			}
 		});
 	});

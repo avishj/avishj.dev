@@ -173,19 +173,6 @@ body {
     color 0.15s var(--ease-out-expo);
 }
 
-.flash-highlight {
-  animation: cardFlash 1.2s var(--ease-out-expo);
-}
-
-@keyframes cardFlash {
-  0% {
-    background: rgba(255, 255, 255, 0.08);
-  }
-  100% {
-    background: transparent;
-  }
-}
-
 /* ═══════════════════════════════════════════════════════════════════════════
    CANVAS GRAIN TEXTURE OVERLAY
    ═══════════════════════════════════════════════════════════════════════════ */

@@ -153,6 +153,14 @@ interface TweenOptions {
  * Helper to create a fadeUp tween config for timeline.fromTo()
  * Vertical slide up + fade in with default duration/ease
  */
+export function tlFadeIn(el: TimelineElement, opts: TweenOptions = {}) {
+  return [
+    el,
+    { opacity: 0 },
+    { opacity: 1, duration: defaultConfig.duration, ease: defaultConfig.ease, ...opts }
+  ] as const;
+}
+
 export function tlFadeUp(el: TimelineElement, opts: TweenOptions = {}) {
   return [
     el,

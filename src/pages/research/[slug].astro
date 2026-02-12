@@ -112,10 +112,10 @@ const abstractSentences = pub.abstract
 						)
 					}
 
-					<div class="paper-metrics mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+					<div class="paper-metrics mb-8 grid grid-cols-4 gap-3">
 						{
 							pub.publishedDate && (
-								<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
+								<div class="metric-card col-span-1 rounded-lg border border-white/[0.06] px-4 py-3">
 									<span class="block font-mono text-xs uppercase tracking-[0.15em] text-white/40">Published</span>
 									<span class="mt-1 block font-mono text-sm text-white/70">{pub.publishedDate}</span>
 								</div>
@@ -123,7 +123,7 @@ const abstractSentences = pub.abstract
 						}
 						{
 							pub.citations > 0 && (
-								<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
+								<div class="metric-card col-span-1 rounded-lg border border-white/[0.06] px-4 py-3">
 									<span class="block font-mono text-xs uppercase tracking-[0.15em] text-white/40">Citations</span>
 									<span class="mt-1 block font-mono text-sm text-white/70">{pub.citations}</span>
 								</div>
@@ -131,7 +131,7 @@ const abstractSentences = pub.abstract
 						}
 						{
 							pub.doi && (
-								<a href={pub.doi} target="_blank" rel="noopener noreferrer" class="metric-card group rounded-lg border border-white/[0.06] px-4 py-3">
+								<a href={pub.doi} target="_blank" rel="noopener noreferrer" class="metric-card col-span-2 group rounded-lg border border-white/[0.06] px-4 py-3">
 									<span class="flex items-center gap-1.5">
 										<span class="font-mono text-xs uppercase tracking-[0.15em] text-white/40">DOI</span>
 										<ArrowIcon class="h-2.5 w-2.5 text-white/20" hover="white" />

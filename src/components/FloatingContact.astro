@@ -2,7 +2,7 @@
 import SocialIcon from "./SocialIcon.astro";
 
 // Floating contact bar - fixed pill at bottom with glassmorphism
-const socialLinks = [
+const socialLinks: { href: string; label: string; icon: "mail" | "linkedin" | "github" | "scholar" | "orcid" }[] = [
   { href: "mailto:avishj@cs.cmu.edu", label: "Email", icon: "mail" },
   { href: "https://linkedin.com/in/avishj", label: "LinkedIn", icon: "linkedin" },
   { href: "https://github.com/avishj", label: "GitHub", icon: "github" },

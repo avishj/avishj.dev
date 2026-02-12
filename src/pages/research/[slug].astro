@@ -33,112 +33,111 @@ const hasPdf = url(pub.link).includes("view/");
 			</header>
 
 			<main class="pb-16">
-				<!-- Venue/year row -->
-				<div class="paper-meta mb-3 flex flex-wrap items-center gap-2">
-					<span class="rounded px-1.5 py-0.5 font-mono text-sm leading-none" style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}>
-						{venueLabels[pub.venueType]}
-					</span>
-					<span class="font-mono text-sm text-[--color-text-muted]">{pub.venue} · {pub.year}</span>
-					{pub.isFirstAuthor && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">1st Author</span>}
-					{pub.status === "preprint" && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">Preprint</span>}
+				<!-- Group 1: Header info (in view on load) -->
+				<div class="anim-group-header">
+					<div class="paper-meta mb-3 flex flex-wrap items-center gap-2">
+						<span class="rounded px-1.5 py-0.5 font-mono text-sm leading-none" style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}>
+							{venueLabels[pub.venueType]}
+						</span>
+						<span class="font-mono text-sm text-[--color-text-muted]">{pub.venue} · {pub.year}</span>
+						{pub.isFirstAuthor && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">1st Author</span>}
+						{pub.status === "preprint" && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">Preprint</span>}
+					</div>
+
+					<h1 class="paper-title font-display text-3xl font-medium italic leading-snug text-white lg:text-4xl">{pub.title}</h1>
+
+					<p class="paper-authors mt-4 text-sm leading-relaxed text-[--color-text-muted]">
+						{
+							displayAuthors.authors.map((da) => (
+								<Fragment>
+									{da.isHighlight ? <span class="font-semibold text-white/80">{da.name}</span> : <span>{da.name}</span>}
+									{da.separator}
+								</Fragment>
+							))
+						}
+						{displayAuthors.truncated && <span class="italic">et al.</span>}
+					</p>
 				</div>
 
-				<!-- Title -->
-				<h1 class="paper-title font-display text-3xl font-medium italic leading-snug text-white lg:text-4xl">{pub.title}</h1>
+				<!-- Group 2: Abstract + Key Findings -->
+				<div class="anim-group-content">
+					<div class="paper-divider my-8 border-t border-white/[0.06]"></div>
 
-				<!-- Authors -->
-				<p class="paper-authors mt-4 text-sm leading-relaxed text-[--color-text-muted]">
 					{
-						displayAuthors.authors.map((da) => (
-							<Fragment>
-								{da.isHighlight ? <span class="font-semibold text-white/80">{da.name}</span> : <span>{da.name}</span>}
-								{da.separator}
-							</Fragment>
-						))
-					}
-					{displayAuthors.truncated && <span class="italic">et al.</span>}
-				</p>
-
-				<!-- Divider -->
-				<div class="my-8 border-t border-white/[0.06]"></div>
-
-				<!-- Abstract -->
-				{
-					pub.abstract && (
-						<section class="paper-section mb-8">
-							<h2 class="mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Abstract</h2>
-							<p class="text-sm leading-relaxed text-white/70 whitespace-pre-line">{pub.abstract}</p>
-						</section>
-					)
-				}
-
-				<!-- Key Findings -->
-				{
-					pub.keyFindings.length > 0 && (
-						<section class="paper-section mb-8">
-							<h2 class="mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Key Findings</h2>
-							<ul class="space-y-2">
-								{pub.keyFindings.map((finding) => (
-									<li class="flex items-start gap-2 text-sm leading-relaxed text-white/70">
-										<span class="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-white/30" />
-										<span>{finding}</span>
-									</li>
-								))}
-							</ul>
-						</section>
-					)
-				}
-
-				<!-- Divider -->
-				<div class="my-8 border-t border-white/[0.06]"></div>
-
-				<!-- Primary CTA: Read Paper -->
-				{
-					hasPdf && (
-						<a href={url(pub.link)} class="read-paper-cta group mb-8 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.08] py-3.5 font-mono text-sm text-white/80 active:scale-[0.97]">
-							<svg class="h-4 w-4 text-white/50 transition-colors duration-200 group-hover:text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-							</svg>
-							<span>Read Paper</span>
-							<ArrowIcon class="h-3.5 w-3.5" hover="white" />
-						</a>
-					)
-				}
-
-				<!-- Metrics grid -->
-				<div class="paper-metrics mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-					{
-						pub.publishedDate && (
-							<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
-								<span class="block font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">Published</span>
-								<span class="mt-1 block font-mono text-sm text-white/70">{pub.publishedDate}</span>
-							</div>
+						pub.abstract && (
+							<section class="paper-section mb-8">
+								<h2 class="mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Abstract</h2>
+								<p class="text-sm leading-relaxed text-white/70 whitespace-pre-line">{pub.abstract}</p>
+							</section>
 						)
 					}
+
 					{
-						pub.citations > 0 && (
-							<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
-								<span class="block font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">Citations</span>
-								<span class="mt-1 block font-number text-lg text-white/70">{pub.citations}</span>
-							</div>
+						pub.keyFindings.length > 0 && (
+							<section class="paper-section mb-8">
+								<h2 class="mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Key Findings</h2>
+								<ul class="space-y-2">
+									{pub.keyFindings.map((finding) => (
+										<li class="flex items-start gap-2 text-sm leading-relaxed text-white/70">
+											<span class="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-white/30" />
+											<span>{finding}</span>
+										</li>
+									))}
+								</ul>
+							</section>
 						)
 					}
+				</div>
+
+				<!-- Group 3: Actions (CTA + metrics + cite) -->
+				<div class="anim-group-actions">
+					<div class="paper-divider my-8 border-t border-white/[0.06]"></div>
+
 					{
-						pub.doi && (
-							<a href={pub.doi} target="_blank" rel="noopener noreferrer" class="metric-card group rounded-lg border border-white/[0.06] px-4 py-3">
-								<span class="flex items-center gap-1.5">
-									<span class="font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">DOI</span>
-									<ArrowIcon class="h-2.5 w-2.5 text-white/20" hover="white" />
-								</span>
-								<span class="mt-1 block truncate font-mono text-xs text-white/50 transition-colors duration-200 group-hover:text-white/70">{pub.doi.replace(/^https?:\/\/(doi\.org\/)?/, "")}</span>
+						hasPdf && (
+							<a href={url(pub.link)} class="read-paper-cta group mb-8 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.08] py-3.5 font-mono text-sm text-white/80 active:scale-[0.97]">
+								<svg class="h-4 w-4 text-white/50 transition-colors duration-200 group-hover:text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+								</svg>
+								<span>Read Paper</span>
+								<ArrowIcon class="h-3.5 w-3.5" hover="white" />
 							</a>
 						)
 					}
-				</div>
 
-				<!-- Cite -->
-				<div class="paper-actions">
-					{pub.bibtex && <CitationCopy bibtex={pub.bibtex} />}
+					<div class="paper-metrics mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+						{
+							pub.publishedDate && (
+								<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
+									<span class="block font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">Published</span>
+									<span class="mt-1 block font-mono text-sm text-white/70">{pub.publishedDate}</span>
+								</div>
+							)
+						}
+						{
+							pub.citations > 0 && (
+								<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
+									<span class="block font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">Citations</span>
+									<span class="mt-1 block font-number text-lg text-white/70">{pub.citations}</span>
+								</div>
+							)
+						}
+						{
+							pub.doi && (
+								<a href={pub.doi} target="_blank" rel="noopener noreferrer" class="metric-card group rounded-lg border border-white/[0.06] px-4 py-3">
+									<span class="flex items-center gap-1.5">
+										<span class="font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">DOI</span>
+										<ArrowIcon class="h-2.5 w-2.5 text-white/20" hover="white" />
+									</span>
+									<span class="mt-1 block truncate font-mono text-xs text-white/50 transition-colors duration-200 group-hover:text-white/70">{pub.doi.replace(/^https?:\/\/(doi\.org\/)?/, "")}</span>
+								</a>
+							)
+						}
+					</div>
+
+					<div class="paper-actions">
+						{pub.bibtex && <CitationCopy bibtex={pub.bibtex} />}
+					</div>
 				</div>
 			</main>
 
@@ -154,32 +153,68 @@ const hasPdf = url(pub.link).includes("view/");
 
 <script>
 	async function initPaperPageAnimations() {
-		const { scrollRevealTimeline, tlFadeUp, tlScaleUp, TIMELINE_OVERLAP } = await import("../../utils/scroll-animations");
+		const { scrollRevealTimeline, tlFadeUp, tlFadeIn, tlScaleUp, TIMELINE_OVERLAP } = await import("../../utils/scroll-animations");
 
 		const main = document.querySelector("main");
 		if (!main) return;
 
-		const meta = main.querySelector(".paper-meta");
-		const title = main.querySelector(".paper-title");
-		const authors = main.querySelector(".paper-authors");
-		const sections = main.querySelectorAll(".paper-section");
-		const cta = main.querySelector(".read-paper-cta");
-		const metricCards = main.querySelectorAll(".metric-card");
-		const actions = main.querySelector(".paper-actions");
-
-		scrollRevealTimeline(main, (tl) => {
-			tl.fromTo(...tlFadeUp(meta))
-				.fromTo(...tlFadeUp(title), TIMELINE_OVERLAP)
-				.fromTo(...tlFadeUp(authors), TIMELINE_OVERLAP);
-
-			sections.forEach((section) => {
-				tl.fromTo(...tlFadeUp(section), TIMELINE_OVERLAP);
+		const headerGroup = main.querySelector(".anim-group-header");
+		if (headerGroup) {
+			scrollRevealTimeline(headerGroup, (tl) => {
+				const meta = headerGroup.querySelector(".paper-meta");
+				const title = headerGroup.querySelector(".paper-title");
+				const authors = headerGroup.querySelector(".paper-authors");
+				tl.fromTo(...tlFadeUp(meta))
+					.fromTo(...tlFadeUp(title), TIMELINE_OVERLAP)
+					.fromTo(...tlFadeUp(authors), TIMELINE_OVERLAP);
 			});
+		}
 
-			if (cta) tl.fromTo(...tlFadeUp(cta), TIMELINE_OVERLAP);
-			if (metricCards.length) tl.fromTo(...tlScaleUp(metricCards, { stagger: 0.06 }), TIMELINE_OVERLAP);
-			if (actions) tl.fromTo(...tlFadeUp(actions), TIMELINE_OVERLAP);
-		});
+		const contentGroup = main.querySelector(".anim-group-content");
+		if (contentGroup) {
+			const divider = contentGroup.querySelector(".paper-divider");
+			const sections = contentGroup.querySelectorAll(".paper-section");
+
+			if (divider) {
+				scrollRevealTimeline(divider, (tl) => {
+					tl.fromTo(...tlFadeIn(divider));
+				});
+			}
+			sections.forEach((section) => {
+				scrollRevealTimeline(section, (tl) => {
+					tl.fromTo(...tlFadeUp(section));
+				});
+			});
+		}
+
+		const actionsGroup = main.querySelector(".anim-group-actions");
+		if (actionsGroup) {
+			const divider = actionsGroup.querySelector(".paper-divider");
+			const cta = actionsGroup.querySelector(".read-paper-cta");
+			const metricCards = actionsGroup.querySelectorAll(".metric-card");
+			const actions = actionsGroup.querySelector(".paper-actions");
+
+			if (divider) {
+				scrollRevealTimeline(divider, (tl) => {
+					tl.fromTo(...tlFadeIn(divider));
+				});
+			}
+			if (cta) {
+				scrollRevealTimeline(cta, (tl) => {
+					tl.fromTo(...tlFadeUp(cta));
+				});
+			}
+			if (metricCards.length) {
+				scrollRevealTimeline(metricCards[0].parentElement!, (tl) => {
+					tl.fromTo(...tlScaleUp(metricCards, { stagger: 0.06 }));
+				});
+			}
+			if (actions) {
+				scrollRevealTimeline(actions, (tl) => {
+					tl.fromTo(...tlFadeUp(actions));
+				});
+			}
+		}
 	}
 
 	window.addEventListener("intro-complete", () => initPaperPageAnimations(), { once: true });

@@ -8,10 +8,12 @@ export function initPageTransition(introSplashId: string, mainContentId: string)
 			introSplash.remove();
 			mainContent.style.visibility = "visible";
 			mainContent.style.opacity = "1";
+			window.dispatchEvent(new CustomEvent("intro-complete"));
 		} else {
 			setTimeout(() => {
 				mainContent.style.visibility = "visible";
 				mainContent.style.opacity = "1";
+				window.dispatchEvent(new CustomEvent("intro-complete"));
 
 				const originX = window.innerWidth / 2;
 				const originY = window.innerHeight / 2;

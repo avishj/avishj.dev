@@ -31,7 +31,7 @@ const { Content } = await render(post);
 	<div id="main-content" class="invisible min-h-screen bg-[--color-bg-primary] opacity-0">
 		<div class="mx-auto max-w-2xl px-6 lg:px-8">
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
-				<BackButton href={url("blog/")} text="all posts" />
+				<BackButton fallbackHref={url("blog/")} />
 			</header>
 			<article class="pb-16">
 				<time class="font-mono text-xs tracking-wide text-white/40">

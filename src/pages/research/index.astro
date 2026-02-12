@@ -19,7 +19,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			<!-- Header -->
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
 				<div class="flex items-center gap-4">
-					<BackButton href={url("")} text="back" />
+					<BackButton fallbackHref={url("")} />
 				</div>
 				<h1 class="mt-8 font-display text-5xl font-medium italic tracking-tight text-white lg:text-6xl">Research</h1>
 			</header>

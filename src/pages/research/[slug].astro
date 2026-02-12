@@ -29,7 +29,7 @@ const hasPdf = url(pub.link).includes("view/");
 		<div class="mx-auto max-w-3xl px-6 lg:px-8">
 			<!-- Header -->
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
-				<BackButton href={url("research/")} text="research" />
+				<BackButton fallbackHref={url("research/")} />
 			</header>
 
 			<main class="pb-16">

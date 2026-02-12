@@ -3,4 +3,19 @@ declare module "citation-js" {
 		constructor(data: string);
 		format(type: string, options: Record<string, string>): string;
 	}
+
+	interface Templates {
+		has(name: string): boolean;
+		add(name: string, template: string): void;
+	}
+
+	interface CSLConfig {
+		templates: Templates;
+	}
+
+	export const plugins: {
+		config: {
+			get(id: string): CSLConfig;
+		};
+	};
 }

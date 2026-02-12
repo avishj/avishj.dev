@@ -41,6 +41,7 @@ export interface TeachingService {
 	location: string;
 	dates: string;
 	responsibilities: string[];
+	link?: string;
 }
 
 export type AcademicService = ConferenceService | TeachingService;
@@ -224,7 +225,8 @@ export const academicService: AcademicService[] = [
 		year: 2025,
 		location: "Pittsburgh, PA",
 		dates: "Fall 2025",
-		responsibilities: ["Grading", "Office Hours", "Doubt Clearing"]
+		responsibilities: ["Grading", "Office Hours", "Doubt Clearing"],
+		link: "view/ta-17614/"
 	}
 ];
 

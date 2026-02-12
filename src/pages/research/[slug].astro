@@ -19,6 +19,9 @@ const { publication: pub } = Astro.props;
 const displayAuthors = getDisplayAuthors(pub);
 // If link points to our internal viewer, we have a PDF
 const hasPdf = url(pub.link).includes("view/");
+const abstractSentences = pub.abstract
+	? pub.abstract.split(/(?<=\.)\s+/).filter((s) => s.trim())
+	: [];
 ---
 
 <BaseLayout title={`${pub.title} · Avish Jha`} description={pub.abstract || pub.title}>
@@ -59,26 +62,30 @@ const hasPdf = url(pub.link).includes("view/");
 					</p>
 				</div>
 
-				<!-- Group 2: Abstract + Key Findings -->
+				<!-- Group 2: Abstract + Key Findings (sentence-level scroll triggers) -->
 				<div class="anim-group-content">
 					<div class="paper-divider my-8 border-t border-white/[0.06]"></div>
 
 					{
-						pub.abstract && (
-							<section class="paper-section mb-8">
-								<h2 class="mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Abstract</h2>
-								<p class="text-sm leading-relaxed text-white/70 whitespace-pre-line">{pub.abstract}</p>
+						abstractSentences.length > 0 && (
+							<section class="mb-8">
+								<h2 class="abstract-heading mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Abstract</h2>
+								<p class="text-sm leading-relaxed text-white/70">
+									{abstractSentences.map((sentence) => (
+										<span class="abstract-sentence inline">{sentence} </span>
+									))}
+								</p>
 							</section>
 						)
 					}
 
 					{
 						pub.keyFindings.length > 0 && (
-							<section class="paper-section mb-8">
-								<h2 class="mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Key Findings</h2>
+							<section class="mb-8">
+								<h2 class="findings-heading mb-3 font-mono text-sm uppercase tracking-[0.15em] text-white/40">Key Findings</h2>
 								<ul class="space-y-2">
 									{pub.keyFindings.map((finding) => (
-										<li class="flex items-start gap-2 text-sm leading-relaxed text-white/70">
+										<li class="finding-item flex items-start gap-2 text-sm leading-relaxed text-white/70">
 											<span class="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-white/30" />
 											<span>{finding}</span>
 										</li>
@@ -173,16 +180,34 @@ const hasPdf = url(pub.link).includes("view/");
 		const contentGroup = main.querySelector(".anim-group-content");
 		if (contentGroup) {
 			const divider = contentGroup.querySelector(".paper-divider");
-			const sections = contentGroup.querySelectorAll(".paper-section");
+			const abstractHeading = contentGroup.querySelector(".abstract-heading");
+			const abstractSentences = contentGroup.querySelectorAll(".abstract-sentence");
+			const findingsHeading = contentGroup.querySelector(".findings-heading");
+			const findingItems = contentGroup.querySelectorAll(".finding-item");
 
 			if (divider) {
 				scrollRevealTimeline(divider, (tl) => {
 					tl.fromTo(...tlFadeIn(divider));
 				});
 			}
-			sections.forEach((section) => {
-				scrollRevealTimeline(section, (tl) => {
-					tl.fromTo(...tlFadeUp(section));
+			if (abstractHeading) {
+				scrollRevealTimeline(abstractHeading, (tl) => {
+					tl.fromTo(...tlFadeUp(abstractHeading));
+				});
+			}
+			abstractSentences.forEach((sentence) => {
+				scrollRevealTimeline(sentence, (tl) => {
+					tl.fromTo(...tlFadeUp(sentence));
+				});
+			});
+			if (findingsHeading) {
+				scrollRevealTimeline(findingsHeading, (tl) => {
+					tl.fromTo(...tlFadeUp(findingsHeading));
+				});
+			}
+			findingItems.forEach((item) => {
+				scrollRevealTimeline(item, (tl) => {
+					tl.fromTo(...tlFadeUp(item));
 				});
 			});
 		}

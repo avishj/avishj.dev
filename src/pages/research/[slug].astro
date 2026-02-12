@@ -102,7 +102,7 @@ const abstractSentences = pub.abstract
 
 					{
 						hasPdf && (
-							<a href={url(pub.link)} class="read-paper-cta group mb-8 flex w-full items-center justify-center gap-3 rounded-xl border border-[#e0a860]/15 py-3.5 font-mono text-sm text-white/80 active:scale-[0.97]">
+							<a href={url(pub.link)} class="read-paper-cta group mb-8 flex w-full items-center justify-center gap-3 rounded-xl border border-[#e0a860]/15 py-3.5 font-mono text-sm text-white/80">
 								<svg class="cta-icon h-4 w-4 text-white/50 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
 								</svg>
@@ -116,7 +116,7 @@ const abstractSentences = pub.abstract
 						{
 							pub.publishedDate && (
 								<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
-									<span class="block font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">Published</span>
+									<span class="block font-mono text-xs uppercase tracking-[0.15em] text-white/40">Published</span>
 									<span class="mt-1 block font-mono text-sm text-white/70">{pub.publishedDate}</span>
 								</div>
 							)
@@ -124,8 +124,8 @@ const abstractSentences = pub.abstract
 						{
 							pub.citations > 0 && (
 								<div class="metric-card rounded-lg border border-white/[0.06] px-4 py-3">
-									<span class="block font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">Citations</span>
-									<span class="mt-1 block font-number text-lg text-white/70">{pub.citations}</span>
+									<span class="block font-mono text-xs uppercase tracking-[0.15em] text-white/40">Citations</span>
+									<span class="mt-1 block font-mono text-sm text-white/70">{pub.citations}</span>
 								</div>
 							)
 						}
@@ -133,10 +133,10 @@ const abstractSentences = pub.abstract
 							pub.doi && (
 								<a href={pub.doi} target="_blank" rel="noopener noreferrer" class="metric-card group rounded-lg border border-white/[0.06] px-4 py-3">
 									<span class="flex items-center gap-1.5">
-										<span class="font-mono text-[10px] uppercase tracking-[0.15em] text-white/30">DOI</span>
+										<span class="font-mono text-xs uppercase tracking-[0.15em] text-white/40">DOI</span>
 										<ArrowIcon class="h-2.5 w-2.5 text-white/20" hover="white" />
 									</span>
-									<span class="mt-1 block truncate font-mono text-xs text-white/50 transition-colors duration-200 group-hover:text-white/70">{pub.doi.replace(/^https?:\/\/(doi\.org\/)?/, "")}</span>
+									<span class="mt-1 block truncate font-mono text-sm text-white/70">{pub.doi.replace(/^https?:\/\/(doi\.org\/)?/, "")}</span>
 								</a>
 							)
 						}
@@ -259,7 +259,8 @@ const abstractSentences = pub.abstract
 			border-color 200ms ease,
 			background-color 200ms ease,
 			box-shadow 300ms ease,
-			color 200ms ease;
+			color 200ms ease,
+			transform 200ms var(--ease-out-expo);
 	}
 
 	.metric-card {
@@ -287,10 +288,15 @@ const abstractSentences = pub.abstract
 			color: #e0a860;
 		}
 
+		.read-paper-cta:active,
+		.metric-card:active {
+			transform: scale(0.98);
+			transition: transform var(--duration-fast) ease;
+		}
+
 		.metric-card:hover {
 			border-color: rgba(255, 255, 255, 0.12);
 			background: rgba(255, 255, 255, 0.03);
-			transform: scale(1.02);
 		}
 	}
 
@@ -352,9 +358,6 @@ const abstractSentences = pub.abstract
 		.read-paper-cta {
 			background: transparent;
 			box-shadow: none;
-		}
-		.metric-card:hover {
-			transform: none;
 		}
 		.highlight-author {
 			animation: none;

@@ -3,7 +3,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PortalBurn from "../../components/PortalBurn.astro";
 import BackButton from "../../components/BackButton.astro";
 import Footer from "../../components/Footer.astro";
-import { publications } from "../../data/publications";
 import { url } from "../../utils/url";
 
 export function getStaticPaths() {
@@ -12,7 +11,7 @@ export function getStaticPaths() {
 		cmu: { file: "Jha, Avish - Education - CMU Record.pdf", title: "CMU Record" },
 		vit: { file: "Jha, Avish - Education - VIT Record.pdf", title: "VIT Record" },
 		snap: { file: "Jha, Avish - Experience - Snap Record.pdf", title: "Snap Inc. Record" },
-		siemens: { file: "Jha, Avish - Experience - Siemens Healthineers Record.pdf", title: "Siemens Healthineers Record" },
+		"siemens-healthineers": { file: "Jha, Avish - Experience - Siemens Healthineers Record.pdf", title: "Siemens Healthineers Record" },
 		addverb: { file: "Jha, Avish - Experience - Addverb Record.pdf", title: "Addverb Record" },
 		mitacs: { file: "Jha, Avish - Experience - MITACS Record.pdf", title: "MITACS Record" },
 		ey: { file: "Jha, Avish - Experience - Ernst & Young Record.pdf", title: "Ernst & Young Record" },

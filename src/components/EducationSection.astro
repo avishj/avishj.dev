@@ -91,7 +91,7 @@ const education: Education[] = [
 										<p class="mb-2 font-mono text-xs uppercase tracking-[0.15em] text-white/50">Relevant Coursework</p>
 										<div class="flex flex-wrap gap-1.5">
 											{edu.coursework.map((course) => (
-												<span class="rounded border border-white/10 px-2.5 py-1 text-sm text-white/70">{course}</span>
+												<span class="edu-course rounded border border-white/10 px-2.5 py-1 text-sm text-white/70">{course}</span>
 											))}
 										</div>
 									</div>
@@ -188,6 +188,11 @@ const education: Education[] = [
 
 		.edu-card:hover .edu-honor {
 			color: rgba(255, 255, 255, 0.85);
+		}
+
+		.edu-card:hover .edu-course {
+			color: rgba(255, 255, 255, 0.9);
+			border-color: rgba(255, 255, 255, 0.15);
 		}
 
 		.edu-card:hover .honor-dot {

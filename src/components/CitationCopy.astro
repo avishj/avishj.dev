@@ -8,7 +8,7 @@ interface Props {
 
 const { bibtex } = Astro.props;
 
-const cslDir = new URL("../data/csl", import.meta.url).pathname;
+const cslDir = `${process.cwd()}/src/data/csl`;
 const cslConfig = plugins.config.get("@csl");
 
 const customStyles: Record<string, string> = {

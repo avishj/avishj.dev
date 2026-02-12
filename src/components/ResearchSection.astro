@@ -264,6 +264,11 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			color: rgba(255, 255, 255, 0.85);
 		}
 
+		.publication-item:hover .citation-badge {
+			color: var(--accent);
+			border-color: var(--accent);
+		}
+
 		.service-item:hover {
 			background: rgba(255, 255, 255, 0.02);
 		}

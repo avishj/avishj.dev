@@ -53,7 +53,7 @@ const abstractSentences = pub.abstract
 						{
 							displayAuthors.authors.map((da) => (
 								<Fragment>
-									{da.isHighlight ? <span class="font-semibold text-white/80">{da.name}</span> : <span>{da.name}</span>}
+									{da.isHighlight ? <span class="highlight-author font-semibold">{da.name}</span> : <span>{da.name}</span>}
 									{da.separator}
 								</Fragment>
 							))
@@ -286,6 +286,49 @@ const abstractSentences = pub.abstract
 		}
 	}
 
+	@property --border-angle {
+		syntax: "<angle>";
+		initial-value: 0deg;
+		inherits: false;
+	}
+
+	.highlight-author {
+		--glow: #e0a860;
+		position: relative;
+		color: var(--glow);
+		padding: 1px 6px;
+		border-radius: 4px;
+		background: linear-gradient(var(--border-angle), rgba(224, 168, 96, 0.1) 0%, rgba(224, 168, 96, 0.03) 50%, rgba(224, 168, 96, 0.1) 100%);
+		border: 1px solid transparent;
+		background-clip: padding-box;
+		animation: rotate-border 3s linear infinite;
+	}
+
+	.highlight-author::before {
+		content: "";
+		position: absolute;
+		inset: -1px;
+		border-radius: 5px;
+		padding: 1px;
+		background: conic-gradient(from var(--border-angle), rgba(224, 168, 96, 0.06), rgba(224, 168, 96, 0.35), rgba(224, 168, 96, 0.06));
+		-webkit-mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		-webkit-mask-composite: xor;
+		mask-composite: exclude;
+		animation: rotate-border 3s linear infinite;
+		will-change: --border-angle;
+	}
+
+	@keyframes rotate-border {
+		to {
+			--border-angle: 360deg;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		#intro-splash {
 			display: none;
@@ -300,6 +343,13 @@ const abstractSentences = pub.abstract
 		}
 		.metric-card:hover {
 			transform: none;
+		}
+		.highlight-author {
+			animation: none;
+			border: 1px solid rgba(224, 168, 96, 0.2);
+		}
+		.highlight-author::before {
+			animation: none;
 		}
 	}
 </style>

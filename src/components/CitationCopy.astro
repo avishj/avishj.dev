@@ -1,5 +1,6 @@
 ---
 import Cite from "citation-js";
+const { plugins } = Cite as any;
 
 interface Props {
 	bibtex: string;
@@ -7,13 +8,31 @@ interface Props {
 
 const { bibtex } = Astro.props;
 
-const formats: Record<string, string> = { bibtex };
+const cslDir = `${import.meta.dir}/../data/csl`;
+const cslConfig = plugins.config.get("@csl");
+
+const customStyles: Record<string, string> = {
+	ieee: "ieee.csl",
+	harvard: "harvard-cite-them-right.csl",
+	mla: "modern-language-association-notes.csl",
+	chicago: "chicago-notes-bibliography-classic.csl"
+};
+
+for (const [name, file] of Object.entries(customStyles)) {
+	if (!cslConfig.templates.has(name)) {
+		cslConfig.templates.add(name, await Bun.file(`${cslDir}/${file}`).text());
+	}
+}
+
 const templateMap: Record<string, string> = {
 	apa: "apa",
-	vancouver: "vancouver",
-	mla: "modern-language-association",
-	chicago: "chicago-fullnote-bibliography"
+	ieee: "ieee",
+	harvard: "harvard",
+	mla: "mla",
+	chicago: "chicago"
 };
+
+const formats: Record<string, string> = { bibtex };
 
 try {
 	const cite = new Cite(bibtex);
@@ -45,7 +64,8 @@ try {
 	<div class="cite-dropdown absolute right-0 top-full z-10 mt-1.5 hidden min-w-[140px] rounded-lg border border-white/[0.08] bg-[#111] p-1.5 shadow-lg">
 		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="bibtex">BibTeX</button>
 		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="apa">APA</button>
-		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="vancouver">IEEE</button>
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="ieee">IEEE</button>
+		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="harvard">Harvard</button>
 		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="mla">MLA</button>
 		<button class="cite-format-btn block w-full rounded px-3 py-1.5 text-left font-mono text-xs text-white/70 hover:bg-white/[0.06] hover:text-white" data-format="chicago">Chicago</button>
 	</div>

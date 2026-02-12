@@ -276,6 +276,10 @@ const abstractSentences = pub.abstract
 		cursor: pointer;
 	}
 
+	.metric-card span {
+		transition: color 200ms ease;
+	}
+
 	@media (hover: hover) and (pointer: fine) {
 		.read-paper-cta:hover {
 			border-color: rgba(224, 168, 96, 0.3);
@@ -297,6 +301,10 @@ const abstractSentences = pub.abstract
 		.metric-card:hover {
 			border-color: rgba(255, 255, 255, 0.12);
 			background: rgba(255, 255, 255, 0.03);
+		}
+
+		.metric-card:hover span {
+			color: rgba(255, 255, 255, 0.85);
 		}
 	}
 

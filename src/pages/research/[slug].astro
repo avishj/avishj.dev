@@ -154,7 +154,7 @@ const hasPdf = url(pub.link).includes("view/");
 
 <script>
 	async function initPaperPageAnimations() {
-		const { scrollRevealTimeline, tlFadeUp, TIMELINE_OVERLAP } = await import("../../utils/scroll-animations");
+		const { scrollRevealTimeline, tlFadeUp, tlScaleUp, TIMELINE_OVERLAP } = await import("../../utils/scroll-animations");
 
 		const main = document.querySelector("main");
 		if (!main) return;
@@ -164,7 +164,7 @@ const hasPdf = url(pub.link).includes("view/");
 		const authors = main.querySelector(".paper-authors");
 		const sections = main.querySelectorAll(".paper-section");
 		const cta = main.querySelector(".read-paper-cta");
-		const metrics = main.querySelector(".paper-metrics");
+		const metricCards = main.querySelectorAll(".metric-card");
 		const actions = main.querySelector(".paper-actions");
 
 		scrollRevealTimeline(main, (tl) => {
@@ -177,7 +177,7 @@ const hasPdf = url(pub.link).includes("view/");
 			});
 
 			if (cta) tl.fromTo(...tlFadeUp(cta), TIMELINE_OVERLAP);
-			if (metrics) tl.fromTo(...tlFadeUp(metrics), TIMELINE_OVERLAP);
+			if (metricCards.length) tl.fromTo(...tlScaleUp(metricCards, { stagger: 0.06 }), TIMELINE_OVERLAP);
 			if (actions) tl.fromTo(...tlFadeUp(actions), TIMELINE_OVERLAP);
 		});
 	}
@@ -192,13 +192,16 @@ const hasPdf = url(pub.link).includes("view/");
 <style>
 	.read-paper-cta {
 		cursor: pointer;
+		will-change: transform;
 		transition:
 			border-color 200ms ease,
-			background-color 200ms ease;
+			background-color 200ms ease,
+			box-shadow 300ms ease;
 	}
 
 	.metric-card {
 		cursor: default;
+		will-change: transform;
 		transition:
 			border-color 200ms ease,
 			background-color 200ms ease,
@@ -213,6 +216,7 @@ const hasPdf = url(pub.link).includes("view/");
 		.read-paper-cta:hover {
 			border-color: rgba(255, 255, 255, 0.2);
 			background: rgba(255, 255, 255, 0.04);
+			box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.02);
 		}
 
 		.metric-card:hover {

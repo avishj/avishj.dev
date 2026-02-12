@@ -73,6 +73,10 @@ import { base, url } from "../utils/url";
 
 			<!-- Fixed vertical section nav — right side -->
 			<nav id="section-nav" class="fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 lg:right-12 lg:block">
+				<!-- Vertical rail + traveling dot -->
+				<div class="nav-rail absolute left-[15px] top-2 bottom-2 w-px bg-white/[0.12]">
+					<div class="nav-dot absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full bg-white/80 shadow-[0_0_6px_rgba(255,255,255,0.3)]" style="will-change: transform;"></div>
+				</div>
 				<ul class="flex flex-col gap-5">
 					<li>
 						<a href="#about" class="nav-link group flex items-center gap-3" data-section="about">
@@ -341,12 +345,16 @@ import { base, url } from "../utils/url";
 	window.addEventListener("intro-complete", () => initSectionHeaderAnimations(), { once: true });
 
 	// ═══════════════════════════════════════════════════════════════════════════
-	// SECTION NAV HIGHLIGHTING — Update active state on scroll
+	// SECTION NAV — Active state + traveling dot
 	// ═══════════════════════════════════════════════════════════════════════════
 	const sections = ["about", "experience", "projects", "research", "education", "skills"];
 	const navLinks = document.querySelectorAll(".nav-link");
+	const navDot = document.querySelector(".nav-dot") as HTMLElement;
+	const navRail = document.querySelector(".nav-rail") as HTMLElement;
+	const navLinkEls = Array.from(navLinks) as HTMLElement[];
+	let activeSection = "";
 
-	sections.forEach((sectionId) => {
+	sections.forEach((sectionId, i) => {
 		const section = document.getElementById(sectionId);
 		if (!section) return;
 
@@ -354,8 +362,21 @@ import { base, url } from "../utils/url";
 			trigger: section,
 			start: "top center",
 			end: "bottom center",
-			onEnter: () => setActiveNav(sectionId),
-			onEnterBack: () => setActiveNav(sectionId)
+			onUpdate: (self) => {
+				if (activeSection !== sectionId) {
+					activeSection = sectionId;
+					setActiveNav(sectionId);
+				}
+				updateDotPosition(i, self.progress);
+			},
+			onEnter: () => {
+				activeSection = sectionId;
+				setActiveNav(sectionId);
+			},
+			onEnterBack: () => {
+				activeSection = sectionId;
+				setActiveNav(sectionId);
+			}
 		});
 	});
 
@@ -376,6 +397,28 @@ import { base, url } from "../utils/url";
 				text?.classList.remove("text-white");
 				text?.classList.add("text-white/40");
 			}
+		});
+	}
+
+	function updateDotPosition(sectionIndex: number, progress: number) {
+		if (!navDot || !navRail || navLinkEls.length === 0) return;
+
+		const railRect = navRail.getBoundingClientRect();
+
+		const linkCenters = navLinkEls.map((el) => {
+			const rect = el.getBoundingClientRect();
+			return rect.top + rect.height / 2 - railRect.top;
+		});
+
+		const currentCenter = linkCenters[sectionIndex] ?? 0;
+		const nextCenter = linkCenters[sectionIndex + 1] ?? currentCenter;
+		const dotY = currentCenter + progress * (nextCenter - currentCenter);
+
+		gsap.to(navDot, {
+			y: dotY,
+			duration: 0.3,
+			ease: "power3.out",
+			overwrite: true
 		});
 	}
 
@@ -482,6 +525,9 @@ import { base, url } from "../utils/url";
 		}
 		.header-link {
 			transition: none;
+		}
+		.nav-dot {
+			display: none;
 		}
 	}
 </style>

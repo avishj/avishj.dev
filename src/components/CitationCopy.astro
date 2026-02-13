@@ -128,7 +128,7 @@ const formatLabels: Record<string, string> = {
 		let activeFormat = "bibtex";
 		let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
-		if (!toggle || !panel) return;
+		if (!toggle || !panel || !copyBtn || !copyIcon || !checkIcon || !copyLabel) return;
 
 		toggle.addEventListener("click", () => {
 			isOpen = !isOpen;

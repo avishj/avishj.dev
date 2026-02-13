@@ -229,9 +229,16 @@ import ArrowIcon from "./ArrowIcon.astro";
 	wrapWords();
 	resetToDefault();
 
-	// Mouse move handler
+	// Mouse move handler (rAF-throttled to avoid layout thrash)
+	let pendingY: number | null = null;
+	let rafId: number | null = null;
 	textContainer?.addEventListener("mousemove", (e) => {
-		updateColors(e.clientY);
+		pendingY = e.clientY;
+		if (rafId !== null) return;
+		rafId = requestAnimationFrame(() => {
+			if (pendingY !== null) updateColors(pendingY);
+			rafId = null;
+		});
 	});
 
 	textContainer?.addEventListener("mouseleave", () => {

@@ -230,13 +230,13 @@ export const academicService: AcademicService[] = [
 	}
 ];
 
-export const venueColors: Record<string, string> = {
+export const venueColors: Record<Publication['venueType'], string> = {
 	IEEE: "var(--color-accent-ieee)",
 	Springer: "var(--color-accent-springer)",
 	Preprint: "#2ea44f"
 };
 
-export const venueLabels: Record<string, string> = {
+export const venueLabels: Record<Publication['venueType'], string> = {
 	IEEE: "IEEE",
 	Springer: "Springer",
 	Preprint: "BioHackrXiv"
@@ -261,7 +261,7 @@ export function getDisplayAuthors(pub: Publication): { authors: DisplayAuthor[];
 			truncated: false
 		};
 	}
-	const shown = pub.authors.slice(0, 6);
+	const shown = pub.authors.slice(0, MAX_AUTHORS - 2);
 	const highlightInShown = shown.includes(pub.highlightAuthor);
 	const result: DisplayAuthor[] = shown.map((a) => ({
 		name: a,

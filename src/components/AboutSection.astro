@@ -62,13 +62,11 @@ import ArrowIcon from "./ArrowIcon.astro";
 </section>
 
 <script>
-	import { gsap } from "../utils/gsap-init";
 	import { onIntroComplete } from "../utils/intro-event";
 
 	const textContainer = document.querySelector(".about-text") as HTMLElement;
 	const paras = document.querySelectorAll(".about-para");
 	let wordSpans: HTMLSpanElement[] = [];
-	let currentLineY = -1;
 
 	const companyColors: Record<string, string> = {
 		"hw-cmu": "var(--color-accent-cmu)",
@@ -170,7 +168,6 @@ import ArrowIcon from "./ArrowIcon.astro";
 			}
 		});
 
-		currentLineY = closestLineY;
 		const closestIndex = sortedLineYs.indexOf(closestLineY);
 
 		// Inverted: active line stays bright, others dim based on distance
@@ -243,7 +240,6 @@ import ArrowIcon from "./ArrowIcon.astro";
 	});
 
 	textContainer?.addEventListener("mouseleave", () => {
-		currentLineY = -1;
 		resetToDefault();
 	});
 

@@ -170,6 +170,7 @@ const experiences: Experience[] = [
 
 <script>
   import { gsap } from '../utils/gsap-init';
+  import { onIntroComplete } from '../utils/intro-event';
 
   const cards = document.querySelectorAll('.exp-card');
   const allBullets = document.querySelectorAll('.exp-bullet');
@@ -190,8 +191,7 @@ const experiences: Experience[] = [
     });
   }
 
-  // Wait for intro to complete before setting up animations
-  window.addEventListener('intro-complete', () => initExperienceAnimations(), { once: true });
+  onIntroComplete(() => initExperienceAnimations());
 
   // Trailing hover brightness effect
   const bulletArray = Array.from(allBullets);

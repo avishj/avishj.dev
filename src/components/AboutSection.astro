@@ -63,6 +63,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 
 <script>
 	import { gsap } from "../utils/gsap-init";
+	import { onIntroComplete } from "../utils/intro-event";
 
 	const textContainer = document.querySelector(".about-text") as HTMLElement;
 	const paras = document.querySelectorAll(".about-para");
@@ -281,7 +282,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 		}
 	}
 
-	window.addEventListener("intro-complete", () => initAboutAnimations(), { once: true });
+	onIntroComplete(() => initAboutAnimations());
 </script>
 
 <style>

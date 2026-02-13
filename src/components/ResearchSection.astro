@@ -168,6 +168,8 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 </section>
 
 <script>
+	import { onIntroComplete } from "../utils/intro-event";
+
 	async function initResearchAnimations() {
 		const { scrollReveal, scrollRevealTimeline, presets, tlFadeIn, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
 
@@ -217,7 +219,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		});
 	}
 
-	window.addEventListener("intro-complete", () => initResearchAnimations(), { once: true });
+	onIntroComplete(() => initResearchAnimations());
 
 	import { groupHoverFade } from "../utils/group-hover";
 	groupHoverFade(".publication-item");

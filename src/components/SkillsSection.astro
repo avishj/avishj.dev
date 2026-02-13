@@ -66,6 +66,8 @@ const awards = ["Special Achiever's Award at VIT", "Treasurer at MSE Leadership 
 </section>
 
 <script>
+	import { onIntroComplete } from "../utils/intro-event";
+
 	async function initSkillsAnimations() {
 		const { scrollReveal, presets } = await import("../utils/scroll-animations");
 
@@ -78,7 +80,7 @@ const awards = ["Special Achiever's Award at VIT", "Treasurer at MSE Leadership 
 		scrollReveal(items, presets.scaleUp);
 	}
 
-	window.addEventListener("intro-complete", () => initSkillsAnimations(), { once: true });
+	onIntroComplete(() => initSkillsAnimations());
 </script>
 
 <style>

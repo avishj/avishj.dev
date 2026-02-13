@@ -119,6 +119,8 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 </script>
 
 <script>
+	import { onIntroComplete } from "../../utils/intro-event";
+
 	async function initResearchPageAnimations() {
 		const { scrollRevealTimeline, tlFadeUp, TIMELINE_OVERLAP } = await import("../../utils/scroll-animations");
 
@@ -136,12 +138,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		});
 	}
 
-	window.addEventListener("intro-complete", () => initResearchPageAnimations(), { once: true });
-
-	// Fallback if intro-complete already fired
-	if (document.getElementById("main-content")?.style.opacity === "1") {
-		initResearchPageAnimations();
-	}
+	onIntroComplete(() => initResearchPageAnimations());
 
 	import { groupHoverFade } from "../../utils/group-hover";
 	groupHoverFade(".paper-card");

@@ -205,14 +205,15 @@ const sizeClasses = {
 </section>
 
 <script>
+  import { onIntroComplete } from '../utils/intro-event';
+
   async function initProjectAnimations() {
     const { scrollReveal, presets } = await import('../utils/scroll-animations');
     const cards = document.querySelectorAll('.project-card .card-inner');
     scrollReveal(cards, presets.fadeUpScale);
   }
 
-  // Wait for intro to complete before setting up animations
-  window.addEventListener('intro-complete', () => initProjectAnimations(), { once: true });
+  onIntroComplete(() => initProjectAnimations());
 
   // Group hover opacity fade effect
   import { groupHoverFade } from '../utils/group-hover';

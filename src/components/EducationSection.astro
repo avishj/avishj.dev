@@ -121,6 +121,8 @@ const education: Education[] = [
 </section>
 
 <script>
+	import { onIntroComplete } from "../utils/intro-event";
+
 	async function initEducationAnimations() {
 		const { scrollRevealTimeline, tlFadeIn, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
 
@@ -146,7 +148,7 @@ const education: Education[] = [
 		});
 	}
 
-	window.addEventListener("intro-complete", () => initEducationAnimations(), { once: true });
+	onIntroComplete(() => initEducationAnimations());
 
 	import { groupHoverFade } from "../utils/group-hover";
 	groupHoverFade(".edu-card");

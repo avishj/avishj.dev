@@ -1,3 +1,5 @@
+import { markIntroComplete } from "./intro-event";
+
 export function initPageTransition(introSplashId: string, mainContentId: string) {
 	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 	const introSplash = document.getElementById(introSplashId);
@@ -8,12 +10,12 @@ export function initPageTransition(introSplashId: string, mainContentId: string)
 			introSplash.remove();
 			mainContent.style.visibility = "visible";
 			mainContent.style.opacity = "1";
-			window.dispatchEvent(new CustomEvent("intro-complete"));
+			markIntroComplete();
 		} else {
 			setTimeout(() => {
 				mainContent.style.visibility = "visible";
 				mainContent.style.opacity = "1";
-				window.dispatchEvent(new CustomEvent("intro-complete"));
+				markIntroComplete();
 
 				const originX = window.innerWidth / 2;
 				const originY = window.innerHeight / 2;

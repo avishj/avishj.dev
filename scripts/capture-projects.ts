@@ -40,7 +40,7 @@ for (const site of targets) {
     `--scale=${SCALE}`,
     `--filename=${site.name}`,
     '--crop',
-    '--delay=25',
+    '--delay=25', // seconds; sites use heavy JS/GSAP animations that need time to settle
     '--timeout=30',
     '--css=html, body { scroll-behavior: auto !important; } ::-webkit-scrollbar { display: none !important; }',
     '--overwrite',

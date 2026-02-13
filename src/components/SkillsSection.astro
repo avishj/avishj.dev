@@ -38,7 +38,7 @@ const awards = ["Special Achiever's Award at VIT", "Treasurer at MSE Leadership 
 						<h3 class="skill-category-heading mb-4 font-mono text-xs uppercase tracking-wider text-white/50">{category.name}</h3>
 						<div class="flex flex-wrap gap-2">
 							{category.skills.map((skill, skillIndex) => (
-								<span class="skill-pill cursor-pointer select-none rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-white/80 transition-all duration-150 active:scale-[0.92]" style={`--delay: ${skillIndex * 30}ms;`} role="button" tabindex="0">
+								<span class="skill-pill select-none rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-white/80 transition-all duration-150" style={`--delay: ${skillIndex * 30}ms;`}>
 									{skill}
 								</span>
 							))}

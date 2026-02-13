@@ -1,0 +1,11 @@
+{
+  "lastUpdated": null,
+  "runs": [],
+  "paths": {
+    "/": { "consecutiveFailures": 0 },
+    "/blog": { "consecutiveFailures": 0 },
+    "/research": { "consecutiveFailures": 0 },
+    "/blog/hello-world": { "consecutiveFailures": 0 },
+    "/research/eeg-feature-extraction": { "consecutiveFailures": 0 }
+  }
+}

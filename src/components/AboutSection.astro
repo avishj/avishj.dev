@@ -258,27 +258,32 @@ import ArrowIcon from "./ArrowIcon.astro";
 		"hw-tata": "5"
 	};
 
+	function makeScrollLink(el: Element, targetSelector: string) {
+		el.classList.add("company-link");
+		el.setAttribute("role", "link");
+		el.setAttribute("tabindex", "0");
+		const scroll = () => {
+			const target = document.querySelector(targetSelector);
+			target?.scrollIntoView({ behavior: scrollBehavior, block: "center" });
+		};
+		el.addEventListener("click", scroll);
+		el.addEventListener("keydown", (e) => {
+			if ((e as KeyboardEvent).key === "Enter" || (e as KeyboardEvent).key === " ") {
+				e.preventDefault();
+				scroll();
+			}
+		});
+	}
+
 	Object.entries(companyMap).forEach(([className, dataIndex]) => {
 		document.querySelectorAll(`.${className}`).forEach((el) => {
-			el.classList.add("company-link");
-			el.addEventListener("click", () => {
-				const targetCard = document.querySelector(`.exp-card[data-index="${dataIndex}"]`);
-				if (targetCard) {
-					targetCard.scrollIntoView({ behavior: scrollBehavior, block: "center" });
-				}
-			});
+			makeScrollLink(el, `.exp-card[data-index="${dataIndex}"]`);
 		});
 	});
 
 	// CMU links to education section
 	document.querySelectorAll(".hw-cmu").forEach((el) => {
-		el.classList.add("company-link");
-		el.addEventListener("click", () => {
-			const targetCard = document.querySelector('.edu-card[data-index="0"]');
-			if (targetCard) {
-				targetCard.scrollIntoView({ behavior: scrollBehavior, block: "center" });
-			}
-		});
+		makeScrollLink(el, '.edu-card[data-index="0"]');
 	});
 
 	// Paragraph and status card animations - wait for intro

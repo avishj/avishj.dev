@@ -157,6 +157,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 	function updateColors(cursorY: number) {
 		const lines = getLineGroups();
 		const sortedLineYs = Array.from(lines.keys()).sort((a, b) => a - b);
+		if (sortedLineYs.length === 0) return;
 
 		// Find the closest line to cursor
 		let closestLineY = sortedLineYs[0];

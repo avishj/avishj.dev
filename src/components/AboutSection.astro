@@ -246,6 +246,8 @@ import ArrowIcon from "./ArrowIcon.astro";
 		resetToDefault();
 	});
 
+	const scrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+
 	const companyMap: Record<string, string> = {
 		"hw-snap": "0",
 		"hw-siemens": "1",
@@ -261,7 +263,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 			el.addEventListener("click", () => {
 				const targetCard = document.querySelector(`.exp-card[data-index="${dataIndex}"]`);
 				if (targetCard) {
-					targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
+					targetCard.scrollIntoView({ behavior: scrollBehavior, block: "center" });
 				}
 			});
 		});
@@ -273,7 +275,7 @@ import ArrowIcon from "./ArrowIcon.astro";
 		el.addEventListener("click", () => {
 			const targetCard = document.querySelector('.edu-card[data-index="0"]');
 			if (targetCard) {
-				targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
+				targetCard.scrollIntoView({ behavior: scrollBehavior, block: "center" });
 			}
 		});
 	});

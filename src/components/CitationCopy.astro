@@ -191,7 +191,19 @@ const formatLabels: Record<string, string> = {
 			const text = formats[activeFormat] || formats.bibtex || "";
 			if (!text) return;
 
-			await navigator.clipboard.writeText(text);
+			try {
+				await navigator.clipboard.writeText(text);
+			} catch {
+				copyLabel.textContent = "Failed";
+				copyBtn.classList.add("text-red-400");
+				copyBtn.classList.remove("text-white/50");
+				copyTimeout = setTimeout(() => {
+					copyLabel.textContent = "Copy";
+					copyBtn.classList.remove("text-red-400");
+					copyBtn.classList.add("text-white/50");
+				}, 1500);
+				return;
+			}
 
 			if (copyTimeout) clearTimeout(copyTimeout);
 

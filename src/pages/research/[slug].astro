@@ -25,10 +25,10 @@ const abstractSentences = pub.abstract
 ---
 
 <BaseLayout title={`${pub.title} · Avish Jha`} description={pub.abstract || pub.title}>
-	<div id="intro-splash" class="fixed inset-0 z-50 bg-[--color-bg-primary]"></div>
+	<div id="intro-splash" class="fixed inset-0 z-50 bg-(--color-bg-primary)"></div>
 	<PortalBurn />
 
-	<div id="main-content" class="invisible min-h-screen bg-[--color-bg-primary] opacity-0">
+	<div id="main-content" class="invisible min-h-screen bg-(--color-bg-primary) opacity-0">
 		<div class="mx-auto max-w-3xl px-6 lg:px-8">
 			<!-- Header -->
 			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
@@ -42,14 +42,14 @@ const abstractSentences = pub.abstract
 						<span class="rounded px-1.5 py-0.5 font-mono text-sm leading-none" style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}>
 							{venueLabels[pub.venueType]}
 						</span>
-						<span class="font-mono text-sm text-[--color-text-muted]">{pub.venue} · {pub.year}</span>
+						<span class="font-mono text-sm text-(--color-text-muted)">{pub.venue} · {pub.year}</span>
 						{pub.isFirstAuthor && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">1st Author</span>}
 						{pub.status === "preprint" && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">Preprint</span>}
 					</div>
 
 					<h1 class="paper-title font-display text-3xl font-medium italic leading-snug text-white lg:text-4xl">{pub.title}</h1>
 
-					<p class="paper-authors mt-4 text-sm leading-relaxed text-[--color-text-muted]">
+					<p class="paper-authors mt-4 text-sm leading-relaxed text-(--color-text-muted)">
 						{
 							displayAuthors.authors.map((da) => (
 								<Fragment>

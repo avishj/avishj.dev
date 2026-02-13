@@ -10,7 +10,7 @@ const hIndex = 2;
 const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 ---
 
-<section id="research" class="research-section relative bg-[--color-bg-primary] pt-2 pb-16 md:pt-3 md:pb-24">
+<section id="research" class="research-section relative bg-(--color-bg-primary) pt-2 pb-16 md:pt-3 md:pb-24">
 	<div class="max-w-(--max-width)">
 		<SectionHeader number="04" title="Research" />
 
@@ -33,9 +33,9 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 		<a href="research/" class="research-cta card-base group flex items-center justify-between rounded-lg border border-white/[0.06] px-5 py-4 mb-8">
 			<div>
 				<span class="font-display text-lg italic text-white/90 transition-colors duration-200">Explore Research</span>
-				<span class="ml-3 font-mono text-sm text-[--color-text-muted]">Abstracts, key findings, full papers, citations, and more.</span>
+				<span class="ml-3 font-mono text-sm text-(--color-text-muted)">Abstracts, key findings, full papers, citations, and more.</span>
 			</div>
-			<ArrowIcon class="h-4 w-4 text-[--color-text-muted]" hover="white" />
+			<ArrowIcon class="h-4 w-4 text-(--color-text-muted)" hover="white" />
 		</a>
 
 		<!-- Publications subsection -->
@@ -47,7 +47,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 					publications.map((pub, index) => (
 						<a href={url(`research/${pub.slug}/`)} class="publication-item card-base group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6" data-index={index} style={`--accent: ${venueColors[pub.venueType]};`}>
 							{/* Year */}
-							<span class="w-10 flex-shrink-0 pt-0.5 font-mono text-sm tabular-nums text-[--color-text-muted]">{pub.year}</span>
+							<span class="w-10 flex-shrink-0 pt-0.5 font-mono text-sm tabular-nums text-(--color-text-muted)">{pub.year}</span>
 
 							{/* Main content */}
 							<div class="min-w-0 flex-grow">
@@ -56,10 +56,10 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 									<span class="rounded px-1.5 py-0.5 font-mono text-sm leading-none" style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}>
 										{venueLabels[pub.venueType]}
 									</span>
-									<span class="font-mono text-sm text-[--color-text-muted]">{pub.venue}</span>
+									<span class="font-mono text-sm text-(--color-text-muted)">{pub.venue}</span>
 									{pub.isFirstAuthor && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">1st Author</span>}
 									{pub.citations > 0 && (
-										<span class="citation-badge relative ml-auto flex cursor-default items-center gap-1 border-b border-dotted border-white/40 font-mono text-sm tabular-nums text-[--color-text-muted]" data-tooltip={`${pub.citations} citation${pub.citations !== 1 ? "s" : ""}`}>
+										<span class="citation-badge relative ml-auto flex cursor-default items-center gap-1 border-b border-dotted border-white/40 font-mono text-sm tabular-nums text-(--color-text-muted)" data-tooltip={`${pub.citations} citation${pub.citations !== 1 ? "s" : ""}`}>
 											<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
 												<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
 											</svg>
@@ -72,7 +72,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 								<p class="pub-title text-base leading-relaxed text-white/80 transition-colors duration-200 md:truncate md:text-lg">{pub.title}</p>
 
 								{/* Authors */}
-								<p class="mt-1.5 text-sm leading-relaxed text-[--color-text-muted]">
+								<p class="mt-1.5 text-sm leading-relaxed text-(--color-text-muted)">
 									{pubDisplayAuthors[index].authors.map((da) => (
 										<Fragment>
 											{da.isHighlight ? <span class="highlight-author font-semibold">{da.name}</span> : <span>{da.name}</span>}
@@ -84,7 +84,7 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 							</div>
 
 							{/* External link arrow */}
-							<ArrowIcon class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-[--color-text-muted]" hover="accent" />
+							<ArrowIcon class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-(--color-text-muted)" hover="accent" />
 						</a>
 					))
 				}
@@ -101,18 +101,18 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 						<a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item card-base group block border-b border-white/[0.06] py-3.5">
 							<div class="flex items-start justify-between gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.location}</p>
 							</div>
 							<div class="mt-1 flex items-baseline justify-between gap-6">
 								<p class="flex items-center gap-1.5 text-sm text-white/70">
 									<span>
-										{service.conference} <span class="font-mono text-[--color-text-muted]">({service.abbreviation})</span>
+										{service.conference} <span class="font-mono text-(--color-text-muted)">({service.abbreviation})</span>
 									</span>
-									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]" hover="white" />
+									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-(--color-text-muted)">
 								<span>{service.organizers.join(" · ")}</span>
 								<span class="flex-shrink-0 text-right">{service.details}</span>
 							</div>
@@ -121,18 +121,18 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 						<a href={url(service.link)} class="service-item card-base group block border-b border-white/[0.06] py-3.5">
 							<div class="flex items-start justify-between gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.location}</p>
 							</div>
 							<div class="mt-1 flex items-baseline justify-between gap-6">
 								<p class="flex items-center gap-1.5 text-sm text-white/70">
 									<span>
-										{service.course} <span class="font-mono text-[--color-text-muted]">({service.courseCode})</span>
+										{service.course} <span class="font-mono text-(--color-text-muted)">({service.courseCode})</span>
 									</span>
-									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-[--color-text-muted]" hover="white" />
+									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-(--color-text-muted)">
 								<span>
 									{service.institution} · {service.department}
 								</span>
@@ -143,17 +143,17 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 						<div class="service-item card-base group block border-b border-white/[0.06] py-3.5">
 							<div class="flex items-start justify-between gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.location}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.location}</p>
 							</div>
 							<div class="mt-1 flex items-baseline justify-between gap-6">
 								<p class="text-sm text-white/70">
 									<span>
-										{service.course} <span class="font-mono text-[--color-text-muted]">({service.courseCode})</span>
+										{service.course} <span class="font-mono text-(--color-text-muted)">({service.courseCode})</span>
 									</span>
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-[--color-text-muted] text-right">{service.dates}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-[--color-text-muted]">
+							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-(--color-text-muted)">
 								<span>
 									{service.institution} · {service.department}
 								</span>

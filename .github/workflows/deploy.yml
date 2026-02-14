@@ -38,6 +38,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -69,10 +71,10 @@ jobs:
         with:
           urls: |
             ${{ needs.deploy.outputs.page_url }}
-            ${{ needs.deploy.outputs.page_url }}/blog
-            ${{ needs.deploy.outputs.page_url }}/research
-            ${{ needs.deploy.outputs.page_url }}/blog/hello-world
-            ${{ needs.deploy.outputs.page_url }}/research/eeg-feature-extraction
+            ${{ needs.deploy.outputs.page_url }}blog
+            ${{ needs.deploy.outputs.page_url }}research
+            ${{ needs.deploy.outputs.page_url }}blog/hello-world
+            ${{ needs.deploy.outputs.page_url }}research/eeg-feature-extraction
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: .github/lighthouse/lighthouserc.json

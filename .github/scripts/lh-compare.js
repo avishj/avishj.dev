@@ -246,13 +246,22 @@ class LighthouseAnalyzer {
 }
 
 async function ensureLabels() {
+  const created = [];
   for (const label of LABELS) {
     try {
-      await LighthouseAnalyzer.gh(["label", "create", label, "--force"]);
+      await LighthouseAnalyzer.gh(["label", "create", label, "--force", "--color", "D93F0B"]);
+      created.push(label);
     } catch {
-      // label may already exist or gh not available
+      // label may already exist — verify it does
+      try {
+        await LighthouseAnalyzer.gh(["label", "list", "--search", label, "--json", "name"]);
+        created.push(label);
+      } catch {
+        // skip this label entirely
+      }
     }
   }
+  return created;
 }
 
 async function findOpenIssue() {
@@ -321,8 +330,9 @@ async function run() {
       await LighthouseAnalyzer.gh(["issue", "comment", String(existingIssue.number), "--body", body]);
     } else {
       console.log("Creating new issue");
-      await ensureLabels();
-      await LighthouseAnalyzer.gh(["issue", "create", "--title", ISSUE_TITLE, "--body", body, "--label", LABELS.join(",")]);
+      const validLabels = await ensureLabels();
+      const labelArgs = validLabels.length > 0 ? ["--label", validLabels.join(",")] : [];
+      await LighthouseAnalyzer.gh(["issue", "create", "--title", ISSUE_TITLE, "--body", body, ...labelArgs]);
     }
   }
 

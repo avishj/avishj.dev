@@ -99,65 +99,65 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 				academicService.map((service) =>
 					service.type === "conference" ? (
 						<a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item card-base group block border-b border-white/[0.06] py-3.5">
-							<div class="flex items-start justify-between gap-6">
+							<div class="flex flex-col gap-0.5 md:flex-row md:items-start md:justify-between md:gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.location}</p>
+								<p class="font-mono text-sm text-(--color-text-muted)">{service.location}</p>
 							</div>
-							<div class="mt-1 flex items-baseline justify-between gap-6">
+							<div class="mt-1 flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-6">
 								<p class="flex items-center gap-1.5 text-sm text-white/70">
 									<span>
 										{service.conference} <span class="font-mono text-(--color-text-muted)">({service.abbreviation})</span>
 									</span>
 									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.dates}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted)">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-(--color-text-muted)">
+							<div class="mt-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-6 font-mono text-sm text-(--color-text-muted)">
 								<span>{service.organizers.join(" · ")}</span>
-								<span class="flex-shrink-0 text-right">{service.details}</span>
+								<span class="flex-shrink-0">{service.details}</span>
 							</div>
 						</a>
 					) : service.link ? (
 						<a href={url(service.link)} class="service-item card-base group block border-b border-white/[0.06] py-3.5">
-							<div class="flex items-start justify-between gap-6">
+							<div class="flex flex-col gap-0.5 md:flex-row md:items-start md:justify-between md:gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.location}</p>
+								<p class="font-mono text-sm text-(--color-text-muted)">{service.location}</p>
 							</div>
-							<div class="mt-1 flex items-baseline justify-between gap-6">
+							<div class="mt-1 flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-6">
 								<p class="flex items-center gap-1.5 text-sm text-white/70">
 									<span>
 										{service.course} <span class="font-mono text-(--color-text-muted)">({service.courseCode})</span>
 									</span>
 									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.dates}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted)">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-(--color-text-muted)">
+							<div class="mt-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-6 font-mono text-sm text-(--color-text-muted)">
 								<span>
 									{service.institution} · {service.department}
 								</span>
-								<span class="flex-shrink-0 text-right">{service.responsibilities.join(" · ")}</span>
+								<span class="flex-shrink-0">{service.responsibilities.join(" · ")}</span>
 							</div>
 						</a>
 					) : (
 						<div class="service-item card-base group block border-b border-white/[0.06] py-3.5">
-							<div class="flex items-start justify-between gap-6">
+							<div class="flex flex-col gap-0.5 md:flex-row md:items-start md:justify-between md:gap-6">
 								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.location}</p>
+								<p class="font-mono text-sm text-(--color-text-muted)">{service.location}</p>
 							</div>
-							<div class="mt-1 flex items-baseline justify-between gap-6">
+							<div class="mt-1 flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-6">
 								<p class="text-sm text-white/70">
 									<span>
 										{service.course} <span class="font-mono text-(--color-text-muted)">({service.courseCode})</span>
 									</span>
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted) text-right">{service.dates}</p>
+								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted)">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex items-center justify-between gap-6 font-mono text-sm text-(--color-text-muted)">
+							<div class="mt-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-6 font-mono text-sm text-(--color-text-muted)">
 								<span>
 									{service.institution} · {service.department}
 								</span>
-								<span class="flex-shrink-0 text-right">{service.responsibilities.join(" · ")}</span>
+								<span class="flex-shrink-0">{service.responsibilities.join(" · ")}</span>
 							</div>
 						</div>
 					)

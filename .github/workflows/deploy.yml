@@ -48,3 +48,46 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  lighthouse:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: needs.deploy.result == 'success'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2.1.2
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v12.6.1
+        with:
+          urls: |
+            ${{ needs.deploy.outputs.page_url }}
+            ${{ needs.deploy.outputs.page_url }}/blog
+            ${{ needs.deploy.outputs.page_url }}/research
+            ${{ needs.deploy.outputs.page_url }}/blog/hello-world
+            ${{ needs.deploy.outputs.page_url }}/research/eeg-feature-extraction
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: .github/lighthouse/lighthouserc.json
+
+      - name: Compare results
+        run: bun run .github/scripts/lh-compare.js ${{ steps.lighthouse.outputs.resultsPath }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_SHA: ${{ github.sha }}
+
+      - name: Commit history
+        run: |
+          git config --global user.email "avish.j@protonmail.com"
+          git config --global user.name "Avish"
+          git add .lighthouse/history.json
+          git diff --staged --quiet || git commit -m "ci: update lighthouse history" -s
+          git push

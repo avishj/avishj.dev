@@ -69,13 +69,13 @@ const education: Education[] = [
 							</div>
 						</div>
 
-						<div class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+						<div class="mt-1">
 							<p class="text-base text-white/90">
 								{edu.degree} · {edu.field}
+								<span class="gpa-pill ml-3 inline-block translate-y-[-1px] rounded-md border px-2 py-0.5 font-mono text-[11px] font-medium leading-none align-middle" style="color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); border-color: color-mix(in srgb, var(--accent) 15%, transparent);">
+									{edu.gpaLabel.split("/")[0].trim()} {edu.gpa} / {edu.gpaLabel.split("/")[1].trim()}
+								</span>
 							</p>
-							<span class="gpa-pill rounded-md border px-2 py-0.5 font-mono text-[11px] font-medium leading-none" style="color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); border-color: color-mix(in srgb, var(--accent) 15%, transparent);">
-								{edu.gpaLabel.split("/")[0].trim()} {edu.gpa} / {edu.gpaLabel.split("/")[1].trim()}
-							</span>
 						</div>
 
 						<div class="mt-1.5 flex items-center gap-2 font-mono text-xs text-white/90 md:hidden">

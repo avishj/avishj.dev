@@ -37,7 +37,7 @@ jobs:
           curl -sf http://localhost:4321 > /dev/null || exit 1
 
       - name: Run Lighthouse
-        uses: treosh/lighthouse-ci-action@v12.6.1
+        uses: treosh/lighthouse-ci-action@12.6.1
         with:
           urls: |
             http://localhost:4321/

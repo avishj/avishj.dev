@@ -18,31 +18,16 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2.1.2
 
-      - name: Install dependencies
-        run: bun install
-
-      - name: Build
-        run: bun run build
-
-      - name: Start preview server
-        run: |
-          bun run preview &
-          for i in {1..30}; do
-            curl -sf http://localhost:4321 > /dev/null && break
-            sleep 1
-          done
-          curl -sf http://localhost:4321 > /dev/null || exit 1
-
       - name: Run Lighthouse
         id: lighthouse
         uses: treosh/lighthouse-ci-action@12.6.1
         with:
           urls: |
-            http://localhost:4321/
-            http://localhost:4321/blog
-            http://localhost:4321/research
-            http://localhost:4321/blog/hello-world
-            http://localhost:4321/research/eeg-feature-extraction
+            https://avishj.dev/
+            https://avishj.dev/blog/
+            https://avishj.dev/research/
+            https://avishj.dev/blog/hello-world/
+            https://avishj.dev/research/eeg-feature-extraction/
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: .github/lighthouse/lighthouserc.json

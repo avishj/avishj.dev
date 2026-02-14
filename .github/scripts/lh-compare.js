@@ -245,6 +245,16 @@ class LighthouseAnalyzer {
   }
 }
 
+async function ensureLabels() {
+  for (const label of LABELS) {
+    try {
+      await LighthouseAnalyzer.gh(["label", "create", label, "--force"]);
+    } catch {
+      // label may already exist or gh not available
+    }
+  }
+}
+
 async function findOpenIssue() {
   try {
     const output = await LighthouseAnalyzer.gh([
@@ -311,6 +321,7 @@ async function run() {
       await LighthouseAnalyzer.gh(["issue", "comment", String(existingIssue.number), "--body", body]);
     } else {
       console.log("Creating new issue");
+      await ensureLabels();
       await LighthouseAnalyzer.gh(["issue", "create", "--title", ISSUE_TITLE, "--body", body, "--label", LABELS.join(",")]);
     }
   }

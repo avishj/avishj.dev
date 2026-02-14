@@ -96,72 +96,55 @@ const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
 			<h3 class="service-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
 
 			{
-				academicService.map((service) =>
-					service.type === "conference" ? (
-						<a href={service.link} target="_blank" rel="noopener noreferrer" class="service-item card-base group block border-b border-white/[0.06] py-3.5">
-							<div class="flex flex-col gap-0.5 md:flex-row md:items-start md:justify-between md:gap-6">
-								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="font-mono text-sm text-(--color-text-muted)">{service.location}</p>
+				academicService.map((service) => {
+					const isConference = service.type === "conference";
+					const hasLink = isConference ? !!service.link : !!service.link;
+					const Tag = hasLink ? "a" : "div";
+					const linkProps = isConference
+						? { href: service.link, target: "_blank", rel: "noopener noreferrer" }
+						: service.link ? { href: url(service.link) } : {};
+
+					const name = isConference ? service.conference : service.course;
+					const nameDetail = isConference ? service.abbreviation : service.courseCode;
+					const org = isConference
+						? service.organizers.join(" · ")
+						: `${service.institution} · ${service.department}`;
+					const detail = isConference ? service.details : service.responsibilities.join(" · ");
+
+					return (
+						<Tag {...linkProps} class="service-item card-base group block border-b border-white/[0.06] py-3.5">
+							{/* Row 1: Role + location (location right-aligned on md+) */}
+							<div class="flex items-start justify-between gap-4">
+								<div class="flex items-center gap-2">
+									<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
+									{hasLink && <ArrowIcon class="service-arrow h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />}
+								</div>
+								<p class="hidden flex-shrink-0 font-mono text-sm text-(--color-text-muted) md:block">{service.location}</p>
 							</div>
-							<div class="mt-1 flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-6">
-								<p class="flex items-center gap-1.5 text-sm text-white/70">
-									<span>
-										{service.conference} <span class="font-mono text-(--color-text-muted)">({service.abbreviation})</span>
-									</span>
-									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />
-								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted)">{service.dates}</p>
-							</div>
-							<div class="mt-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-6 font-mono text-sm text-(--color-text-muted)">
-								<span>{service.organizers.join(" · ")}</span>
-								<span class="flex-shrink-0">{service.details}</span>
-							</div>
-						</a>
-					) : service.link ? (
-						<a href={url(service.link)} class="service-item card-base group block border-b border-white/[0.06] py-3.5">
-							<div class="flex flex-col gap-0.5 md:flex-row md:items-start md:justify-between md:gap-6">
-								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="font-mono text-sm text-(--color-text-muted)">{service.location}</p>
-							</div>
-							<div class="mt-1 flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-6">
-								<p class="flex items-center gap-1.5 text-sm text-white/70">
-									<span>
-										{service.course} <span class="font-mono text-(--color-text-muted)">({service.courseCode})</span>
-									</span>
-									<ArrowIcon class="service-arrow inline-block h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />
-								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted)">{service.dates}</p>
-							</div>
-							<div class="mt-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-6 font-mono text-sm text-(--color-text-muted)">
-								<span>
-									{service.institution} · {service.department}
-								</span>
-								<span class="flex-shrink-0">{service.responsibilities.join(" · ")}</span>
-							</div>
-						</a>
-					) : (
-						<div class="service-item card-base group block border-b border-white/[0.06] py-3.5">
-							<div class="flex flex-col gap-0.5 md:flex-row md:items-start md:justify-between md:gap-6">
-								<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
-								<p class="font-mono text-sm text-(--color-text-muted)">{service.location}</p>
-							</div>
-							<div class="mt-1 flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-6">
+
+							{/* Row 2: Conference/course + dates (dates right-aligned on md+) */}
+							<div class="mt-1 flex items-baseline justify-between gap-4">
 								<p class="text-sm text-white/70">
-									<span>
-										{service.course} <span class="font-mono text-(--color-text-muted)">({service.courseCode})</span>
-									</span>
+									{name} <span class="font-mono text-(--color-text-muted)">({nameDetail})</span>
 								</p>
-								<p class="flex-shrink-0 font-mono text-sm text-(--color-text-muted)">{service.dates}</p>
+								<p class="hidden flex-shrink-0 font-mono text-sm text-(--color-text-muted) md:block">{service.dates}</p>
 							</div>
-							<div class="mt-2 flex flex-col gap-0.5 md:flex-row md:items-center md:justify-between md:gap-6 font-mono text-sm text-(--color-text-muted)">
-								<span>
-									{service.institution} · {service.department}
-								</span>
-								<span class="flex-shrink-0">{service.responsibilities.join(" · ")}</span>
+
+							{/* Row 3 (mobile only): Date · Location compact meta line */}
+							<div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/40 md:hidden">
+								<span class="tabular-nums">{service.dates}</span>
+								<span class="inline-block h-px w-3 bg-white/25"></span>
+								<span>{service.location}</span>
 							</div>
-						</div>
-					)
-				)
+
+							{/* Row 4: Org on its own line */}
+							<p class="mt-2 font-mono text-xs text-(--color-text-muted)">{org}</p>
+
+							{/* Row 5: Detail */}
+							<p class="mt-1 font-mono text-xs text-white/50">{detail}</p>
+						</Tag>
+					);
+				})
 			}
 		</div>
 	</div>

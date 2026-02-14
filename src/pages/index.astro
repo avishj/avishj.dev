@@ -33,13 +33,13 @@ import { base, url } from "../utils/url";
 			<!-- Name header — scrolls with page -->
 			<header id="hero-header" class="px-6 pb-6 pt-8 lg:px-12 lg:pb-8 lg:pt-12">
 				<!-- Top row: Name + Links -->
-				<div class="flex items-start justify-between">
+				<div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 					<a href="#" class="block">
 						<h1 class="hero-title font-display text-5xl font-medium tracking-tight text-white lg:text-6xl xl:text-7xl">Avish Jha</h1>
 					</a>
 
 					<!-- Navigation links -->
-					<nav id="hero-nav" class="flex items-center gap-5 pt-2 lg:gap-6 lg:pt-3">
+					<nav id="hero-nav" class="flex items-center gap-5 lg:gap-6 md:pt-3">
 						<a href={url("view/resume")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
 							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">resume</span>
 							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />

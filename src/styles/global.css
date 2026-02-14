@@ -204,6 +204,21 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   TOUCH DEVICE READABILITY
+   On devices without hover, bump dimmed content text to readable levels.
+   Labels/meta (white/40, white/50) stay subdued as hierarchy cues.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media not (hover: hover) {
+  .text-white\/60,
+  .text-white\/65,
+  .text-white\/70,
+  .text-white\/80 {
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════════════════════════════════════ */
 

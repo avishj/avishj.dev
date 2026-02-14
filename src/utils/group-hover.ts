@@ -1,6 +1,10 @@
 import gsap from 'gsap';
 
+const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 export function groupHoverFade(itemSelector: string) {
+  if (!canHover) return;
+
   const items = document.querySelectorAll(itemSelector);
   if (items.length < 2) return;
 

@@ -224,24 +224,27 @@ import ArrowIcon from "./ArrowIcon.astro";
 	}
 
 	// Initialize
+	const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 	wrapWords();
 	resetToDefault();
 
-	// Mouse move handler (rAF-throttled to avoid layout thrash)
-	let pendingY: number | null = null;
-	let rafId: number | null = null;
-	textContainer?.addEventListener("mousemove", (e) => {
-		pendingY = e.clientY;
-		if (rafId !== null) return;
-		rafId = requestAnimationFrame(() => {
-			if (pendingY !== null) updateColors(pendingY);
-			rafId = null;
+	if (canHover) {
+		// Mouse move handler (rAF-throttled to avoid layout thrash)
+		let pendingY: number | null = null;
+		let rafId: number | null = null;
+		textContainer?.addEventListener("mousemove", (e) => {
+			pendingY = e.clientY;
+			if (rafId !== null) return;
+			rafId = requestAnimationFrame(() => {
+				if (pendingY !== null) updateColors(pendingY);
+				rafId = null;
+			});
 		});
-	});
 
-	textContainer?.addEventListener("mouseleave", () => {
-		resetToDefault();
-	});
+		textContainer?.addEventListener("mouseleave", () => {
+			resetToDefault();
+		});
+	}
 
 	const scrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
 

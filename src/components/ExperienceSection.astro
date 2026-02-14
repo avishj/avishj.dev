@@ -193,97 +193,101 @@ const experiences: Experience[] = [
 
   onIntroComplete(() => initExperienceAnimations());
 
-  // Trailing hover brightness effect
+  // Trailing hover brightness effect (pointer devices only)
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   const bulletArray = Array.from(allBullets);
   const cardsArray = Array.from(cards) as HTMLElement[];
-  const baseOpacity = 0.65;
-  const hoverOpacity = 1;
-  const trailFalloff = [0.9, 0.78]; // opacity for ±1, ±2 neighbors
 
-  function applyTrailingHover(hoveredIndex: number) {
-    bulletArray.forEach((bullet, i) => {
-      const distance = Math.abs(i - hoveredIndex);
-      let targetOpacity = baseOpacity;
-      
-      if (distance === 0) {
-        targetOpacity = hoverOpacity;
-      } else if (distance <= trailFalloff.length) {
-        targetOpacity = trailFalloff[distance - 1];
-      }
+  if (canHover) {
+    const baseOpacity = 0.65;
+    const hoverOpacity = 1;
+    const trailFalloff = [0.9, 0.78]; // opacity for ±1, ±2 neighbors
 
-      gsap.to(bullet, {
-        color: `rgba(255, 255, 255, ${targetOpacity})`,
-        duration: 0.15,
-        ease: 'power2.out',
-      });
+    function applyTrailingHover(hoveredIndex: number) {
+      bulletArray.forEach((bullet, i) => {
+        const distance = Math.abs(i - hoveredIndex);
+        let targetOpacity = baseOpacity;
+        
+        if (distance === 0) {
+          targetOpacity = hoverOpacity;
+        } else if (distance <= trailFalloff.length) {
+          targetOpacity = trailFalloff[distance - 1];
+        }
 
-      const dot = bullet.querySelector('.bullet-dot');
-      if (dot) {
-        gsap.to(dot, {
-          opacity: targetOpacity,
+        gsap.to(bullet, {
+          color: `rgba(255, 255, 255, ${targetOpacity})`,
           duration: 0.15,
           ease: 'power2.out',
         });
-      }
-    });
 
-    // Brighten the active card's meta
-    const hoveredBullet = bulletArray[hoveredIndex];
-    const parentCard = hoveredBullet?.closest('.exp-card') as HTMLElement | null;
-    highlightCardMeta(parentCard);
-  }
-
-  function highlightCardMeta(activeCard: HTMLElement | null) {
-    cardsArray.forEach((card) => {
-      const isActive = card === activeCard;
-      if (isActive) {
-        card.classList.add('meta-active');
-      } else {
-        card.classList.remove('meta-active');
-      }
-    });
-  }
-
-  function resetHover() {
-    bulletArray.forEach((bullet) => {
-      gsap.to(bullet, {
-        color: `rgba(255, 255, 255, ${baseOpacity})`,
-        duration: 0.2,
-        ease: 'power2.out',
-        overwrite: 'auto',
+        const dot = bullet.querySelector('.bullet-dot');
+        if (dot) {
+          gsap.to(dot, {
+            opacity: targetOpacity,
+            duration: 0.15,
+            ease: 'power2.out',
+          });
+        }
       });
 
-      const dot = bullet.querySelector('.bullet-dot');
-      if (dot) {
-        gsap.to(dot, {
-          opacity: 0.75,
+      // Brighten the active card's meta
+      const hoveredBullet = bulletArray[hoveredIndex];
+      const parentCard = hoveredBullet?.closest('.exp-card') as HTMLElement | null;
+      highlightCardMeta(parentCard);
+    }
+
+    function highlightCardMeta(activeCard: HTMLElement | null) {
+      cardsArray.forEach((card) => {
+        const isActive = card === activeCard;
+        if (isActive) {
+          card.classList.add('meta-active');
+        } else {
+          card.classList.remove('meta-active');
+        }
+      });
+    }
+
+    function resetHover() {
+      bulletArray.forEach((bullet) => {
+        gsap.to(bullet, {
+          color: `rgba(255, 255, 255, ${baseOpacity})`,
           duration: 0.2,
           ease: 'power2.out',
           overwrite: 'auto',
         });
+
+        const dot = bullet.querySelector('.bullet-dot');
+        if (dot) {
+          gsap.to(dot, {
+            opacity: 0.75,
+            duration: 0.2,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        }
+      });
+
+      cardsArray.forEach((card) => {
+        card.classList.remove('meta-active');
+      });
+    }
+
+    // Bullet hover listeners
+    bulletArray.forEach((bullet, index) => {
+      bullet.addEventListener('mouseenter', () => applyTrailingHover(index));
+    });
+
+    // Meta (left section) hover listeners - highlight the card
+    cardsArray.forEach((card) => {
+      const meta = card.querySelector('.exp-meta');
+      if (meta) {
+        meta.addEventListener('mouseenter', () => highlightCardMeta(card));
       }
     });
 
-    cardsArray.forEach((card) => {
-      card.classList.remove('meta-active');
-    });
+    const experienceList = document.querySelector('.experience-list');
+    experienceList?.addEventListener('mouseleave', resetHover);
   }
-
-  // Bullet hover listeners
-  bulletArray.forEach((bullet, index) => {
-    bullet.addEventListener('mouseenter', () => applyTrailingHover(index));
-  });
-
-  // Meta (left section) hover listeners - highlight the card
-  cardsArray.forEach((card) => {
-    const meta = card.querySelector('.exp-meta');
-    if (meta) {
-      meta.addEventListener('mouseenter', () => highlightCardMeta(card));
-    }
-  });
-
-  const experienceList = document.querySelector('.experience-list');
-  experienceList?.addEventListener('mouseleave', resetHover);
 </script>
 
 <style>

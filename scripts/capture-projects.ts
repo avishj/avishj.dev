@@ -35,14 +35,15 @@ console.log(`Capturing ${targets.length}/${sites.length} sites${activeOnly ? ' (
 for (const site of targets) {
   console.log(`\n${site.active ? '●' : '○'} ${site.name} — ${site.url} (${CAPTURE_W}x${CAPTURE_H} @${SCALE}x)`);
 
+  const css = 'html, body { scroll-behavior: auto !important; } ::-webkit-scrollbar { display: none !important; }';
   const proc = Bun.spawnSync([
-    'bunx', 'pageres', site.url, `${CAPTURE_W}x${CAPTURE_H}`,
+    'bunx', 'pageres-cli', site.url, `${CAPTURE_W}x${CAPTURE_H}`,
     `--scale=${SCALE}`,
     `--filename=${site.name}`,
     '--crop',
     '--delay=25', // seconds; sites use heavy JS/GSAP animations that need time to settle
     '--timeout=30',
-    '--css=html, body { scroll-behavior: auto !important; } ::-webkit-scrollbar { display: none !important; }',
+    `--css=${css}`,
     '--overwrite',
   ], { cwd: OUT_DIR, stdio: ['inherit', 'inherit', 'inherit'] });
 

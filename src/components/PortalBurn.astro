@@ -2,13 +2,23 @@
 // Portal Burn Effect Component
 // Shader-based dissolve transition inspired by Shopify Editions
 // Uses FBM noise for organic chaotic edges, no particle system
+// Raw WebGL2 — no Three.js dependency
 ---
 
 <canvas id="portal-canvas" class="pointer-events-none fixed inset-0 z-[100] hidden"></canvas>
 
 <script>
-// Noise functions for organic dissolve
-const noiseGLSL = `
+const VERT = `#version 300 es
+in vec2 aPosition;
+out vec2 vUv;
+void main() {
+  vUv = aPosition * 0.5 + 0.5;
+  gl_Position = vec4(aPosition, 0.0, 1.0);
+}`;
+
+const FRAG = `#version 300 es
+precision highp float;
+
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
 }
@@ -17,12 +27,10 @@ float noise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
   f = f * f * (3.0 - 2.0 * f);
-  
   float a = hash(i);
   float b = hash(i + vec2(1.0, 0.0));
   float c = hash(i + vec2(0.0, 1.0));
   float d = hash(i + vec2(1.0, 1.0));
-  
   return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
 
@@ -30,7 +38,6 @@ float fbm(vec2 p) {
   float value = 0.0;
   float amplitude = 0.5;
   float frequency = 1.0;
-  
   for (int i = 0; i < 5; i++) {
     value += amplitude * noise(p * frequency);
     amplitude *= 0.5;
@@ -38,47 +45,110 @@ float fbm(vec2 p) {
   }
   return value;
 }
-`;
 
-export async function initPortalBurn(
-  originX: number, 
-  originY: number, 
+uniform float uDissolve;
+uniform vec2 uCenter;
+uniform vec2 uResolution;
+uniform float uMaxDist;
+
+in vec2 vUv;
+out vec4 fragColor;
+
+void main() {
+  float aspect = uResolution.x / uResolution.y;
+  vec2 centeredUv = vUv - uCenter;
+  centeredUv.x *= aspect;
+
+  float dist = length(centeredUv);
+  float noiseRamp = smoothstep(0.0, 0.5, uDissolve);
+
+  float blobNoise = fbm(centeredUv * 3.0) * 0.3 * noiseRamp;
+  float edgeVariation = fbm(centeredUv * 5.0 + vec2(0.5, 0.3)) * 0.2;
+  float emberTexture = fbm(vUv * 50.0) * 0.08;
+  float fineDetail = fbm(vUv * 120.0) * 0.04;
+
+  float totalNoise = blobNoise + edgeVariation + emberTexture + fineDetail;
+  float normalizedDist = (dist + totalNoise) / uMaxDist;
+
+  float dissolveThreshold = uDissolve;
+  float dissolveMask = smoothstep(dissolveThreshold - 0.02, dissolveThreshold, normalizedDist);
+
+  if (dissolveMask < 0.01) discard;
+
+  float edgeZoneWidth = 0.15 * (1.0 - uDissolve) + 0.04;
+  float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.06, normalizedDist) *
+                   smoothstep(dissolveThreshold + 0.04, dissolveThreshold - 0.02, normalizedDist);
+
+  float emberNoise = fbm(vUv * 80.0 + vec2(normalizedDist * 5.0, 0.0));
+  float ember = pow(emberNoise, 1.5) * edgeZone * 1.5;
+  float brightSpots = smoothstep(0.65, 0.75, fbm(vUv * 100.0)) * edgeZone * 0.8;
+
+  vec3 bgColor = vec3(0.03, 0.02, 0.02);
+  float emberTemp = ember + brightSpots * 0.6;
+  vec3 hotCore = vec3(1.0, 0.95, 0.85);
+  vec3 midFlame = vec3(1.0, 0.55, 0.15);
+  vec3 coolEdge = vec3(0.85, 0.25, 0.08);
+
+  vec3 emberColor = mix(coolEdge, midFlame, smoothstep(0.0, 0.4, emberTemp));
+  emberColor = mix(emberColor, hotCore, smoothstep(0.4, 0.9, emberTemp));
+
+  float glowIntensity = edgeZone;
+  vec3 glow = mix(vec3(0.85, 0.35, 0.08), vec3(1.0, 0.65, 0.25), sqrt(edgeZone)) * glowIntensity;
+  vec3 emberParticles = emberColor * (ember + brightSpots * 0.5);
+
+  fragColor = vec4(bgColor + glow + emberParticles, dissolveMask);
+}`;
+
+function createShader(gl: WebGL2RenderingContext, type: number, src: string) {
+  const s = gl.createShader(type)!;
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  return s;
+}
+
+function createProgram(gl: WebGL2RenderingContext) {
+  const p = gl.createProgram()!;
+  gl.attachShader(p, createShader(gl, gl.VERTEX_SHADER, VERT));
+  gl.attachShader(p, createShader(gl, gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(p);
+  return p;
+}
+
+export function initPortalBurn(
+  originX: number,
+  originY: number,
   onComplete: () => void,
   onHeaderReveal?: () => void,
   onNameReveal?: () => void
 ) {
   const canvas = document.getElementById('portal-canvas') as HTMLCanvasElement;
   if (!canvas) return;
-  
-  const { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Vector2, Color } = await import('three');
-  
+
+  const gl = canvas.getContext('webgl2', { alpha: true, antialias: false })!;
+  if (!gl) return;
+
   canvas.classList.remove('hidden');
-  
+
   let W = window.innerWidth;
   let H = window.innerHeight;
-  
-  // Normalize origin to 0-1 UV range
+  const dpr = Math.min(window.devicePixelRatio, 2);
+
   const centerX = originX / W;
-  const centerY = 1.0 - (originY / H); // Flip Y for WebGL
-  
-  // Setup Three.js
-  const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: false });
-  renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x000000, 0);
-  
-  const scene = new Scene();
-  const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-  camera.position.z = 1;
-  
-  // Calculate max distance from origin to any corner (for full coverage)
+  const centerY = 1.0 - (originY / H);
+
+  const setSize = () => {
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  };
+  setSize();
+
   const computeMaxDist = () => {
     const aspect = W / H;
-    const corners = [
-      [0, 0], [1, 0], [0, 1], [1, 1]
-    ];
     let maxDist = 0;
-    for (const [cx, cy] of corners) {
+    for (const [cx, cy] of [[0,0],[1,0],[0,1],[1,1]]) {
       const dx = (cx - centerX) * aspect;
       const dy = cy - centerY;
       const d = Math.sqrt(dx * dx + dy * dy);
@@ -87,200 +157,88 @@ export async function initPortalBurn(
     return maxDist * 1.4;
   };
   let maxDist = computeMaxDist();
-  
-  const uniforms = {
-    uDissolve: { value: 0.0 },
-    uCenter: { value: new Vector2(centerX, centerY) },
-    uResolution: { value: new Vector2(W, H) },
-    uMaxDist: { value: maxDist },
-    uEdgeColor: { value: new Color(1.0, 0.7, 0.3) }, // Warm golden
-  };
-  
+
+  const program = createProgram(gl);
+  gl.useProgram(program);
+
+  // Fullscreen quad
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(program, 'aPosition');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  // Uniform locations
+  const uDissolve = gl.getUniformLocation(program, 'uDissolve');
+  const uCenter = gl.getUniformLocation(program, 'uCenter');
+  const uResolution = gl.getUniformLocation(program, 'uResolution');
+  const uMaxDist = gl.getUniformLocation(program, 'uMaxDist');
+
+  gl.uniform2f(uCenter, centerX, centerY);
+  gl.uniform2f(uResolution, W, H);
+  gl.uniform1f(uMaxDist, maxDist);
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
   const onResize = () => {
     W = window.innerWidth;
     H = window.innerHeight;
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    uniforms.uResolution.value.set(W, H);
-    uniforms.uMaxDist.value = computeMaxDist();
+    setSize();
+    gl.uniform2f(uResolution, W, H);
+    gl.uniform1f(uMaxDist, computeMaxDist());
   };
   window.addEventListener('resize', onResize, { passive: true });
-  
-  const geometry = new PlaneGeometry(2, 2);
-  const material = new ShaderMaterial({
-    uniforms,
-    transparent: true,
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      ${noiseGLSL}
-      
-      uniform float uDissolve;
-      uniform vec2 uCenter;
-      uniform vec2 uResolution;
-      uniform float uMaxDist;
-      uniform vec3 uEdgeColor;
-      
-      varying vec2 vUv;
-      
-      void main() {
-        // Aspect-corrected coordinates
-        float aspect = uResolution.x / uResolution.y;
-        vec2 centeredUv = vUv - uCenter;
-        centeredUv.x *= aspect;
-        
-        float dist = length(centeredUv);
-        
-        // Angular position for directional noise
-        float angle = atan(centeredUv.y, centeredUv.x);
-        
-        // Noise intensity ramps up as dissolve progresses
-        float noiseRamp = smoothstep(0.0, 0.5, uDissolve);
-        
-        // Use cartesian-based noise instead of angular to avoid star patterns
-        // This creates organic blob-like variations instead of radial spikes
-        float blobNoise = fbm(centeredUv * 3.0) * 0.3 * noiseRamp;
-        
-        // Gentle organic edge variation
-        float edgeVariation = fbm(centeredUv * 5.0 + vec2(0.5, 0.3)) * 0.2;
-        
-        // Smooth high-freq texture (no pixelation)
-        float emberTexture = fbm(vUv * 50.0) * 0.08;
-        
-        // Finer detail layer for natural look
-        float fineDetail = fbm(vUv * 120.0) * 0.04;
-        
-        // Combine noises - smooth organic variation
-        float totalNoise = blobNoise + edgeVariation + emberTexture + fineDetail;
-        float noisyDist = dist + totalNoise;
-        
-        // Normalize to 0-1 range
-        float normalizedDist = noisyDist / uMaxDist;
-        
-        // Dissolve threshold based on progress
-        float dissolveThreshold = uDissolve;
-        
-        // Sharp dissolve mask
-        float dissolveMask = smoothstep(dissolveThreshold - 0.02, dissolveThreshold, normalizedDist);
-        
-        // Inside the hole = fully transparent
-        if (dissolveMask < 0.01) {
-          discard;
-        }
-        
-        // Edge glow zone - wider and smoother
-        float edgeZoneWidth = 0.15 * (1.0 - uDissolve) + 0.04;
-        float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.06, normalizedDist) *
-                         smoothstep(dissolveThreshold + 0.04, dissolveThreshold - 0.02, normalizedDist);
-        
-        // Smooth ember glow using continuous noise instead of hash
-        float emberNoise = fbm(vUv * 80.0 + vec2(normalizedDist * 5.0, 0.0));
-        float ember = pow(emberNoise, 1.5) * edgeZone * 1.5;
-        
-        // Subtle bright spots using smooth noise threshold
-        float brightSpots = smoothstep(0.65, 0.75, fbm(vUv * 100.0)) * edgeZone * 0.8;
-        
-        // Base color (dark background)
-        vec3 bgColor = vec3(0.03, 0.02, 0.02);
-        
-        // Ember color gradient: white hot core -> orange -> deep red at edges
-        float emberTemp = ember + brightSpots * 0.6;
-        vec3 hotCore = vec3(1.0, 0.95, 0.85);   // White-yellow
-        vec3 midFlame = vec3(1.0, 0.55, 0.15);  // Orange
-        vec3 coolEdge = vec3(0.85, 0.25, 0.08); // Deep red-orange
-        
-        // Smooth temperature-based color mixing
-        vec3 emberColor = mix(coolEdge, midFlame, smoothstep(0.0, 0.4, emberTemp));
-        emberColor = mix(emberColor, hotCore, smoothstep(0.4, 0.9, emberTemp));
-        
-        // Soft edge glow - warmer orange tones with smooth falloff
-        float glowIntensity = edgeZone * 1.0;
-        vec3 glow = mix(vec3(0.85, 0.35, 0.08), vec3(1.0, 0.65, 0.25), sqrt(edgeZone)) * glowIntensity;
-        
-        // Combine ember particles with smooth blending
-        vec3 emberParticles = emberColor * (ember + brightSpots * 0.5);
-        
-        // Final color
-        vec3 finalColor = bgColor + glow + emberParticles;
-        
-        // Alpha: solid background fading at very edge
-        float alpha = dissolveMask;
-        
-        gl_FragColor = vec4(finalColor, alpha);
-      }
-    `,
-  });
-  
-  const mesh = new Mesh(geometry, material);
-  scene.add(mesh);
-  
-  // Animation - slower for more dramatic effect
+
   const duration = 3800;
   const startTime = performance.now();
-  
-  // Unlock scroll early (after 400ms when main content is visible)
+
   setTimeout(() => onComplete(), 400);
-  
-  // Calculate distances from origin to different screen regions
+
   const aspect = W / H;
-  
-  // Distance to header (top edge)
   const distToHeader = Math.sqrt(
     Math.pow((0.5 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)
   ) / maxDist;
-  
-  // Distance to name area (left side of screen where name sits)
-  const nameX = 0.05; // ~5% from left edge
+  const nameX = 0.05;
   const distToName = Math.sqrt(
     Math.pow((nameX - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)
   ) / maxDist;
-  
+
   let headerRevealed = false;
   let nameRevealed = false;
-  
+
   function animate() {
     const elapsed = performance.now() - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    
-    // Aggressive ease-out curve
     const easedProgress = 1 - Math.pow(1 - progress, 3);
-    
-    uniforms.uDissolve.value = easedProgress;
-    
-    // Fire name reveal when burn reaches name area
+
+    gl.uniform1f(uDissolve, easedProgress);
+
     if (!nameRevealed && easedProgress >= distToName && onNameReveal) {
       nameRevealed = true;
       onNameReveal();
     }
-    
-    // Fire header reveal when burn reaches header area
     if (!headerRevealed && easedProgress >= distToHeader && onHeaderReveal) {
       headerRevealed = true;
       onHeaderReveal();
     }
-    
-    renderer.render(scene, camera);
-    
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      // Cleanup
       window.removeEventListener('resize', onResize);
-      renderer.dispose();
-      geometry.dispose();
-      material.dispose();
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
       canvas.classList.add('hidden');
     }
   }
-  
+
   requestAnimationFrame(animate);
 }
 
-// Export to window for access from index.astro
 (window as any).initPortalBurn = initPortalBurn;
 </script>

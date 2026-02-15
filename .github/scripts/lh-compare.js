@@ -50,11 +50,12 @@ class LighthouseAnalyzer {
 
   static async gh(args) {
     const proc = Bun.spawn(["gh", ...args], { stdout: "pipe", stderr: "pipe" });
-    const [out, err] = await Promise.all([
+    const [out, err, exitCode] = await Promise.all([
       new Response(proc.stdout).text(),
       new Response(proc.stderr).text(),
+      proc.exited,
     ]);
-    if (proc.exitCode !== 0) throw new Error(err || `gh exited ${proc.exitCode}`);
+    if (exitCode !== 0) throw new Error(err || `gh exited ${exitCode}`);
     return out;
   }
 

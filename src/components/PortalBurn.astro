@@ -7,8 +7,6 @@
 <canvas id="portal-canvas" class="pointer-events-none fixed inset-0 z-[100] hidden"></canvas>
 
 <script>
-import { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Vector2, Color } from 'three';
-
 // Noise functions for organic dissolve
 const noiseGLSL = `
 float hash(vec2 p) {
@@ -42,7 +40,7 @@ float fbm(vec2 p) {
 }
 `;
 
-export function initPortalBurn(
+export async function initPortalBurn(
   originX: number, 
   originY: number, 
   onComplete: () => void,
@@ -51,6 +49,8 @@ export function initPortalBurn(
 ) {
   const canvas = document.getElementById('portal-canvas') as HTMLCanvasElement;
   if (!canvas) return;
+  
+  const { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Vector2, Color } = await import('three');
   
   canvas.classList.remove('hidden');
   

@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-15T07:29:39.929Z",
+  "lastUpdated": "2026-02-15T07:45:58.363Z",
   "runs": [
     {
       "timestamp": "2026-02-15T00:32:57.456Z",
@@ -3993,6 +3993,571 @@
           "consecutiveFailures": 0
         }
       ]
+    },
+    {
+      "timestamp": "2026-02-15T07:45:58.363Z",
+      "branch": "v2",
+      "commit": "fbfe8b6",
+      "results": [
+        {
+          "path": "/blog/",
+          "url": "https://avishj.dev/blog/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 95,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 754.626,
+            "largest-contentful-paint": 754.626,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2302.568,
+            "speed-index": 1242.7193968600595,
+            "interactive": 3807.7440000000006
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2302.568,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3807.7440000000006,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 22
+        },
+        {
+          "path": "/blog/hello-world/",
+          "url": "https://avishj.dev/blog/hello-world/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 94,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 750.8520000000001,
+            "largest-contentful-paint": 750.8520000000001,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2385.429,
+            "speed-index": 1271.102963123858,
+            "interactive": 3887.6310000000003
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2385.429,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3887.6310000000003,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 22
+        },
+        {
+          "path": "/blog/hello-world/",
+          "url": "https://avishj.dev/blog/hello-world/",
+          "passed": false,
+          "scores": {
+            "performance": 69,
+            "accessibility": 94,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 759.534,
+            "largest-contentful-paint": 759.534,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2369.2059999999997,
+            "speed-index": 1124.655725584952,
+            "interactive": 3879.2400000000002
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 69,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2369.2059999999997,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3879.2400000000002,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 23
+        },
+        {
+          "path": "/blog/",
+          "url": "https://avishj.dev/blog/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 95,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 753.764,
+            "largest-contentful-paint": 753.7640000000001,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2396,
+            "speed-index": 1291.4195688024438,
+            "interactive": 3803.215
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2396,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3803.215,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 23
+        },
+        {
+          "path": "/",
+          "url": "https://avishj.dev/",
+          "passed": true,
+          "scores": {
+            "performance": 99,
+            "accessibility": 96,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 834.431,
+            "largest-contentful-paint": 854.431,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 0,
+            "speed-index": 834.431,
+            "interactive": 856.431
+          },
+          "failures": [],
+          "regressions": [],
+          "consecutiveFailures": 0
+        },
+        {
+          "path": "/",
+          "url": "https://avishj.dev/",
+          "passed": true,
+          "scores": {
+            "performance": 98,
+            "accessibility": 96,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 800.19,
+            "largest-contentful-paint": 966.666,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 0,
+            "speed-index": 800.19,
+            "interactive": 970.3414000000001
+          },
+          "failures": [],
+          "regressions": [],
+          "consecutiveFailures": 0
+        },
+        {
+          "path": "/research/",
+          "url": "https://avishj.dev/research/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 94,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 757.211,
+            "largest-contentful-paint": 788.838,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2129.1639999999998,
+            "speed-index": 1324.3768082852143,
+            "interactive": 3686.375
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2129.1639999999998,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3686.375,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 22
+        },
+        {
+          "path": "/blog/hello-world/",
+          "url": "https://avishj.dev/blog/hello-world/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 94,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 785.6709999999999,
+            "largest-contentful-paint": 785.6709999999999,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2299.7960000000003,
+            "speed-index": 1380.56492283557,
+            "interactive": 3836.3170000000005
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2299.7960000000003,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3836.3170000000005,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 24
+        },
+        {
+          "path": "/",
+          "url": "https://avishj.dev/",
+          "passed": true,
+          "scores": {
+            "performance": 98,
+            "accessibility": 96,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 882.6700000000001,
+            "largest-contentful-paint": 882.6700000000001,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 0,
+            "speed-index": 908.8672460482805,
+            "interactive": 882.6700000000001
+          },
+          "failures": [],
+          "regressions": [],
+          "consecutiveFailures": 0
+        },
+        {
+          "path": "/research/eeg-feature-extraction/",
+          "url": "https://avishj.dev/research/eeg-feature-extraction/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 95,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 755.477,
+            "largest-contentful-paint": 755.477,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2193.5,
+            "speed-index": 1276.0451168036875,
+            "interactive": 3716.258
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2193.5,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3716.258,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 22
+        },
+        {
+          "path": "/research/eeg-feature-extraction/",
+          "url": "https://avishj.dev/research/eeg-feature-extraction/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 95,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 786.947,
+            "largest-contentful-paint": 786.947,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2173.73,
+            "speed-index": 1397.9021227204182,
+            "interactive": 3761.077
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2173.73,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3761.077,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 23
+        },
+        {
+          "path": "/research/eeg-feature-extraction/",
+          "url": "https://avishj.dev/research/eeg-feature-extraction/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 95,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 757.613,
+            "largest-contentful-paint": 816.5629999999999,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2252.3999999999996,
+            "speed-index": 1308.0939348210434,
+            "interactive": 3810.463
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2252.3999999999996,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3810.463,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 24
+        },
+        {
+          "path": "/research/",
+          "url": "https://avishj.dev/research/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 94,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 753.405,
+            "largest-contentful-paint": 786.883,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2204.6440000000002,
+            "speed-index": 1297.3928091536925,
+            "interactive": 3758.549
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2204.6440000000002,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3758.549,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 23
+        },
+        {
+          "path": "/research/",
+          "url": "https://avishj.dev/research/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 94,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 758.0640000000001,
+            "largest-contentful-paint": 758.0640000000001,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2099.2129999999997,
+            "speed-index": 1330.5901513123827,
+            "interactive": 3657.777
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2099.2129999999997,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3657.777,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 24
+        },
+        {
+          "path": "/blog/",
+          "url": "https://avishj.dev/blog/",
+          "passed": false,
+          "scores": {
+            "performance": 68,
+            "accessibility": 95,
+            "best-practices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "first-contentful-paint": 751.722,
+            "largest-contentful-paint": 751.722,
+            "cumulative-layout-shift": 0,
+            "total-blocking-time": 2362.112,
+            "speed-index": 1321.2232933660096,
+            "interactive": 3865.234
+          },
+          "failures": [
+            {
+              "type": "score",
+              "category": "performance",
+              "value": 68,
+              "threshold": 85
+            },
+            {
+              "type": "metric",
+              "metric": "total-blocking-time",
+              "value": 2362.112,
+              "threshold": 300
+            },
+            {
+              "type": "metric",
+              "metric": "interactive",
+              "value": 3865.234,
+              "threshold": 3500
+            }
+          ],
+          "regressions": [],
+          "consecutiveFailures": 24
+        }
+      ]
     }
   ],
   "paths": {
@@ -4012,16 +4577,16 @@
       "consecutiveFailures": 0
     },
     "/research/": {
-      "consecutiveFailures": 21
+      "consecutiveFailures": 24
     },
     "/research/eeg-feature-extraction/": {
-      "consecutiveFailures": 21
+      "consecutiveFailures": 24
     },
     "/blog/hello-world/": {
-      "consecutiveFailures": 21
+      "consecutiveFailures": 24
     },
     "/blog/": {
-      "consecutiveFailures": 21
+      "consecutiveFailures": 24
     }
   }
 }

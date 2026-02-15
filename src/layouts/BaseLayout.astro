@@ -10,6 +10,7 @@ const {
 } = Astro.props;
 
 import { url } from '../utils/url';
+import RedirectOverlay from '../components/RedirectOverlay.astro';
 ---
 
 <!doctype html>
@@ -47,6 +48,7 @@ import { url } from '../utils/url';
   </head>
   <body class="grain-overlay">
     <slot />
+    <RedirectOverlay />
   </body>
 </html>
 

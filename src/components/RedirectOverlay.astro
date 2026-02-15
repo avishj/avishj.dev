@@ -49,9 +49,10 @@ const redirectEnabled = import.meta.env.PUBLIC_CMU_REDIRECT === 'true';
 			const countdown = document.getElementById("redirect-countdown");
 			const progress = document.getElementById("redirect-progress");
 			const stayBtn = document.getElementById("redirect-stay");
-			const goBtn = document.getElementById("redirect-go");
 
 			if (!overlay || !modal || !backdrop || !countdown || !progress) return;
+
+			const el = { overlay, modal, backdrop };
 
 			overlay.style.display = "flex";
 
@@ -96,21 +97,21 @@ const redirectEnabled = import.meta.env.PUBLIC_CMU_REDIRECT === 'true';
 			function dismiss() {
 				clearInterval(timer);
 				if (prefersReducedMotion) {
-					overlay.remove();
+					el.overlay.remove();
 					return;
 				}
-				gsap.to(modal, {
+				gsap.to(el.modal, {
 					opacity: 0,
 					y: -16,
 					scale: 0.97,
 					duration: 0.25,
 					ease: "power3.in"
 				});
-				gsap.to(backdrop, {
+				gsap.to(el.backdrop, {
 					opacity: 0,
 					duration: 0.3,
 					delay: 0.05,
-					onComplete: () => overlay.remove()
+					onComplete: () => el.overlay.remove()
 				});
 			}
 

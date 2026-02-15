@@ -82,7 +82,7 @@ const downloadName = file;
 		const pdf = await getDocument(pdfUrl).promise;
 		if (loading) loading.remove();
 
-		const linkService = {
+		const linkService: any = {
 			externalLinkEnabled: true,
 			externalLinkTarget: 2,
 			externalLinkRel: "noopener noreferrer",
@@ -141,7 +141,7 @@ const downloadName = file;
 
 			container.appendChild(wrapper);
 
-			await page.render({ canvasContext: ctx, viewport }).promise;
+			await page.render({ canvas, canvasContext: ctx, viewport }).promise;
 
 			// Render text layer
 			const textContent = await page.getTextContent();
@@ -156,11 +156,17 @@ const downloadName = file;
 			const annotations = await page.getAnnotations();
 			const annotationLayer = new AnnotationLayer({
 				div: annotDiv,
+				accessibilityManager: null,
+				annotationCanvasMap: null,
+				annotationEditorUIManager: null,
 				page,
 				viewport,
+				structTreeLayer: null,
+				commentManager: null,
 				linkService,
+				annotationStorage: null,
 			});
-			await annotationLayer.render({ annotations });
+			await annotationLayer.render({ annotations, viewport, div: annotDiv, page, linkService, renderForms: false });
 		}
 	} catch (err) {
 		if (loading) loading.textContent = "Failed to load PDF.";

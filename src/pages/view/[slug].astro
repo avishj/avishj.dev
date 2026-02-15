@@ -36,6 +36,7 @@ const downloadName = file;
 ---
 
 <BaseLayout title={`${title} · Avish Jha`}>
+	<link rel="preload" href={pdfUrl} as="fetch" crossorigin="anonymous" />
 	<div id="intro-splash" class="fixed inset-0 z-50 bg-(--color-bg-primary)"></div>
 	<PortalBurn />
 
@@ -53,7 +54,7 @@ const downloadName = file;
 
 			<h1 class="font-display text-4xl font-medium italic tracking-tight text-white lg:text-5xl">{title}</h1>
 
-			<div id="pdf-container" class="mt-8 flex flex-col items-center gap-6 pb-16">
+			<div id="pdf-container" class="mt-8 flex flex-col items-center gap-6 pb-16" data-pdf-url={pdfUrl}>
 				<p id="pdf-loading" class="font-mono text-sm text-white/40">Loading PDF...</p>
 			</div>
 
@@ -67,52 +68,102 @@ const downloadName = file;
 	initPageTransition("intro-splash", "main-content");
 </script>
 
-<script is:inline define:vars={{ pdfUrl }}>
-	const PDFJS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155";
+<script>
+	import { getDocument, GlobalWorkerOptions, TextLayer, AnnotationLayer } from "pdfjs-dist";
+	import "pdfjs-dist/web/pdf_viewer.css";
 
-	const script = document.createElement("script");
-	script.src = `${PDFJS_CDN}/pdf.min.mjs`;
-	script.type = "module";
-	document.head.appendChild(script);
+	GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).href;
 
-	script.onload = async () => {
-		const pdfjsLib = globalThis.pdfjsLib;
-		pdfjsLib.GlobalWorkerOptions.workerSrc = `${PDFJS_CDN}/pdf.worker.min.mjs`;
+	const container = document.getElementById("pdf-container")!;
+	const pdfUrl = container.dataset.pdfUrl!;
+	const loading = document.getElementById("pdf-loading");
 
-		const container = document.getElementById("pdf-container");
-		const loading = document.getElementById("pdf-loading");
+	try {
+		const pdf = await getDocument(pdfUrl).promise;
+		if (loading) loading.remove();
 
-		try {
-			const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
-			const totalPages = pdf.numPages;
+		const linkService = {
+			externalLinkEnabled: true,
+			externalLinkTarget: 2,
+			externalLinkRel: "noopener noreferrer",
+			addLinkAttributes(link: HTMLAnchorElement, url: string) {
+				link.href = url;
+				link.target = "_blank";
+				link.rel = "noopener noreferrer";
+			},
+			getDestinationHash: () => "#",
+			getAnchorUrl: (hash: string) => hash,
+			navigateTo: () => {},
+			goToDestination: () => {},
+			goToPage: () => {},
+		};
 
-			if (loading) loading.remove();
+		const availableWidth = container.clientWidth;
 
-			for (let i = 1; i <= totalPages; i++) {
-				const page = await pdf.getPage(i);
-				const scale = Math.min((window.innerWidth - 48) / page.getViewport({ scale: 1 }).width, 2);
-				const viewport = page.getViewport({ scale });
+		for (let i = 1; i <= pdf.numPages; i++) {
+			const page = await pdf.getPage(i);
+			const baseViewport = page.getViewport({ scale: 1 });
+			const scale = Math.min(availableWidth / baseViewport.width, 2);
+			const viewport = page.getViewport({ scale });
 
-				const canvas = document.createElement("canvas");
-				canvas.width = viewport.width * window.devicePixelRatio;
-				canvas.height = viewport.height * window.devicePixelRatio;
-				canvas.style.width = `${viewport.width}px`;
-				canvas.style.height = `${viewport.height}px`;
-				canvas.style.boxShadow = "0 2px 16px rgba(0, 0, 0, 0.4)";
-				canvas.style.maxWidth = "100%";
-				canvas.style.height = "auto";
+			// Page wrapper
+			const wrapper = document.createElement("div");
+			wrapper.style.position = "relative";
+			wrapper.style.width = `${viewport.width}px`;
+			wrapper.style.boxShadow = "0 2px 16px rgba(0, 0, 0, 0.4)";
+			wrapper.style.setProperty("--scale-factor", String(viewport.scale));
+			wrapper.style.setProperty("--total-scale-factor", String(viewport.scale));
 
-				const ctx = canvas.getContext("2d");
-				ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+			// Canvas layer
+			const canvas = document.createElement("canvas");
+			const dpr = window.devicePixelRatio || 1;
+			canvas.width = viewport.width * dpr;
+			canvas.height = viewport.height * dpr;
+			canvas.style.width = `${viewport.width}px`;
+			canvas.style.height = `${viewport.height}px`;
+			canvas.style.display = "block";
+			const ctx = canvas.getContext("2d")!;
+			ctx.scale(dpr, dpr);
+			wrapper.appendChild(canvas);
 
-				container.appendChild(canvas);
-				await page.render({ canvasContext: ctx, viewport }).promise;
-			}
-		} catch (err) {
-			if (loading) loading.textContent = "Failed to load PDF.";
-			console.error(err);
+			// Text layer
+			const textDiv = document.createElement("div");
+			textDiv.className = "textLayer";
+			wrapper.appendChild(textDiv);
+
+			// Annotation layer
+			const annotDiv = document.createElement("div");
+			annotDiv.className = "annotationLayer";
+			annotDiv.style.zIndex = "2";
+			wrapper.appendChild(annotDiv);
+
+			container.appendChild(wrapper);
+
+			await page.render({ canvasContext: ctx, viewport }).promise;
+
+			// Render text layer
+			const textContent = await page.getTextContent();
+			const textLayer = new TextLayer({
+				textContentSource: textContent,
+				container: textDiv,
+				viewport,
+			});
+			await textLayer.render();
+
+			// Render annotation layer
+			const annotations = await page.getAnnotations();
+			const annotationLayer = new AnnotationLayer({
+				div: annotDiv,
+				page,
+				viewport,
+				linkService,
+			});
+			await annotationLayer.render({ annotations });
 		}
-	};
+	} catch (err) {
+		if (loading) loading.textContent = "Failed to load PDF.";
+		console.error(err);
+	}
 </script>
 
 <style>

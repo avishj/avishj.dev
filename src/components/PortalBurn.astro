@@ -7,7 +7,7 @@
 <canvas id="portal-canvas" class="pointer-events-none fixed inset-0 z-[100] hidden"></canvas>
 
 <script>
-import * as THREE from 'three';
+import { WebGLRenderer, Scene, OrthographicCamera, PlaneGeometry, ShaderMaterial, Mesh, Vector2, Color } from 'three';
 
 // Noise functions for organic dissolve
 const noiseGLSL = `
@@ -62,13 +62,13 @@ export function initPortalBurn(
   const centerY = 1.0 - (originY / H); // Flip Y for WebGL
   
   // Setup Three.js
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+  const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: false });
   renderer.setSize(W, H);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
   
-  const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  const scene = new Scene();
+  const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
   camera.position.z = 1;
   
   // Calculate max distance from origin to any corner (for full coverage)
@@ -90,10 +90,10 @@ export function initPortalBurn(
   
   const uniforms = {
     uDissolve: { value: 0.0 },
-    uCenter: { value: new THREE.Vector2(centerX, centerY) },
-    uResolution: { value: new THREE.Vector2(W, H) },
+    uCenter: { value: new Vector2(centerX, centerY) },
+    uResolution: { value: new Vector2(W, H) },
     uMaxDist: { value: maxDist },
-    uEdgeColor: { value: new THREE.Color(1.0, 0.7, 0.3) }, // Warm golden
+    uEdgeColor: { value: new Color(1.0, 0.7, 0.3) }, // Warm golden
   };
   
   const onResize = () => {
@@ -106,8 +106,8 @@ export function initPortalBurn(
   };
   window.addEventListener('resize', onResize, { passive: true });
   
-  const geometry = new THREE.PlaneGeometry(2, 2);
-  const material = new THREE.ShaderMaterial({
+  const geometry = new PlaneGeometry(2, 2);
+  const material = new ShaderMaterial({
     uniforms,
     transparent: true,
     vertexShader: `
@@ -216,7 +216,7 @@ export function initPortalBurn(
     `,
   });
   
-  const mesh = new THREE.Mesh(geometry, material);
+  const mesh = new Mesh(geometry, material);
   scene.add(mesh);
   
   // Animation - slower for more dramatic effect

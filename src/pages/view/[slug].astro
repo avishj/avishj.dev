@@ -113,6 +113,8 @@ const downloadName = file;
 			wrapper.style.boxShadow = "0 2px 16px rgba(0, 0, 0, 0.4)";
 			wrapper.style.setProperty("--scale-factor", String(viewport.scale));
 			wrapper.style.setProperty("--total-scale-factor", String(viewport.scale));
+			wrapper.style.setProperty("--scale-round-x", "1px");
+			wrapper.style.setProperty("--scale-round-y", "1px");
 
 			// Canvas layer
 			const canvas = document.createElement("canvas");

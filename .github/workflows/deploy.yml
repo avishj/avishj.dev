@@ -95,4 +95,5 @@ jobs:
           git config --global user.name "Avish"
           git add .lighthouse/history.json
           git diff --staged --quiet || git commit -m "ci: update lighthouse history" -s
+          git pull --rebase
           git push

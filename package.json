@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "bunx --bun astro dev",
     "build": "bunx --bun astro build",
+    "build:cmu": "PUBLIC_CMU_REDIRECT=true bunx --bun astro build --site https://cs.cmu.edu --base /~avishj",
     "preview": "bunx --bun astro preview",
     "astro": "bunx --bun astro"
   },

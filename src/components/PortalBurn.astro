@@ -1,290 +1,174 @@
 ---
 // Portal Burn Effect Component
 // Shader-based dissolve transition inspired by Shopify Editions
-// Uses FBM noise for organic chaotic edges, no particle system
-// Raw WebGL2 — no Three.js dependency
+// Uses OffscreenCanvas + Web Worker to compile shaders off the main thread
+// Falls back to inline execution if OffscreenCanvas is unavailable
 ---
 
 <canvas id="portal-canvas" class="pointer-events-none fixed inset-0 z-[100] hidden"></canvas>
 
 <script>
-const VERT = `#version 300 es
-in vec2 aPosition;
-out vec2 vUv;
-void main() {
-  vUv = aPosition * 0.5 + 0.5;
-  gl_Position = vec4(aPosition, 0.0, 1.0);
-}`;
+import VERT from "../shaders/portal-burn.vert.glsl?raw";
+import FRAG from "../shaders/portal-burn.frag.glsl?raw";
 
-const FRAG = `#version 300 es
-precision highp float;
-
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  f = f * f * (3.0 - 2.0 * f);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-}
-
-float fbm(vec2 p) {
-  float value = 0.0;
-  float amplitude = 0.5;
-  float frequency = 1.0;
-  for (int i = 0; i < 5; i++) {
-    value += amplitude * noise(p * frequency);
-    amplitude *= 0.5;
-    frequency *= 2.0;
-  }
-  return value;
-}
-
-uniform float uDissolve;
-uniform vec2 uCenter;
-uniform vec2 uResolution;
-uniform float uMaxDist;
-
-in vec2 vUv;
-out vec4 fragColor;
-
-void main() {
-  float aspect = uResolution.x / uResolution.y;
-  vec2 centeredUv = vUv - uCenter;
-  centeredUv.x *= aspect;
-
-  float dist = length(centeredUv);
-  float noiseRamp = smoothstep(0.0, 0.5, uDissolve);
-
-  float blobNoise = fbm(centeredUv * 3.0) * 0.3 * noiseRamp;
-  float edgeVariation = fbm(centeredUv * 5.0 + vec2(0.5, 0.3)) * 0.2;
-  float emberTexture = fbm(vUv * 50.0) * 0.08;
-  float fineDetail = fbm(vUv * 120.0) * 0.04;
-
-  float totalNoise = blobNoise + edgeVariation + emberTexture + fineDetail;
-  float normalizedDist = (dist + totalNoise) / uMaxDist;
-
-  float dissolveThreshold = uDissolve;
-  float dissolveMask = smoothstep(dissolveThreshold - 0.02, dissolveThreshold, normalizedDist);
-
-  if (dissolveMask < 0.01) discard;
-
-  float edgeZoneWidth = 0.15 * (1.0 - uDissolve) + 0.04;
-  float edgeZone = smoothstep(dissolveThreshold - edgeZoneWidth, dissolveThreshold - edgeZoneWidth + 0.06, normalizedDist) *
-                   smoothstep(dissolveThreshold + 0.04, dissolveThreshold - 0.02, normalizedDist);
-
-  float emberNoise = fbm(vUv * 80.0 + vec2(normalizedDist * 5.0, 0.0));
-  float ember = pow(emberNoise, 1.5) * edgeZone * 1.5;
-  float brightSpots = smoothstep(0.65, 0.75, fbm(vUv * 100.0)) * edgeZone * 0.8;
-
-  vec3 bgColor = vec3(0.03, 0.02, 0.02);
-  float emberTemp = ember + brightSpots * 0.6;
-  vec3 hotCore = vec3(1.0, 0.95, 0.85);
-  vec3 midFlame = vec3(1.0, 0.55, 0.15);
-  vec3 coolEdge = vec3(0.85, 0.25, 0.08);
-
-  vec3 emberColor = mix(coolEdge, midFlame, smoothstep(0.0, 0.4, emberTemp));
-  emberColor = mix(emberColor, hotCore, smoothstep(0.4, 0.9, emberTemp));
-
-  float glowIntensity = edgeZone;
-  vec3 glow = mix(vec3(0.85, 0.35, 0.08), vec3(1.0, 0.65, 0.25), sqrt(edgeZone)) * glowIntensity;
-  vec3 emberParticles = emberColor * (ember + brightSpots * 0.5);
-
-  fragColor = vec4(bgColor + glow + emberParticles, dissolveMask);
-}`;
-
-const COMPLETION_STATUS_KHR = 0x91B1;
-
-// Eagerly warm up GL context and kick off shader compilation at module parse time.
-// With KHR_parallel_shader_compile, compileShader/linkProgram return instantly
-// and the GPU compiles on a background thread, keeping the main thread free.
-let warmGl: WebGL2RenderingContext | null = null;
-let warmProgram: WebGLProgram | null = null;
-let hasParallelCompile = false;
-
-function warmUp() {
-  const canvas = document.getElementById('portal-canvas') as HTMLCanvasElement;
-  if (!canvas) return;
-
-  warmGl = canvas.getContext('webgl2', { alpha: true, antialias: false });
-  if (!warmGl) return;
-
-  hasParallelCompile = !!warmGl.getExtension('KHR_parallel_shader_compile');
-
-  const vs = warmGl.createShader(warmGl.VERTEX_SHADER)!;
-  warmGl.shaderSource(vs, VERT);
-  warmGl.compileShader(vs);
-
-  const fs = warmGl.createShader(warmGl.FRAGMENT_SHADER)!;
-  warmGl.shaderSource(fs, FRAG);
-  warmGl.compileShader(fs);
-
-  warmProgram = warmGl.createProgram()!;
-  warmGl.attachShader(warmProgram, vs);
-  warmGl.attachShader(warmProgram, fs);
-  warmGl.linkProgram(warmProgram);
-}
-
-warmUp();
+let worker: Worker | null = null;
 
 export function initPortalBurn(
-  originX: number,
-  originY: number,
-  onComplete: () => void,
-  onHeaderReveal?: () => void,
-  onNameReveal?: () => void
+	originX: number,
+	originY: number,
+	onComplete: () => void,
+	onHeaderReveal?: () => void,
+	onNameReveal?: () => void
 ) {
-  const canvas = document.getElementById('portal-canvas') as HTMLCanvasElement;
-  if (!canvas) return;
+	const canvas = document.getElementById("portal-canvas") as HTMLCanvasElement;
+	if (!canvas) return;
 
-  const gl = warmGl || canvas.getContext('webgl2', { alpha: true, antialias: false })!;
-  if (!gl) return;
+	canvas.classList.remove("hidden");
 
-  canvas.classList.remove('hidden');
+	const W = window.innerWidth;
+	const H = window.innerHeight;
+	const dpr = Math.min(window.devicePixelRatio, 2);
 
-  let W = window.innerWidth;
-  let H = window.innerHeight;
-  const dpr = Math.min(window.devicePixelRatio, 2);
+	const canUseOffscreen = typeof canvas.transferControlToOffscreen === "function";
 
-  const centerX = originX / W;
-  const centerY = 1.0 - (originY / H);
+	if (canUseOffscreen) {
+		const offscreen = canvas.transferControlToOffscreen();
+		worker = new Worker(new URL("../workers/portal-burn.worker.ts", import.meta.url), {
+			type: "module",
+		});
 
-  const setSize = () => {
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    gl.viewport(0, 0, canvas.width, canvas.height);
-  };
-  setSize();
+		worker.onmessage = (e) => {
+			if (e.data.type === "complete") onComplete();
+			else if (e.data.type === "headerReveal") onHeaderReveal?.();
+			else if (e.data.type === "nameReveal") onNameReveal?.();
+			else if (e.data.type === "done") {
+				canvas.classList.add("hidden");
+				worker?.terminate();
+				worker = null;
+			}
+		};
 
-  const computeMaxDist = () => {
-    const aspect = W / H;
-    let maxDist = 0;
-    for (const [cx, cy] of [[0,0],[1,0],[0,1],[1,1]]) {
-      const dx = (cx - centerX) * aspect;
-      const dy = cy - centerY;
-      const d = Math.sqrt(dx * dx + dy * dy);
-      if (d > maxDist) maxDist = d;
-    }
-    return maxDist * 1.4;
-  };
-  let maxDist = computeMaxDist();
+		const onResize = () => {
+			worker?.postMessage({
+				type: "resize",
+				W: window.innerWidth,
+				H: window.innerHeight,
+			});
+		};
+		window.addEventListener("resize", onResize, { passive: true });
 
-  const setupAndAnimate = (program: WebGLProgram) => {
-    gl.useProgram(program);
+		worker.postMessage(
+			{ type: "init", canvas: offscreen, originX, originY, W, H, dpr },
+			[offscreen]
+		);
+	} else {
+		runInline(canvas, originX, originY, W, H, dpr, onComplete, onHeaderReveal, onNameReveal);
+	}
+}
 
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-    const aPos = gl.getAttribLocation(program, 'aPosition');
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+function runInline(
+	canvas: HTMLCanvasElement,
+	originX: number,
+	originY: number,
+	W: number,
+	H: number,
+	dpr: number,
+	onComplete: () => void,
+	onHeaderReveal?: () => void,
+	onNameReveal?: () => void
+) {
+	const gl = canvas.getContext("webgl2", { alpha: true, antialias: false });
+	if (!gl) { onComplete(); return; }
 
-    const uDissolve = gl.getUniformLocation(program, 'uDissolve');
-    const uCenter = gl.getUniformLocation(program, 'uCenter');
-    const uResolution = gl.getUniformLocation(program, 'uResolution');
-    const uMaxDist = gl.getUniformLocation(program, 'uMaxDist');
+	canvas.width = W * dpr;
+	canvas.height = H * dpr;
+	canvas.style.width = W + "px";
+	canvas.style.height = H + "px";
+	gl.viewport(0, 0, canvas.width, canvas.height);
 
-    gl.uniform2f(uCenter, centerX, centerY);
-    gl.uniform2f(uResolution, W, H);
-    gl.uniform1f(uMaxDist, maxDist);
+	const centerX = originX / W;
+	const centerY = 1.0 - originY / H;
 
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+	const computeMaxDist = () => {
+		const aspect = W / H;
+		let maxDist = 0;
+		for (const [cx, cy] of [[0,0],[1,0],[0,1],[1,1]]) {
+			const dx = (cx - centerX) * aspect;
+			const dy = cy - centerY;
+			const d = Math.sqrt(dx * dx + dy * dy);
+			if (d > maxDist) maxDist = d;
+		}
+		return maxDist * 1.4;
+	};
+	const maxDist = computeMaxDist();
 
-    const onResize = () => {
-      W = window.innerWidth;
-      H = window.innerHeight;
-      setSize();
-      gl.uniform2f(uResolution, W, H);
-      gl.uniform1f(uMaxDist, computeMaxDist());
-    };
-    window.addEventListener('resize', onResize, { passive: true });
+	const vs = gl.createShader(gl.VERTEX_SHADER)!;
+	gl.shaderSource(vs, VERT);
+	gl.compileShader(vs);
+	const fs = gl.createShader(gl.FRAGMENT_SHADER)!;
+	gl.shaderSource(fs, FRAG);
+	gl.compileShader(fs);
+	const prog = gl.createProgram()!;
+	gl.attachShader(prog, vs);
+	gl.attachShader(prog, fs);
+	gl.linkProgram(prog);
+	gl.useProgram(prog);
 
-    const duration = 3800;
-    const startTime = performance.now();
+	const buf = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+	const aPos = gl.getAttribLocation(prog, "aPosition");
+	gl.enableVertexAttribArray(aPos);
+	gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    setTimeout(() => onComplete(), 400);
+	const uDissolve = gl.getUniformLocation(prog, "uDissolve");
+	gl.uniform2f(gl.getUniformLocation(prog, "uCenter"), centerX, centerY);
+	gl.uniform2f(gl.getUniformLocation(prog, "uResolution"), W, H);
+	gl.uniform1f(gl.getUniformLocation(prog, "uMaxDist"), maxDist);
 
-    const aspect = W / H;
-    const distToHeader = Math.sqrt(
-      Math.pow((0.5 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)
-    ) / maxDist;
-    const nameX = 0.05;
-    const distToName = Math.sqrt(
-      Math.pow((nameX - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)
-    ) / maxDist;
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    let headerRevealed = false;
-    let nameRevealed = false;
+	const aspect = W / H;
+	const distToHeader = Math.sqrt(Math.pow((0.5 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)) / maxDist;
+	const distToName = Math.sqrt(Math.pow((0.05 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)) / maxDist;
 
-    function animate() {
-      const elapsed = performance.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
+	const duration = 3800;
+	const startTime = performance.now();
+	let headerRevealed = false;
+	let nameRevealed = false;
 
-      gl.uniform1f(uDissolve, easedProgress);
+	setTimeout(() => onComplete(), 400);
 
-      if (!nameRevealed && easedProgress >= distToName && onNameReveal) {
-        nameRevealed = true;
-        onNameReveal();
-      }
-      if (!headerRevealed && easedProgress >= distToHeader && onHeaderReveal) {
-        headerRevealed = true;
-        onHeaderReveal();
-      }
+	function animate() {
+		const elapsed = performance.now() - startTime;
+		const progress = Math.min(elapsed / duration, 1);
+		const easedProgress = 1 - Math.pow(1 - progress, 3);
 
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+		gl!.uniform1f(uDissolve, easedProgress);
 
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        window.removeEventListener('resize', onResize);
-        gl.getExtension('WEBGL_lose_context')?.loseContext();
-        canvas.classList.add('hidden');
-      }
-    }
+		if (!nameRevealed && easedProgress >= distToName && onNameReveal) {
+			nameRevealed = true;
+			onNameReveal();
+		}
+		if (!headerRevealed && easedProgress >= distToHeader && onHeaderReveal) {
+			headerRevealed = true;
+			onHeaderReveal();
+		}
 
-    requestAnimationFrame(animate);
-  };
+		gl!.clearColor(0, 0, 0, 0);
+		gl!.clear(gl!.COLOR_BUFFER_BIT);
+		gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
 
-  const program = warmProgram || (() => {
-    const p = gl.createProgram()!;
-    const vs = gl.createShader(gl.VERTEX_SHADER)!;
-    gl.shaderSource(vs, VERT);
-    gl.compileShader(vs);
-    const fs = gl.createShader(gl.FRAGMENT_SHADER)!;
-    gl.shaderSource(fs, FRAG);
-    gl.compileShader(fs);
-    gl.attachShader(p, vs);
-    gl.attachShader(p, fs);
-    gl.linkProgram(p);
-    return p;
-  })();
-  warmProgram = null;
-  warmGl = null;
+		if (progress < 1) {
+			requestAnimationFrame(animate);
+		} else {
+			gl!.getExtension("WEBGL_lose_context")?.loseContext();
+			canvas.classList.add("hidden");
+		}
+	}
 
-  if (hasParallelCompile) {
-    const pollReady = () => {
-      if (gl.getProgramParameter(program, COMPLETION_STATUS_KHR)) {
-        setupAndAnimate(program);
-      } else {
-        requestAnimationFrame(pollReady);
-      }
-    };
-    pollReady();
-  } else {
-    setupAndAnimate(program);
-  }
+	requestAnimationFrame(animate);
 }
 
 (window as any).initPortalBurn = initPortalBurn;

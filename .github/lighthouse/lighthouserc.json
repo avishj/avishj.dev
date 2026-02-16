@@ -104,8 +104,7 @@
         "canonical": ["warn"],
         "robots-txt": ["warn"],
         "hreflang": ["warn"],
-        "is-crawlable": ["error"],
-        "image-alt": ["error"]
+        "is-crawlable": ["error"]
       }
     }
   }

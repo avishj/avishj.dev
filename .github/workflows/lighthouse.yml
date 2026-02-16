@@ -15,8 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2.1.2
+      - name: Setup Bun environment
+        uses: ./.github/actions/setup-bun
 
       - name: Run Lighthouse
         id: lighthouse

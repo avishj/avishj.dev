@@ -1,48 +1,14 @@
-name: Lighthouse Audit
+name: Lighthouse Audit (Scheduled)
 
 on:
   schedule:
-    - cron: "0 1 * * 0"
+    - cron: '0 1 * * 0'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
 
 jobs:
   lighthouse:
-    name: Lighthouse Audit
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.2
-
-      - name: Setup Bun environment
-        uses: ./.github/actions/setup-bun
-
-      - name: Run Lighthouse
-        id: lighthouse
-        uses: treosh/lighthouse-ci-action@12.6.1
-        with:
-          urls: |
-            https://avishj.dev/
-            https://avishj.dev/blog/
-            https://avishj.dev/research/
-            https://avishj.dev/blog/hello-world/
-            https://avishj.dev/research/eeg-feature-extraction/
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          configPath: .github/lighthouse/lighthouserc.json
-
-      - name: Compare results
-        run: bun run .github/scripts/lh-compare.js ${{ steps.lighthouse.outputs.resultsPath }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_SHA: ${{ github.sha }}
-
-      - name: Commit history
-        run: |
-          git config --global user.email "avish.j@protonmail.com"
-          git config --global user.name "Avish"
-          git add .lighthouse/history.json
-          git diff --staged --quiet || git commit -m "ci: update lighthouse history" -s
-          git push
+    uses: ./.github/workflows/_lighthouse.yml

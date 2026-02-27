@@ -51,46 +51,8 @@ jobs:
 
   lighthouse:
     needs: deploy
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
     if: needs.deploy.result == 'success'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.2
-
-      - name: Setup Bun environment
-        uses: ./.github/actions/setup-bun
-
-      - name: Wait for deployment
-        run: sleep 30
-
-      - name: Run Lighthouse
-        id: lighthouse
-        uses: treosh/lighthouse-ci-action@12.6.1
-        with:
-          urls: |
-            ${{ needs.deploy.outputs.page_url }}
-            ${{ needs.deploy.outputs.page_url }}blog/
-            ${{ needs.deploy.outputs.page_url }}research/
-            ${{ needs.deploy.outputs.page_url }}blog/hello-world/
-            ${{ needs.deploy.outputs.page_url }}research/eeg-feature-extraction/
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          configPath: .github/lighthouse/lighthouserc.json
-
-      - name: Compare results
-        run: bun run .github/scripts/lh-compare.js ${{ steps.lighthouse.outputs.resultsPath }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_SHA: ${{ github.sha }}
-
-      - name: Commit history
-        if: always()
-        run: |
-          git config --global user.email "avish.j@protonmail.com"
-          git config --global user.name "Avish"
-          git add .lighthouse/history.json
-          git diff --staged --quiet || git commit -m "ci: update lighthouse history" -s
-          git pull --rebase
-          git push
+    uses: ./.github/workflows/_lighthouse.yml
+    with:
+      url: ${{ needs.deploy.outputs.page_url }}
+      wait-seconds: 30

@@ -54,5 +54,10 @@ jobs:
     if: needs.deploy.result == 'success'
     uses: ./.github/workflows/_lighthouse.yml
     with:
-      url: ${{ needs.deploy.outputs.page_url }}
+      urls: |-
+        ${{ needs.deploy.outputs.page_url }}
+        ${{ needs.deploy.outputs.page_url }}blog/
+        ${{ needs.deploy.outputs.page_url }}research/
+        ${{ needs.deploy.outputs.page_url }}blog/hello-world/
+        ${{ needs.deploy.outputs.page_url }}research/eeg-feature-extraction/
       wait-seconds: 30

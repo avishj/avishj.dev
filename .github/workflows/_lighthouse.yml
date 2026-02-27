@@ -3,11 +3,16 @@ name: Lighthouse Audit
 on:
   workflow_call:
     inputs:
-      url:
-        description: URL to audit
+      urls:
+        description: Newline-separated URLs to audit
         type: string
         required: false
-        default: https://avishj.dev
+        default: |-
+          https://avishj.dev/
+          https://avishj.dev/blog/
+          https://avishj.dev/research/
+          https://avishj.dev/blog/hello-world/
+          https://avishj.dev/research/eeg-feature-extraction/
       wait-seconds:
         description: Seconds to wait before auditing (e.g. deployment propagation)
         type: number
@@ -36,7 +41,7 @@ jobs:
         uses: avishj/AutoLighthouse@main
         with:
           mode: audit
-          urls: ${{ inputs.url }}
+          urls: ${{ inputs.urls }}
           profile: ${{ matrix.profile }}
           preset: strict
 

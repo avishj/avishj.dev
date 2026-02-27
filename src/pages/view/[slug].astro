@@ -1,0 +1,209 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PortalBurn from "../../components/PortalBurn.astro";
+import BackButton from "../../components/BackButton.astro";
+import Footer from "../../components/Footer.astro";
+import { url } from "../../utils/url";
+
+export function getStaticPaths() {
+	const pdfs: Record<string, { file: string; title: string }> = {
+		resume: { file: "Jha, Avish - Resume.pdf", title: "Resume" },
+		cmu: { file: "Jha, Avish - Education - CMU Record.pdf", title: "CMU Record" },
+		vit: { file: "Jha, Avish - Education - VIT Record.pdf", title: "VIT Record" },
+		snap: { file: "Jha, Avish - Experience - Snap Record.pdf", title: "Snap Inc. Record" },
+		"siemens-healthineers": { file: "Jha, Avish - Experience - Siemens Healthineers Record.pdf", title: "Siemens Healthineers Record" },
+		addverb: { file: "Jha, Avish - Experience - Addverb Record.pdf", title: "Addverb Record" },
+		mitacs: { file: "Jha, Avish - Experience - MITACS Record.pdf", title: "MITACS Record" },
+		ey: { file: "Jha, Avish - Experience - Ernst & Young Record.pdf", title: "Ernst & Young Record" },
+		"tata-steel": { file: "Jha, Avish - Experience - Tata Steel Record.pdf", title: "Tata Steel Record" },
+		"cmu-dnanexus-hackathon-2025": { file: "Jha, Avish - Research Paper - 2025 CMU DNAnexus Hackathon.pdf", title: "CMU-DNAnexus Hackathon 2025" },
+		"eeg-feature-extraction": { file: "Jha, Avish - Research Paper - 2023 EEG.pdf", title: "EEG Feature Extraction" },
+		"multiresolution-dark-channel-dehazing": { file: "Jha, Avish - Research Paper - 2023 Fog Removal.pdf", title: "Fog Removal Dehazing" },
+		"sudoku-backtracking-analysis": { file: "Jha, Avish - Research Paper - 2022 Sudoku.pdf", title: "Sudoku Backtracking Analysis" },
+		"automated-driving-pathway-detection": { file: "Jha, Avish - Research Paper - 2020 Automated Driving.pdf", title: "Automated Driving Pathway" },
+		"ta-17614": { file: "Jha, Avish - Academic Service - 17614 Record.pdf", title: "TA Record · 17-614" }
+	};
+
+	return Object.entries(pdfs).map(([slug, data]) => ({
+		params: { slug },
+		props: data
+	}));
+}
+
+const { file, title } = Astro.props;
+const pdfUrl = url(`files/${file}`);
+const downloadName = file;
+---
+
+<BaseLayout title={`${title} · Avish Jha`}>
+	<link rel="preload" href={pdfUrl} as="fetch" crossorigin="anonymous" />
+	<div id="intro-splash" class="fixed inset-0 z-50 bg-(--color-bg-primary)"></div>
+	<PortalBurn />
+
+	<div id="main-content" class="invisible min-h-screen bg-(--color-bg-primary) opacity-0">
+		<div class="mx-auto max-w-4xl px-6 lg:px-8">
+			<header class="flex items-center justify-between pb-6 pt-8 lg:pb-8 lg:pt-12">
+				<BackButton fallbackHref={url("")} />
+				<a href={pdfUrl} download={downloadName} class="download-link group flex items-center gap-1.5 active:scale-[0.97]">
+					<span class="download-link-text font-mono text-sm tracking-wide text-white/50 transition-colors duration-150 ease lg:text-base">download</span>
+					<svg class="download-link-icon h-3 w-3 text-white/30 lg:h-3.5 lg:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+					</svg>
+				</a>
+			</header>
+
+			<h1 class="font-display text-4xl font-medium italic tracking-tight text-white lg:text-5xl">{title}</h1>
+
+			<div id="pdf-container" class="mt-8 flex flex-col items-center gap-6 pb-16" data-pdf-url={pdfUrl}>
+				<p id="pdf-loading" class="font-mono text-sm text-white/40">Loading PDF...</p>
+			</div>
+
+			<Footer />
+		</div>
+	</div>
+</BaseLayout>
+
+<script>
+	import { initPageTransition } from "../../utils/portal-transition";
+	initPageTransition("intro-splash", "main-content");
+</script>
+
+<script>
+	import { getDocument, GlobalWorkerOptions, TextLayer, AnnotationLayer } from "pdfjs-dist";
+	import "pdfjs-dist/web/pdf_viewer.css";
+
+	GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url).href;
+
+	const container = document.getElementById("pdf-container")!;
+	const pdfUrl = container.dataset.pdfUrl!;
+	const loading = document.getElementById("pdf-loading");
+
+	try {
+		const pdf = await getDocument(pdfUrl).promise;
+		if (loading) loading.remove();
+
+		const linkService: any = {
+			externalLinkEnabled: true,
+			externalLinkTarget: 2,
+			externalLinkRel: "noopener noreferrer",
+			addLinkAttributes(link: HTMLAnchorElement, url: string) {
+				link.href = url;
+				link.target = "_blank";
+				link.rel = "noopener noreferrer";
+			},
+			getDestinationHash: () => "#",
+			getAnchorUrl: (hash: string) => hash,
+			navigateTo: () => {},
+			goToDestination: () => {},
+			goToPage: () => {},
+		};
+
+		const availableWidth = container.clientWidth;
+
+		for (let i = 1; i <= pdf.numPages; i++) {
+			const page = await pdf.getPage(i);
+			const baseViewport = page.getViewport({ scale: 1 });
+			const scale = Math.min(availableWidth / baseViewport.width, 2);
+			const viewport = page.getViewport({ scale });
+
+			// Page wrapper
+			const wrapper = document.createElement("div");
+			wrapper.style.position = "relative";
+			wrapper.style.width = `${viewport.width}px`;
+			wrapper.style.boxShadow = "0 2px 16px rgba(0, 0, 0, 0.4)";
+			wrapper.style.setProperty("--scale-factor", String(viewport.scale));
+			wrapper.style.setProperty("--total-scale-factor", String(viewport.scale));
+			wrapper.style.setProperty("--scale-round-x", "1px");
+			wrapper.style.setProperty("--scale-round-y", "1px");
+
+			// Canvas layer
+			const canvas = document.createElement("canvas");
+			const dpr = window.devicePixelRatio || 1;
+			canvas.width = viewport.width * dpr;
+			canvas.height = viewport.height * dpr;
+			canvas.style.width = `${viewport.width}px`;
+			canvas.style.height = `${viewport.height}px`;
+			canvas.style.display = "block";
+			const ctx = canvas.getContext("2d")!;
+			ctx.scale(dpr, dpr);
+			wrapper.appendChild(canvas);
+
+			// Text layer
+			const textDiv = document.createElement("div");
+			textDiv.className = "textLayer";
+			wrapper.appendChild(textDiv);
+
+			// Annotation layer
+			const annotDiv = document.createElement("div");
+			annotDiv.className = "annotationLayer";
+			annotDiv.style.zIndex = "2";
+			wrapper.appendChild(annotDiv);
+
+			container.appendChild(wrapper);
+
+			await page.render({ canvas, canvasContext: ctx, viewport }).promise;
+
+			// Render text layer
+			const textContent = await page.getTextContent();
+			const textLayer = new TextLayer({
+				textContentSource: textContent,
+				container: textDiv,
+				viewport,
+			});
+			await textLayer.render();
+
+			// Render annotation layer
+			const annotations = await page.getAnnotations();
+			const annotationLayer = new AnnotationLayer({
+				div: annotDiv,
+				accessibilityManager: null,
+				annotationCanvasMap: null,
+				annotationEditorUIManager: null,
+				page,
+				viewport,
+				structTreeLayer: null,
+				commentManager: null,
+				linkService,
+				annotationStorage: null,
+			});
+			await annotationLayer.render({ annotations, viewport, div: annotDiv, page, linkService, renderForms: false });
+		}
+	} catch (err) {
+		if (loading) loading.textContent = "Failed to load PDF.";
+		console.error(err);
+	}
+</script>
+
+<style>
+	.download-link-icon {
+		transition:
+			color 200ms ease,
+			transform 200ms var(--ease-out-expo);
+		will-change: transform;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.download-link:hover .download-link-icon {
+			color: rgba(255, 255, 255, 0.7);
+			transform: scale(1.35);
+		}
+
+		.download-link:hover .download-link-text {
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#intro-splash {
+			display: none;
+		}
+		#main-content {
+			visibility: visible !important;
+			opacity: 1 !important;
+		}
+		.download-link,
+		.download-link-icon {
+			transition: none;
+		}
+	}
+</style>

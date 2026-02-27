@@ -1,0 +1,534 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FloatingContact from "../components/FloatingContact.astro";
+import AboutSection from "../components/AboutSection.astro";
+import ExperienceSection from "../components/ExperienceSection.astro";
+import ProjectsSection from "../components/ProjectsSection.astro";
+import ResearchSection from "../components/ResearchSection.astro";
+import EducationSection from "../components/EducationSection.astro";
+import SkillsSection from "../components/SkillsSection.astro";
+import PortalBurn from "../components/PortalBurn.astro";
+import ArrowIcon from "../components/ArrowIcon.astro";
+import SocialIcon from "../components/SocialIcon.astro";
+import Footer from "../components/Footer.astro";
+import { base, url } from "../utils/url";
+---
+
+<BaseLayout>
+	<!-- ═══════════════════════════════════════════════════════════════════════════
+       INTRO SPLASH — Calligraphy signature draws in, then swirls away
+       ═══════════════════════════════════════════════════════════════════════════ -->
+	<div id="intro-splash" class="fixed inset-0 z-50 flex items-center justify-center bg-(--color-bg-primary)">
+		<div id="lottie-container" class="flex items-center justify-center" data-base-url={base}></div>
+	</div>
+
+	<!-- Three.js Portal Burn Effect -->
+	<PortalBurn />
+
+	<main id="main-content" class="invisible opacity-0">
+		<!-- ═══════════════════════════════════════════════════════════════════════════
+         MAIN LAYOUT — Name top-left, sections nav on right
+         ═══════════════════════════════════════════════════════════════════════════ -->
+		<div class="min-h-screen bg-(--color-bg-primary)">
+			<!-- Name header — scrolls with page -->
+			<header id="hero-header" class="px-6 pb-6 pt-8 lg:px-12 lg:pb-8 lg:pt-12">
+				<!-- Top row: Name + Links -->
+				<div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+					<a href="#" class="block">
+						<h1 class="hero-title font-display text-5xl font-medium tracking-tight text-white lg:text-6xl xl:text-7xl">Avish Jha</h1>
+					</a>
+
+					<!-- Navigation links -->
+					<nav id="hero-nav" class="flex items-center gap-5 lg:gap-6 md:pt-3">
+						<a href={url("view/resume")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">resume</span>
+							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />
+						</a>
+						<a href={url("blog/")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">blog</span>
+							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />
+						</a>
+						<a href={url("research/")} class="header-link group flex items-center gap-1.5 active:scale-[0.97]">
+							<span class="header-link-text relative pb-[3px] font-mono text-sm tracking-wide text-white/80 transition-colors duration-150 ease lg:text-base">research</span>
+							<ArrowIcon class="h-4 w-4 text-white/60 lg:h-5 lg:w-5" strokeWidth={2} hover="white" />
+						</a>
+						<a href="https://github.com/avishj" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="header-link ext-profile-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<SocialIcon variant="github" size="h-4 w-4 lg:h-5 lg:w-5" class="text-white/60 transition-colors duration-150 ease" />
+						</a>
+						<a href="https://scholar.google.com/citations?user=5tb4VWYAAAAJ" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar" class="header-link ext-profile-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<SocialIcon variant="scholar" size="h-4 w-4 lg:h-5 lg:w-5" class="text-white/60 transition-colors duration-150 ease" />
+						</a>
+						<a href="https://orcid.org/0000-0003-1479-0456" target="_blank" rel="noopener noreferrer" aria-label="ORCID" class="header-link ext-profile-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<SocialIcon variant="orcid" size="h-4 w-4 lg:h-5 lg:w-5" class="text-white/60 transition-colors duration-150 ease" />
+						</a>
+						<a href="https://linkedin.com/in/avishj" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="header-link ext-profile-link group hidden items-center gap-1.5 active:scale-[0.97] lg:flex">
+							<SocialIcon variant="linkedin" size="h-4 w-4 lg:h-5 lg:w-5" class="text-white/60 transition-colors duration-150 ease" />
+						</a>
+					</nav>
+				</div>
+
+				<!-- Subtitle row -->
+				<p class="hero-subtitle mt-3 font-mono text-sm tracking-[0.2em] text-white/40 lg:mt-4 lg:text-base">Software Engineer · CMU</p>
+			</header>
+
+			<!-- Fixed vertical section nav — right side -->
+			<nav id="section-nav" class="fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 lg:right-12 lg:block">
+				<!-- Vertical rail + traveling dot -->
+				<div class="nav-rail absolute left-[15px] top-2 bottom-2 w-px bg-white/[0.12]">
+					<div class="nav-dot absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full bg-white/80 shadow-[0_0_6px_rgba(255,255,255,0.3)]" style="will-change: transform;"></div>
+				</div>
+				<ul class="flex flex-col gap-5">
+					<li>
+						<a href="#about" class="nav-link group flex items-center gap-3" data-section="about">
+							<span class="nav-line h-px w-8 bg-white/20 transition-all duration-300"></span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">About</span>
+						</a>
+					</li>
+					<li>
+						<a href="#experience" class="nav-link group flex items-center gap-3" data-section="experience">
+							<span class="nav-line h-px w-8 bg-white/20 transition-all duration-300"></span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Experience</span>
+						</a>
+					</li>
+					<li>
+						<a href="#projects" class="nav-link group flex items-center gap-3" data-section="projects">
+							<span class="nav-line h-px w-8 bg-white/20 transition-all duration-300"></span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Projects</span>
+						</a>
+					</li>
+					<li>
+						<a href="#research" class="nav-link group flex items-center gap-3" data-section="research">
+							<span class="nav-line h-px w-8 bg-white/20 transition-all duration-300"></span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Research</span>
+						</a>
+					</li>
+					<li>
+						<a href="#education" class="nav-link group flex items-center gap-3" data-section="education">
+							<span class="nav-line h-px w-8 bg-white/20 transition-all duration-300"></span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Education</span>
+						</a>
+					</li>
+					<li>
+						<a href="#skills" class="nav-link group flex items-center gap-3" data-section="skills">
+							<span class="nav-line h-px w-8 bg-white/20 transition-all duration-300"></span>
+							<span class="nav-text min-w-[5.5rem] font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors duration-300">Skills</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+
+			<!-- Scrollable content area -->
+			<div class="content-area px-6 lg:mr-[180px] lg:px-12">
+				<AboutSection />
+				<ExperienceSection />
+				<ProjectsSection />
+				<ResearchSection />
+				<EducationSection />
+				<SkillsSection />
+			</div>
+
+			<!-- Footer -->
+			<div class="bg-(--color-bg-primary) px-6 lg:mr-[180px] lg:px-12">
+				<div class="px-6">
+					<Footer />
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<FloatingContact />
+</BaseLayout>
+
+<script>
+	import { gsap, ScrollTrigger } from "../utils/gsap-init";
+	import { markIntroComplete, onIntroComplete } from "../utils/intro-event";
+	import lottie from "lottie-web/build/player/lottie_light";
+
+	ScrollTrigger.config({ ignoreMobileResize: true });
+
+	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	// ═══════════════════════════════════════════════════════════════════════════
+	// HERO ENTRANCE ANIMATION — Name, subtitle, and nav reveal after intro
+	// ═══════════════════════════════════════════════════════════════════════════
+	// Nav links reveal (triggered when fire reaches header)
+	function animateNavReveal() {
+		if (prefersReducedMotion) return;
+
+		const heroNavLinks = document.querySelectorAll("#hero-nav .header-link");
+		if (heroNavLinks.length > 0) {
+			gsap.fromTo(
+				heroNavLinks,
+				{ y: 15, opacity: 0 },
+				{
+					y: 0,
+					opacity: 1,
+					duration: 0.5,
+					ease: "power2.out",
+					stagger: 0.06
+				}
+			);
+		}
+	}
+
+	// Name + subtitle reveal (triggered when fire reaches name area)
+	function animateNameReveal() {
+		if (prefersReducedMotion) return;
+
+		const heroTitle = document.querySelector(".hero-title");
+		const heroSubtitle = document.querySelector(".hero-subtitle");
+
+		if (heroTitle) {
+			gsap.fromTo(
+				heroTitle,
+				{ y: 40, opacity: 0, filter: "blur(8px)" },
+				{
+					y: 0,
+					opacity: 1,
+					filter: "blur(0px)",
+					duration: 0.9,
+					ease: "power4.out"
+				}
+			);
+		}
+
+		if (heroSubtitle) {
+			gsap.fromTo(
+				heroSubtitle,
+				{ y: 20, opacity: 0 },
+				{
+					y: 0,
+					opacity: 1,
+					duration: 0.7,
+					ease: "power3.out",
+					delay: 0.15
+				}
+			);
+		}
+	}
+
+	// Set initial hidden state for hero elements (before animation)
+	function setHeroInitialState() {
+		if (prefersReducedMotion) return;
+
+		gsap.set(".hero-title", { y: 40, opacity: 0, filter: "blur(8px)" });
+		gsap.set(".hero-subtitle", { y: 20, opacity: 0 });
+		gsap.set("#hero-nav .header-link", { y: 15, opacity: 0 });
+	}
+
+	setHeroInitialState();
+
+	// ═══════════════════════════════════════════════════════════════════════════
+	// INTRO ANIMATION — Lottie signature draws, then swirls away
+	// ═══════════════════════════════════════════════════════════════════════════
+	const introSplash = document.getElementById("intro-splash");
+	const lottieContainer = document.getElementById("lottie-container");
+	const mainContent = document.getElementById("main-content");
+
+	if (lottieContainer && introSplash && mainContent) {
+		// Disable scrolling during intro
+		document.body.style.overflow = "hidden";
+
+		// Load Lottie animation
+		const baseUrl = lottieContainer.dataset.baseUrl || "";
+		const lottiePath = baseUrl && !baseUrl.endsWith("/") ? `${baseUrl}/lottie/signature.json` : `${baseUrl}lottie/signature.json`;
+		const anim = lottie.loadAnimation({
+			container: lottieContainer,
+			renderer: "svg",
+			loop: false,
+			autoplay: true,
+			path: lottiePath
+		});
+
+		anim.addEventListener("complete", () => {
+			setTimeout(() => {
+				const lottieRect = lottieContainer.getBoundingClientRect();
+				const originX = lottieRect.left + lottieRect.width * 0.75;
+				const originY = lottieRect.top + lottieRect.height * 0.55;
+
+				mainContent.style.visibility = "visible";
+				mainContent.style.opacity = "1";
+
+				// Store scroll position at intro complete for components to use
+				(window as any).__introScrollY = window.scrollY;
+
+				// Wait for layout, then dispatch event for components to initialize animations
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => {
+						markIntroComplete();
+						// Refresh ScrollTrigger after animations are set up to ensure correct positions
+						requestAnimationFrame(() => ScrollTrigger.refresh());
+					});
+				});
+
+				gsap.to(lottieContainer, {
+					opacity: 0,
+					duration: 0.5,
+					ease: "power2.in"
+				});
+
+				if ((window as any).initPortalBurn) {
+					(window as any).initPortalBurn(
+						originX,
+						originY,
+						() => {
+							introSplash.remove();
+							document.body.style.overflow = "";
+						},
+						() => animateNavReveal(), // Called when burn reaches header
+						() => animateNameReveal() // Called when burn reaches name area
+					);
+				} else {
+					gsap.to(introSplash, {
+						opacity: 0,
+						duration: 0.8,
+						onComplete: () => {
+							introSplash.remove();
+							document.body.style.overflow = "";
+						}
+					});
+				}
+			}, 400);
+		});
+
+		// Fallback if animation takes too long or fails
+		function fallbackReveal() {
+			introSplash?.remove();
+			document.body.style.overflow = "";
+			gsap.set(mainContent, { visibility: "visible", opacity: 1 });
+			animateNavReveal();
+			animateNameReveal();
+			markIntroComplete();
+			requestAnimationFrame(() => ScrollTrigger.refresh());
+		}
+
+		anim.addEventListener("data_failed", () => {
+			gsap.to(introSplash, {
+				opacity: 0,
+				duration: 0.5,
+				onComplete: fallbackReveal
+			});
+		});
+
+		// Safety timeout (animation is ~2.5s + 1.2s swirl = ~4s total)
+		setTimeout(() => {
+			if (introSplash.parentNode) {
+				anim.stop();
+				gsap.to(introSplash, {
+					opacity: 0,
+					duration: 0.5,
+					onComplete: fallbackReveal
+				});
+			}
+		}, 6000);
+	}
+
+	// ═══════════════════════════════════════════════════════════════════════════
+	// SECTION HEADER ENTRANCE ANIMATION — Number then title stagger in
+	// ═══════════════════════════════════════════════════════════════════════════
+	async function initSectionHeaderAnimations() {
+		if (prefersReducedMotion) return;
+
+		const { scrollRevealTimeline, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
+		const sectionHeaders = document.querySelectorAll(".section-header");
+
+		sectionHeaders.forEach((header) => {
+			const number = header.querySelector("span");
+			const title = header.querySelector("h2");
+			if (number && title) {
+				scrollRevealTimeline(header, (tl) => {
+					tl.fromTo(...tlFadeUp(number)).fromTo(...tlFadeUp(title), TIMELINE_OVERLAP);
+				});
+			}
+		});
+	}
+
+	onIntroComplete(() => initSectionHeaderAnimations());
+
+	// ═══════════════════════════════════════════════════════════════════════════
+	// SECTION NAV — Active state + traveling dot
+	// ═══════════════════════════════════════════════════════════════════════════
+	const sections = ["about", "experience", "projects", "research", "education", "skills"];
+	const navLinks = document.querySelectorAll(".nav-link");
+	const navDot = document.querySelector(".nav-dot") as HTMLElement;
+	const navRail = document.querySelector(".nav-rail") as HTMLElement;
+	const navLinkEls = Array.from(navLinks) as HTMLElement[];
+	let activeSection = "";
+
+	sections.forEach((sectionId, i) => {
+		const section = document.getElementById(sectionId);
+		if (!section) return;
+
+		ScrollTrigger.create({
+			trigger: section,
+			start: "top center",
+			end: "bottom center",
+			onUpdate: (self) => {
+				if (activeSection !== sectionId) {
+					activeSection = sectionId;
+					setActiveNav(sectionId);
+				}
+				updateDotPosition(i, self.progress);
+			},
+			onEnter: () => {
+				activeSection = sectionId;
+				setActiveNav(sectionId);
+			},
+			onEnterBack: () => {
+				activeSection = sectionId;
+				setActiveNav(sectionId);
+			}
+		});
+	});
+
+	function setActiveNav(activeId: string) {
+		navLinks.forEach((link) => {
+			const linkSection = link.getAttribute("data-section");
+			const line = link.querySelector(".nav-line");
+			const text = link.querySelector(".nav-text");
+
+			if (linkSection === activeId) {
+				line?.classList.add("w-12", "bg-white/80");
+				line?.classList.remove("w-8", "bg-white/20");
+				text?.classList.add("text-white");
+				text?.classList.remove("text-white/40");
+			} else {
+				line?.classList.remove("w-12", "bg-white/80");
+				line?.classList.add("w-8", "bg-white/20");
+				text?.classList.remove("text-white");
+				text?.classList.add("text-white/40");
+			}
+		});
+	}
+
+	function updateDotPosition(sectionIndex: number, progress: number) {
+		if (!navDot || !navRail || navLinkEls.length === 0) return;
+
+		const railRect = navRail.getBoundingClientRect();
+
+		const linkCenters = navLinkEls.map((el) => {
+			const rect = el.getBoundingClientRect();
+			return rect.top + rect.height / 2 - railRect.top;
+		});
+
+		const currentCenter = linkCenters[sectionIndex] ?? 0;
+		const nextCenter = linkCenters[sectionIndex + 1] ?? currentCenter;
+		const dotY = currentCenter + progress * (nextCenter - currentCenter);
+
+		gsap.to(navDot, {
+			y: dotY,
+			duration: 0.3,
+			ease: "power3.out",
+			overwrite: true
+		});
+	}
+
+	// Smooth scroll for nav links
+	navLinks.forEach((link) => {
+		link.addEventListener("click", (e) => {
+			e.preventDefault();
+			const href = link.getAttribute("href");
+			if (href) {
+				const target = document.querySelector(href);
+				target?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
+			}
+		});
+	});
+</script>
+
+<style>
+	/* ═══════════════════════════════════════════════════════════════════════════
+     LOTTIE CONTAINER
+     ═══════════════════════════════════════════════════════════════════════════ */
+	#lottie-container svg {
+		width: 100%;
+		height: auto;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════════════════
+     HEADER LINK ANIMATED DOTTED UNDERLINE
+     ═══════════════════════════════════════════════════════════════════════════ */
+	.header-link {
+		will-change: transform;
+		transition: transform 150ms ease-out;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.header-link:hover {
+			transform: translateX(2px);
+		}
+
+		.header-link:hover .header-link-text::after {
+			background-image: repeating-linear-gradient(to right, rgba(255, 255, 255, 0.7) 0px, rgba(255, 255, 255, 0.7) 2px, transparent 2px, transparent 6px);
+			animation: dotScroll 400ms linear infinite;
+		}
+
+		#hero-nav .ext-profile-link:hover :global(.social-icon) {
+			color: rgba(255, 255, 255, 1);
+		}
+
+		.header-link:hover .header-link-text {
+			color: rgba(255, 255, 255, 1);
+		}
+
+		.nav-link:hover .nav-line {
+			width: 3rem;
+			background-color: rgba(255, 255, 255, 0.6);
+		}
+
+		.nav-link:hover .nav-text {
+			color: rgba(255, 255, 255, 0.8);
+		}
+	}
+
+	.header-link-text::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 1px;
+		background-image: repeating-linear-gradient(to right, rgba(255, 255, 255, 0.3) 0px, rgba(255, 255, 255, 0.3) 2px, transparent 2px, transparent 6px);
+		background-size: 6px 1px;
+		will-change: background-position;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════════════════
+     HERO ENTRANCE ANIMATION SETUP
+     ═══════════════════════════════════════════════════════════════════════════ */
+	.hero-title,
+	.hero-subtitle,
+	#hero-nav .header-link {
+		will-change: transform, opacity, filter;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════════════════
+     SECTION HEADER ENTRANCE ANIMATION
+     ═══════════════════════════════════════════════════════════════════════════ */
+	.section-header span,
+	.section-header h2 {
+		will-change: transform, opacity;
+	}
+
+	/* ═══════════════════════════════════════════════════════════════════════════
+     REDUCED MOTION
+     ═══════════════════════════════════════════════════════════════════════════ */
+	@media (prefers-reduced-motion: reduce) {
+		#intro-splash {
+			display: none;
+		}
+		#main-content {
+			visibility: visible !important;
+			opacity: 1 !important;
+		}
+		.header-link-text::after {
+			animation: none;
+		}
+		.header-link {
+			transition: none;
+		}
+		.nav-dot {
+			display: none;
+		}
+	}
+</style>

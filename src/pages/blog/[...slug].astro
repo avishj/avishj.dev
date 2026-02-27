@@ -1,0 +1,179 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PortalBurn from "../../components/PortalBurn.astro";
+import BackButton from "../../components/BackButton.astro";
+import Footer from "../../components/Footer.astro";
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { url } from "../../utils/url";
+import { formatDate } from "../../utils/date";
+
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post }
+	}));
+}
+
+interface Props {
+	post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} · Avish Jha`} description={post.data.description}>
+	<div id="intro-splash" class="fixed inset-0 z-50 bg-(--color-bg-primary)"></div>
+	<PortalBurn />
+
+	<div id="main-content" class="invisible min-h-screen bg-(--color-bg-primary) opacity-0">
+		<div class="mx-auto max-w-2xl px-6 lg:px-8">
+			<header class="pb-6 pt-8 lg:pb-8 lg:pt-12">
+				<BackButton fallbackHref={url("blog/")} />
+			</header>
+			<article class="pb-16">
+				<time class="font-mono text-xs tracking-wide text-white/40">
+					{formatDate(post.data.pubDate, { month: "long" })}
+				</time>
+				<h1 class="mt-2 font-display text-4xl font-medium italic tracking-tight text-white lg:text-5xl">
+					{post.data.title}
+				</h1>
+				{
+					post.data.tags && (
+						<div class="mt-4 flex flex-wrap gap-2">
+							{post.data.tags.map((tag) => (
+								<span class="rounded-full border border-white/10 px-3 py-1 font-mono text-xs text-white/50">{tag}</span>
+							))}
+						</div>
+					)
+				}
+				<div class="prose-blog mt-12">
+					<Content />
+				</div>
+			</article>
+			<Footer />
+		</div>
+	</div>
+</BaseLayout>
+
+<script>
+	import { initPageTransition } from "../../utils/portal-transition";
+	initPageTransition("intro-splash", "main-content");
+</script>
+
+<style>
+	@media (prefers-reduced-motion: reduce) {
+		#intro-splash {
+			display: none;
+		}
+		#main-content {
+			visibility: visible !important;
+			opacity: 1 !important;
+		}
+	}
+</style>
+
+<style is:global>
+	/* Blog prose styling */
+	.prose-blog {
+		color: rgba(255, 255, 255, 0.7);
+		line-height: 1.75;
+	}
+
+	.prose-blog h2 {
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		font-style: italic;
+		color: white;
+		margin-top: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.prose-blog h3 {
+		font-family: var(--font-display);
+		font-size: 1.25rem;
+		font-style: italic;
+		color: white;
+		margin-top: 2rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.prose-blog p {
+		margin-bottom: 1.25rem;
+	}
+
+	.prose-blog ul,
+	.prose-blog ol {
+		margin-bottom: 1.25rem;
+		padding-left: 1.5rem;
+	}
+
+	.prose-blog li {
+		margin-bottom: 0.5rem;
+	}
+
+	.prose-blog ul li::marker {
+		color: rgba(255, 255, 255, 0.3);
+	}
+
+	.prose-blog ol li::marker {
+		color: rgba(255, 255, 255, 0.5);
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+	}
+
+	.prose-blog code {
+		font-family: var(--font-mono);
+		font-size: 0.875em;
+		background: rgba(255, 255, 255, 0.1);
+		padding: 0.2em 0.4em;
+		border-radius: 4px;
+	}
+
+	.prose-blog pre {
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		padding: 1rem;
+		overflow-x: auto;
+		margin-bottom: 1.5rem;
+	}
+
+	.prose-blog pre code {
+		background: none;
+		padding: 0;
+	}
+
+	.prose-blog a {
+		color: white;
+		text-decoration-line: underline;
+		text-decoration-color: rgba(255, 255, 255, 0.3);
+		text-underline-offset: 3px;
+		transition: text-decoration-color 0.15s;
+	}
+
+	.prose-blog a:hover {
+		text-decoration-color: rgba(255, 255, 255, 0.8);
+	}
+
+	.prose-blog blockquote {
+		border-left: 2px solid rgba(255, 255, 255, 0.2);
+		padding-left: 1rem;
+		font-style: italic;
+		color: rgba(255, 255, 255, 0.6);
+		margin: 1.5rem 0;
+	}
+
+	.prose-blog hr {
+		border: none;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		margin: 2rem 0;
+	}
+
+	.prose-blog strong {
+		color: white;
+		font-weight: 600;
+	}
+</style>

@@ -1,0 +1,97 @@
+---
+import SocialIcon from "./SocialIcon.astro";
+
+// Floating contact bar - fixed pill at bottom with glassmorphism
+const socialLinks: { href: string; label: string; icon: "mail" | "linkedin" | "github" | "scholar" | "orcid" }[] = [
+  { href: "mailto:avishj@cs.cmu.edu", label: "Email", icon: "mail" },
+  { href: "https://linkedin.com/in/avishj", label: "LinkedIn", icon: "linkedin" },
+  { href: "https://github.com/avishj", label: "GitHub", icon: "github" },
+  { href: "https://scholar.google.com/citations?user=5tb4VWYAAAAJ", label: "Scholar", icon: "scholar" },
+  { href: "https://orcid.org/0000-0003-1479-0456", label: "ORCID", icon: "orcid" },
+];
+---
+
+<div class="floating-contact fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
+  <div class="glass flex items-center gap-1 rounded-2xl border border-white/10 px-2 py-2 shadow-lg">
+    {socialLinks.map((link) => (
+      <a
+        href={link.href}
+        target={link.href.startsWith("mailto") ? undefined : "_blank"}
+        rel={link.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+        aria-label={link.label}
+        class="contact-icon ext-profile-link group flex h-10 w-10 items-center justify-center rounded-xl text-(--color-text-muted) transition-all duration-150 active:scale-90"
+      >
+        <SocialIcon variant={link.icon} size="h-5 w-5" />
+      </a>
+    ))}
+    
+    <!-- Divider -->
+    <div class="mx-1 h-6 w-px bg-white/10"></div>
+    
+    <!-- Status indicator -->
+    <div class="flex items-center gap-2 px-3">
+      <span class="relative flex h-2 w-2">
+        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+      </span>
+      <span class="text-xs text-(--color-text-muted)">Available</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import gsap from 'gsap';
+
+  const floatingContact = document.querySelector('.floating-contact') as HTMLElement;
+  
+  if (floatingContact) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Set initial hidden state
+    gsap.set(floatingContact, { y: 20, opacity: 0 });
+    
+    let isVisible = false;
+    
+    // Show after scrolling past the header
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting && !isVisible) {
+          isVisible = true;
+          gsap.to(floatingContact, {
+            y: 0,
+            opacity: 1,
+            duration: prefersReducedMotion ? 0 : 0.4,
+            ease: 'power3.out',
+          });
+        } else if (entry.isIntersecting && isVisible) {
+          isVisible = false;
+          gsap.to(floatingContact, {
+            y: 10,
+            opacity: 0,
+            duration: prefersReducedMotion ? 0 : 0.3,
+            ease: 'power2.in',
+          });
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    // Observe the header
+    const header = document.querySelector('header');
+    if (header) observer.observe(header);
+  }
+</script>
+
+<style>
+  .floating-contact {
+    will-change: transform, opacity;
+  }
+
+  /* Touch device protection - only apply hover on devices with pointer */
+  @media (hover: hover) and (pointer: fine) {
+    .contact-icon:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+  }
+</style>

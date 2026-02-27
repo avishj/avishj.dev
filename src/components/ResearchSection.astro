@@ -1,0 +1,352 @@
+---
+import ArrowIcon from "./ArrowIcon.astro";
+import SectionHeader from "./SectionHeader.astro";
+import { publications, academicService, venueColors, venueLabels, getDisplayAuthors } from "../data/publications";
+import { url } from "../utils/url";
+
+const totalCitations = publications.reduce((sum, p) => sum + p.citations, 0);
+const hIndex = 2;
+
+const pubDisplayAuthors = publications.map((pub) => getDisplayAuthors(pub));
+---
+
+<section id="research" class="research-section relative bg-(--color-bg-primary) pt-2 pb-16 md:pt-3 md:pb-24">
+	<div class="max-w-(--max-width)">
+		<SectionHeader number="04" title="Research" />
+
+		<!-- Aggregate stats bar -->
+		<div class="stats-bar mb-6 flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-white/[0.06] pb-4">
+			<span class="font-mono text-base tabular-nums text-white/80">
+				<span class="text-white font-medium">{publications.length}</span> Publications
+			</span>
+			<span class="text-white/80 text-4xl leading-none">·</span>
+			<span class="font-mono text-base tabular-nums text-white/80">
+				<span class="text-white font-medium">{totalCitations}</span> Citations
+			</span>
+			<span class="text-white/80 text-4xl leading-none">·</span>
+			<span class="font-mono text-base tabular-nums text-white/80">
+				h-index <span class="text-white font-medium">{hIndex}</span>
+			</span>
+		</div>
+
+		<!-- Research CTA -->
+		<a href="research/" class="research-cta card-base group flex items-center justify-between rounded-lg border border-white/[0.06] px-5 py-4 mb-8">
+			<div>
+				<span class="font-display text-lg italic text-white/90 transition-colors duration-200">Explore Research</span>
+				<span class="mt-1 block font-mono text-sm text-(--color-text-muted) md:mt-0 md:ml-3 md:inline">Abstracts, key findings, full papers, citations, and more.</span>
+			</div>
+			<ArrowIcon class="h-4 w-4 flex-shrink-0 text-(--color-text-muted)" hover="white" />
+		</a>
+
+		<!-- Publications subsection -->
+		<div class="mb-6">
+			<h3 class="publications-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Publications</h3>
+
+			<div class="publications-list space-y-0">
+				{
+					publications.map((pub, index) => (
+						<a href={url(`research/${pub.slug}/`)} class="publication-item card-base group flex gap-4 border-b border-white/[0.06] py-3.5 md:gap-6" data-index={index} style={`--accent: ${venueColors[pub.venueType]};`}>
+							{/* Year - hidden on mobile, shown as side column on md+ */}
+							<span class="hidden w-10 flex-shrink-0 pt-0.5 font-mono text-sm tabular-nums text-(--color-text-muted) md:block">{pub.year}</span>
+
+							{/* Main content */}
+							<div class="min-w-0 flex-grow">
+								{/* Meta row: badges + tags */}
+								<div class="mb-1.5 flex flex-wrap items-center gap-2">
+									<span class="font-mono text-sm tabular-nums text-(--color-text-muted) md:hidden">{pub.year}</span>
+									<span class="rounded px-1.5 py-0.5 font-mono text-sm leading-none" style={`background: ${venueColors[pub.venueType]}20; color: ${venueColors[pub.venueType]};`}>
+										{venueLabels[pub.venueType]}
+									</span>
+									{pub.isFirstAuthor && <span class="rounded border border-white/10 px-1.5 py-0.5 font-mono text-sm leading-none text-white/50">1st Author</span>}
+									{pub.citations > 0 && (
+										<span class="citation-badge relative flex cursor-default items-center gap-1 border-b border-dotted border-white/40 font-mono text-sm tabular-nums text-(--color-text-muted)" data-tooltip={`${pub.citations} citation${pub.citations !== 1 ? "s" : ""}`}>
+											<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+											</svg>
+											{pub.citations}
+										</span>
+									)}
+									<span class="font-mono text-sm text-(--color-text-muted)">{pub.venue}</span>
+								</div>
+
+								{/* Title */}
+								<p class="pub-title text-base leading-relaxed text-white/80 transition-colors duration-200 lg:truncate md:text-lg">{pub.title}</p>
+
+								{/* Authors */}
+								<p class="mt-1.5 text-sm leading-relaxed text-(--color-text-muted)">
+									{pubDisplayAuthors[index].authors.map((da) => (
+										<Fragment>
+											{da.isHighlight ? <span class="highlight-author font-semibold">{da.name}</span> : <span>{da.name}</span>}
+											{da.separator}
+										</Fragment>
+									))}
+									{pubDisplayAuthors[index].truncated && <span class="italic">et al.</span>}
+								</p>
+							</div>
+
+							{/* External link arrow */}
+							<ArrowIcon class="pub-arrow h-4 w-4 flex-shrink-0 mt-0.5 text-(--color-text-muted)" hover="accent" />
+						</a>
+					))
+				}
+			</div>
+		</div>
+
+		<!-- Academic Service subsection -->
+		<div>
+			<h3 class="service-heading mb-4 font-mono text-lg uppercase tracking-[0.2em] text-white/40">Academic Service</h3>
+
+			{
+				academicService.map((service) => {
+					const isConference = service.type === "conference";
+					const hasLink = isConference ? !!service.link : !!service.link;
+					const Tag = hasLink ? "a" : "div";
+					const linkProps = isConference
+						? { href: service.link, target: "_blank", rel: "noopener noreferrer" }
+						: service.link ? { href: url(service.link) } : {};
+
+					const name = isConference ? service.conference : service.course;
+					const nameDetail = isConference ? service.abbreviation : service.courseCode;
+					const org = isConference
+						? service.organizers.join(" · ")
+						: `${service.institution} · ${service.department}`;
+					const detail = isConference ? service.details : service.responsibilities.join(" · ");
+
+					return (
+						<Tag {...linkProps} class="service-item card-base group block border-b border-white/[0.06] py-3.5">
+							{/* Row 1: Role + location (location right-aligned on md+) */}
+							<div class="flex items-start justify-between gap-4">
+								<div class="flex items-center gap-2">
+									<p class="service-title text-base font-medium text-white md:text-lg">{service.role}</p>
+									{hasLink && <ArrowIcon class="service-arrow h-3.5 w-3.5 flex-shrink-0 text-(--color-text-muted)" hover="white" />}
+								</div>
+								<p class="hidden flex-shrink-0 font-mono text-sm text-(--color-text-muted) md:block">{service.location}</p>
+							</div>
+
+							{/* Row 2: Conference/course + dates (dates right-aligned on md+) */}
+							<div class="mt-1 flex items-baseline justify-between gap-4">
+								<p class="text-sm text-white/70">
+									{name} <span class="font-mono text-(--color-text-muted)">({nameDetail})</span>
+								</p>
+								<p class="hidden flex-shrink-0 font-mono text-sm text-(--color-text-muted) md:block">{service.dates}</p>
+							</div>
+
+							{/* Row 3 (mobile only): Date · Location compact meta line */}
+							<div class="mt-2 flex items-center gap-2 font-mono text-xs text-white/40 md:hidden">
+								<span class="tabular-nums">{service.dates}</span>
+								<span class="inline-block h-px w-3 bg-white/25"></span>
+								<span>{service.location}</span>
+							</div>
+
+							{/* Row 4: Org on its own line */}
+							<p class="mt-2 font-mono text-xs text-(--color-text-muted)">{org}</p>
+
+							{/* Row 5: Detail */}
+							<p class="mt-1 font-mono text-xs text-white/50">{detail}</p>
+						</Tag>
+					);
+				})
+			}
+		</div>
+	</div>
+</section>
+
+<script>
+	import { onIntroComplete } from "../utils/intro-event";
+
+	async function initResearchAnimations() {
+		const { scrollReveal, scrollRevealTimeline, presets, tlFadeIn, tlFadeUp, TIMELINE_OVERLAP } = await import("../utils/scroll-animations");
+
+		const statsBar = document.querySelector(".stats-bar");
+		if (statsBar) {
+			scrollReveal(statsBar, presets.fadeUp);
+		}
+
+		const cta = document.querySelector(".research-cta");
+		if (cta) {
+			scrollReveal(cta, presets.fadeUp);
+		}
+
+		const pubHeading = document.querySelector(".publications-heading");
+		if (pubHeading) {
+			scrollReveal(pubHeading, presets.fadeUp);
+		}
+
+		const pubItems = document.querySelectorAll(".publication-item");
+		pubItems.forEach((item) => {
+			const year = item.querySelector(":scope > span");
+			const content = item.querySelector(":scope > div");
+			const arrow = item.querySelector(".pub-arrow");
+
+			scrollRevealTimeline(item, (tl) => {
+				tl.fromTo(...tlFadeUp(year));
+				if (arrow) {
+					tl.fromTo(...tlFadeIn(arrow), TIMELINE_OVERLAP);
+				}
+				tl.fromTo(...tlFadeUp(content), TIMELINE_OVERLAP);
+			});
+		});
+
+		const serviceHeading = document.querySelector(".service-heading");
+		if (serviceHeading) {
+			scrollReveal(serviceHeading, presets.fadeUp);
+		}
+
+		const serviceItems = document.querySelectorAll(".service-item");
+		serviceItems.forEach((item) => {
+			scrollRevealTimeline(item, (tl) => {
+				const title = item.querySelector(".service-title");
+				const rest = item.querySelectorAll(":scope > div:not(:first-child), :scope > div > p:not(.service-title)");
+
+				tl.fromTo(...tlFadeUp(title)).fromTo(...tlFadeUp(rest, { stagger: 0.04 }), TIMELINE_OVERLAP);
+			});
+		});
+	}
+
+	onIntroComplete(() => initResearchAnimations());
+
+	import { groupHoverFade } from "../utils/group-hover";
+	groupHoverFade(".publication-item");
+	groupHoverFade(".service-item");
+</script>
+
+<style>
+	.citation-badge::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: calc(100% + 6px);
+		left: 50%;
+		transform: translateX(-50%) scale(0.95);
+		white-space: nowrap;
+		font-size: 0.75rem;
+		line-height: 1;
+		padding: 4px 8px;
+		border-radius: 4px;
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(8px);
+		color: white;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity 100ms ease,
+			transform 100ms ease;
+	}
+
+	.citation-badge:hover::after {
+		opacity: 1;
+		transform: translateX(-50%) scale(1);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.publication-item:hover {
+			background: rgba(255, 255, 255, 0.02);
+		}
+
+		.publication-item:hover .pub-title {
+			color: white;
+		}
+
+		.publication-item:hover p {
+			color: rgba(255, 255, 255, 0.85);
+		}
+
+		.publication-item:hover .citation-badge {
+			color: var(--accent);
+			border-color: var(--accent);
+		}
+
+		.service-item:hover {
+			background: rgba(255, 255, 255, 0.02);
+		}
+
+		.service-item:hover .service-title {
+			color: white;
+		}
+
+		.service-item:hover p {
+			color: rgba(255, 255, 255, 0.85);
+		}
+
+		.research-cta:hover {
+			background: rgba(255, 255, 255, 0.02);
+			border-color: rgba(255, 255, 255, 0.12);
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+		}
+	}
+
+	@property --border-angle {
+		syntax: "<angle>";
+		initial-value: 0deg;
+		inherits: false;
+	}
+
+	.highlight-author {
+		--glow: #e0a860;
+		position: relative;
+		color: var(--glow);
+		padding: 1px 6px;
+		border-radius: 4px;
+		background: linear-gradient(var(--border-angle), rgba(224, 168, 96, 0.1) 0%, rgba(224, 168, 96, 0.03) 50%, rgba(224, 168, 96, 0.1) 100%);
+		border: 1px solid transparent;
+		background-clip: padding-box;
+		animation: rotate-border 3s linear infinite;
+	}
+
+	.highlight-author::before {
+		content: "";
+		position: absolute;
+		inset: -1px;
+		border-radius: 5px;
+		padding: 1px;
+		background: conic-gradient(from var(--border-angle), rgba(224, 168, 96, 0.06), rgba(224, 168, 96, 0.35), rgba(224, 168, 96, 0.06));
+		-webkit-mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		-webkit-mask-composite: xor;
+		mask-composite: exclude;
+		animation: rotate-border 3s linear infinite;
+		will-change: --border-angle;
+	}
+
+	@keyframes rotate-border {
+		to {
+			--border-angle: 360deg;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.publication-item,
+		.service-item {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none;
+		}
+
+		.publication-item:active,
+		.service-item:active {
+			transform: none;
+		}
+
+		.pub-title,
+		.service-title,
+		.publication-item p,
+		.service-item p {
+			transition: none;
+		}
+
+		.research-cta {
+			transition: none;
+		}
+
+		.highlight-author {
+			animation: none;
+			border: 1px solid rgba(224, 168, 96, 0.2);
+		}
+		.highlight-author::before {
+			animation: none;
+		}
+	}
+</style>

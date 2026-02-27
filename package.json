@@ -1,19 +1,28 @@
 {
-  "version": "0.0.0",
+  "name": "avishj.dev",
+  "type": "module",
+  "version": "2.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev": "bunx --bun astro dev",
+    "build": "bunx --bun astro build",
+    "build:cmu": "PUBLIC_CMU_REDIRECT=true bunx --bun astro build --site https://cs.cmu.edu --base /~avishj",
+    "preview": "bunx --bun astro preview",
+    "astro": "bunx --bun astro"
   },
   "dependencies": {
-    "vue": "^3.0.5"
+    "@astrojs/mdx": "^4.3.13",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.17.1",
+    "citation-js": "^0.7.22",
+    "gsap": "^3.14.2",
+    "lottie-web": "^5.13.0",
+    "pdfjs-dist": "^5.4.624",
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.2.5",
-    "@vue/compiler-sfc": "^3.0.5",
-    "autoprefixer": "^10.3.1",
-    "postcss": "^8.3.5",
-    "tailwindcss": "^2.2.4",
-    "vite": "^2.4.2"
+    "@astrojs/check": "^0.9.6",
+    "@types/bun": "^1.3.8",
+    "pageres": "^7.1.0",
+    "sharp": "^0.34.5"
   }
 }

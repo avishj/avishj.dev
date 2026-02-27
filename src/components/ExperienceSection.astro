@@ -1,0 +1,325 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import ArrowIcon from './ArrowIcon.astro';
+
+interface Experience {
+  company: string;
+  slug: string;
+  role: string;
+  location: string;
+  period: string;
+  accentColor: string;
+  highlights: string[];
+  metrics?: string[];
+}
+
+const experiences: Experience[] = [
+  {
+    company: 'Snap Inc.',
+    slug: 'snap',
+    role: 'Software Engineering Intern · Practicum',
+    location: 'Pittsburgh, PA',
+    period: 'Aug 2025 · Dec 2025',
+    accentColor: 'var(--color-accent-snap)',
+    highlights: [
+      'Architected novel XR remote desktop PoC for Snap Spectacles from scratch (C++, OpenXR, VNC).',
+      'Engineered adaptive VNC streaming with tear-free double buffering and adaptive encoding.',
+      'Implemented hand-tracking with dual-pinch gesture recognition for 6DoF display manipulation.',
+      'Developed multi-threaded keyboard pipeline supporting physical and virtual input.',
+    ],
+    metrics: ['51.7 FPS', '138ms latency', '97% bandwidth reduction'],
+  },
+  {
+    company: 'Siemens Healthineers',
+    slug: 'siemens-healthineers',
+    role: 'Software Development Engineer Intern',
+    location: 'Issaquah, WA',
+    period: 'Jun 2025 · Aug 2025',
+    accentColor: 'var(--color-accent-siemens)',
+    highlights: [
+      'Centralized observability for 120+ modules using LLM-powered migration system.',
+      'Designed custom OpenTelemetry exporters with OTel Collector, Prometheus, Grafana, Loki.',
+      'Resolved 3.5-year .NET modernization blocker via test framework automation.',
+      'Recovered lost-source security module via Ghidra reverse engineering.',
+    ],
+    metrics: ['13K+ loggers migrated', '28.7K+ tests', '120+ modules'],
+  },
+  {
+    company: 'Addverb Technologies',
+    slug: 'addverb',
+    role: 'Software Engineer · Simulations & Analytics',
+    location: 'Delhi NCR, India',
+    period: 'Jan 2023 · Jul 2024',
+    accentColor: 'var(--color-accent-addverb)',
+    highlights: [
+      'Developed high-performance SpringBoot middleware replacing OPC for conveyor control.',
+      'Performed 230+ GTP simulations and data analysis for 4 client solutions.',
+      'Designed 120-page functional spec with 78 wireframes for end-to-end warehouse solution.',
+      'Optimized pick face efficiency reducing simulation runtime from 32hrs to 12.5hrs.',
+    ],
+    metrics: ['230+ simulations', '120-page spec', '32hr → 12.5hr'],
+  },
+  {
+    company: 'MITACS · Athabasca University',
+    slug: 'mitacs',
+    role: 'Graduate Research Intern',
+    location: 'Edmonton, Canada',
+    period: 'May 2022 · Aug 2022',
+    accentColor: 'var(--color-accent-mitacs)',
+    highlights: [
+      'Created multi-modal learning framework for digital student involvement.',
+      'Architected responsive dashboard in native JavaScript and Bootstrap.',
+      'Transformed and integrated 3 deep learning models in live MLOps pipeline via AWS.',
+    ],
+  },
+  {
+    company: 'Ernst & Young',
+    slug: 'ey',
+    role: 'Technology Consulting Intern',
+    location: 'Kolkata, India',
+    period: 'Jan 2022 · Apr 2022',
+    accentColor: 'var(--color-accent-ey)',
+    highlights: [
+      'Built ML-based web dashboard with SAP Leonardo for decision-making efficiency.',
+      'Transformed client operations with insights from 800+ MB of cleaned data.',
+    ],
+  },
+  {
+    company: 'Tata Steel',
+    slug: 'tata-steel',
+    role: 'Intern · Vocational Trainee',
+    location: 'Jamshedpur, India',
+    period: 'Jun 2021 · Aug 2021',
+    accentColor: 'var(--color-accent-tata)',
+    highlights: [
+      'Built an IoT-seeded dynamic web dashboard in VueJS to track machinery devices and provide early warning signals on temperature, vibration, and current.',
+      'Managed 190+ devices remotely via polling on a secure internal wired LAN.',
+    ],
+  },
+];
+---
+
+<section id="experience" class="experience-section relative bg-(--color-bg-primary) pt-2 pb-16 md:pt-3 md:pb-24">
+  <div class="max-w-(--max-width)">
+    <SectionHeader number="02" title="Experience" />
+
+    <!-- Experience list with bullet-based trailing hover -->
+    <div class="experience-list">
+      {experiences.map((exp, index) => (
+        <a 
+          href={`/view/${exp.slug}`}
+          class="exp-card card-base group block border-t border-white/[0.06] py-3 md:py-5"
+          data-index={index}
+          style={`--accent: ${exp.accentColor};`}
+        >
+          <div class="grid gap-4 md:grid-cols-12 md:gap-6">
+            <!-- Left column: meta -->
+            <div class="exp-meta md:col-span-4">
+              <div class="exp-header-row flex items-center gap-2">
+                <h3 
+                  class="exp-company font-display text-xl font-medium tracking-tight md:text-2xl"
+                  style="color: var(--accent);"
+                >
+                  {exp.company}
+                </h3>
+                <ArrowIcon class="h-5 w-5 md:h-6 md:w-6 text-(--color-text-muted)" hover="accent" />
+              </div>
+              <p class="mt-1 text-base text-white/60">{exp.role}</p>
+              <div class="hover-text-brighten mt-2 flex items-center gap-2 font-mono text-xs text-white/40">
+                <span class="tabular-nums">{exp.period}</span>
+                <span class="inline-block h-px w-3 bg-white/25"></span>
+                <span>{exp.location}</span>
+              </div>
+
+              {exp.metrics && (
+                <div class="hover-text-brighten mt-3 flex flex-wrap gap-2">
+                  {exp.metrics.map((metric) => (
+                    <span 
+                      class="metric-pill rounded-md border px-2.5 py-1 font-mono text-[11px] font-medium leading-none"
+                      style="color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: color-mix(in srgb, var(--accent) 20%, transparent);"
+                    >
+                      {metric}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <!-- Right column: highlights -->
+            <div class="md:col-span-8">
+              <ul class="exp-highlights space-y-2">
+                {exp.highlights.map((highlight) => (
+                  <li class="exp-bullet flex gap-3 text-base leading-relaxed text-white/65">
+                    <span 
+                      class="bullet-dot mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
+                      style="background: color-mix(in srgb, var(--accent) 75%, transparent);"
+                    ></span>
+                    <span class="bullet-text">{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </a>
+      ))}
+      <!-- Bottom border -->
+      <div class="border-t border-white/[0.06]"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from '../utils/gsap-init';
+  import { onIntroComplete } from '../utils/intro-event';
+
+  const cards = document.querySelectorAll('.exp-card');
+  const allBullets = document.querySelectorAll('.exp-bullet');
+  
+  async function initExperienceAnimations() {
+    const { scrollRevealTimeline, tlFadeUp, tlFadeRight, TIMELINE_OVERLAP } = await import('../utils/scroll-animations');
+    
+    cards.forEach((card) => {
+      const headerRow = card.querySelector('.exp-header-row');
+      const meta = card.querySelectorAll('.exp-meta > p, .exp-meta > div:not(.exp-header-row)');
+      const highlights = card.querySelectorAll('.exp-highlights li');
+      
+      scrollRevealTimeline(card, (tl) => {
+        tl.fromTo(...tlFadeUp(headerRow))
+          .fromTo(...tlFadeUp(meta, { stagger: 0.06 }), TIMELINE_OVERLAP)
+          .fromTo(...tlFadeRight(highlights, { stagger: 0.05 }), TIMELINE_OVERLAP);
+      });
+    });
+  }
+
+  onIntroComplete(() => initExperienceAnimations());
+
+  // Trailing hover brightness effect (pointer devices only)
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const bulletArray = Array.from(allBullets);
+  const cardsArray = Array.from(cards) as HTMLElement[];
+
+  if (canHover) {
+    const baseOpacity = 0.65;
+    const hoverOpacity = 1;
+    const trailFalloff = [0.9, 0.78]; // opacity for ±1, ±2 neighbors
+
+    function applyTrailingHover(hoveredIndex: number) {
+      bulletArray.forEach((bullet, i) => {
+        const distance = Math.abs(i - hoveredIndex);
+        let targetOpacity = baseOpacity;
+        
+        if (distance === 0) {
+          targetOpacity = hoverOpacity;
+        } else if (distance <= trailFalloff.length) {
+          targetOpacity = trailFalloff[distance - 1];
+        }
+
+        gsap.to(bullet, {
+          color: `rgba(255, 255, 255, ${targetOpacity})`,
+          duration: 0.15,
+          ease: 'power2.out',
+        });
+
+        const dot = bullet.querySelector('.bullet-dot');
+        if (dot) {
+          gsap.to(dot, {
+            opacity: targetOpacity,
+            duration: 0.15,
+            ease: 'power2.out',
+          });
+        }
+      });
+
+      // Brighten the active card's meta
+      const hoveredBullet = bulletArray[hoveredIndex];
+      const parentCard = hoveredBullet?.closest('.exp-card') as HTMLElement | null;
+      highlightCardMeta(parentCard);
+    }
+
+    function highlightCardMeta(activeCard: HTMLElement | null) {
+      cardsArray.forEach((card) => {
+        const isActive = card === activeCard;
+        if (isActive) {
+          card.classList.add('meta-active');
+        } else {
+          card.classList.remove('meta-active');
+        }
+      });
+    }
+
+    function resetHover() {
+      bulletArray.forEach((bullet) => {
+        gsap.to(bullet, {
+          color: `rgba(255, 255, 255, ${baseOpacity})`,
+          duration: 0.2,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+
+        const dot = bullet.querySelector('.bullet-dot');
+        if (dot) {
+          gsap.to(dot, {
+            opacity: 0.75,
+            duration: 0.2,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        }
+      });
+
+      cardsArray.forEach((card) => {
+        card.classList.remove('meta-active');
+      });
+    }
+
+    // Bullet hover listeners
+    bulletArray.forEach((bullet, index) => {
+      bullet.addEventListener('mouseenter', () => applyTrailingHover(index));
+    });
+
+    // Meta (left section) hover listeners - highlight the card
+    cardsArray.forEach((card) => {
+      const meta = card.querySelector('.exp-meta');
+      if (meta) {
+        meta.addEventListener('mouseenter', () => highlightCardMeta(card));
+      }
+    });
+
+    const experienceList = document.querySelector('.experience-list');
+    experienceList?.addEventListener('mouseleave', resetHover);
+  }
+</script>
+
+<style>
+  .exp-card.meta-active .exp-company {
+    filter: brightness(1.4);
+  }
+
+  .exp-card.meta-active .exp-meta p,
+  .exp-card.meta-active .exp-meta > div:not(.mt-3) {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .exp-card.meta-active .metric-pill {
+    filter: brightness(1.3);
+  }
+
+  .metric-pill {
+    backdrop-filter: blur(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exp-card {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .exp-highlights li {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .exp-meta {
+      transition: none;
+    }
+  }
+
+</style>

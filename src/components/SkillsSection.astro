@@ -1,0 +1,123 @@
+---
+// Skills Section with tech stack pills and hover states
+// Inspired by varshithm + pqoqubbw bordered skill pills
+import SectionHeader from "./SectionHeader.astro";
+
+interface SkillCategory {
+	name: string;
+	skills: string[];
+}
+
+const skillCategories: SkillCategory[] = [
+	{
+		name: "Languages",
+		skills: ["Java", "Rust", "Python", "C++", "C#", "TypeScript", "JavaScript", "GoLang", "SQL", "C"]
+	},
+	{
+		name: "Tools & Technologies",
+		skills: ["OpenXR", "LibVNC", "OpenTelemetry", "Grafana", "Prometheus", "Loki", "Docker", "Kubernetes", "Azure", "AWS", "Linux", "SpringBoot", "VueJS", "AngularJS", "TensorFlow", "Kafka", "RabbitMQ", "Redis", "MongoDB", "MSTest", "Playwright", "Git"]
+	},
+	{
+		name: "Leadership",
+		skills: ["Team Management", "Coordination", "Prioritization", "Problem Solving", "Initiative"]
+	}
+];
+
+const awards = ["Special Achiever's Award at VIT", "Treasurer at MSE Leadership Initiative (CMU)", "Committee on Student Organizations (CMU)", "Board Chairperson at Mozilla Firefox Club (VIT)", "Projects Head at Sigma Xi Research Society (VIT)"];
+---
+
+<section id="skills" class="skills-section relative bg-(--color-bg-primary) pt-2 pb-3 md:pt-3 md:pb-6">
+	<div class="max-w-(--max-width)">
+		<SectionHeader number="06" title="Skills & Recognition" />
+
+		<!-- Skills grid -->
+		<div class="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+			{
+				skillCategories.map((category, catIndex) => (
+					<div class="skill-category" data-index={catIndex}>
+						<h3 class="skill-category-heading mb-4 font-mono text-xs uppercase tracking-wider text-white/50">{category.name}</h3>
+						<div class="flex flex-wrap gap-2">
+							{category.skills.map((skill, skillIndex) => (
+								<span class="skill-pill select-none rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-white/80 transition-all duration-150" style={`--delay: ${skillIndex * 30}ms;`}>
+									{skill}
+								</span>
+							))}
+						</div>
+					</div>
+				))
+			}
+		</div>
+
+		<!-- Awards & Roles -->
+		<div class="awards-section mt-8">
+			<h3 class="awards-heading mb-6 font-mono text-xs uppercase tracking-wider text-white/50">Awards &amp; Roles</h3>
+			<div class="flex flex-wrap gap-3">
+				{
+					awards.map((award, index) => (
+						<div class="award-item flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition-all duration-200" style={`--delay: ${index * 50}ms;`}>
+							<span class="h-1.5 w-1.5 rounded-full bg-white/30" />
+							<span>{award}</span>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { onIntroComplete } from "../utils/intro-event";
+
+	async function initSkillsAnimations() {
+		const { scrollReveal, presets } = await import("../utils/scroll-animations");
+
+		// Animate headings
+		const headings = document.querySelectorAll(".skill-category-heading, .awards-heading");
+		scrollReveal(headings, presets.fadeUp);
+
+		// Animate pills and award items
+		const items = document.querySelectorAll(".skill-pill, .award-item");
+		scrollReveal(items, presets.scaleUp);
+	}
+
+	onIntroComplete(() => initSkillsAnimations());
+</script>
+
+<style>
+	.skill-pill {
+		animation: fadeIn 0.3s ease-out backwards;
+		animation-delay: var(--delay);
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: scale(0.95);
+		}
+		to {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	/* Touch device protection - only apply hover on devices with pointer */
+	@media (hover: hover) and (pointer: fine) {
+		.skill-pill:hover {
+			border-color: rgba(255, 255, 255, 0.3);
+			background: rgba(255, 255, 255, 0.15);
+			color: white;
+		}
+
+		.award-item:hover {
+			border-color: rgba(255, 255, 255, 0.2);
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		.education-callout:hover {
+			border-color: rgba(255, 255, 255, 0.15);
+			box-shadow:
+				0 4px 24px rgba(0, 0, 0, 0.3),
+				0 0 0 1px rgba(255, 255, 255, 0.08);
+		}
+	}
+</style>

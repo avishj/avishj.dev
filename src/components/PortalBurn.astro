@@ -1,0 +1,175 @@
+---
+// Portal Burn Effect Component
+// Shader-based dissolve transition inspired by Shopify Editions
+// Uses OffscreenCanvas + Web Worker to compile shaders off the main thread
+// Falls back to inline execution if OffscreenCanvas is unavailable
+---
+
+<canvas id="portal-canvas" class="pointer-events-none fixed inset-0 z-[100] hidden"></canvas>
+
+<script>
+import VERT from "../shaders/portal-burn.vert.glsl?raw";
+import FRAG from "../shaders/portal-burn.frag.glsl?raw";
+
+let worker: Worker | null = null;
+
+export function initPortalBurn(
+	originX: number,
+	originY: number,
+	onComplete: () => void,
+	onHeaderReveal?: () => void,
+	onNameReveal?: () => void
+) {
+	const canvas = document.getElementById("portal-canvas") as HTMLCanvasElement;
+	if (!canvas) return;
+
+	canvas.classList.remove("hidden");
+
+	const W = window.innerWidth;
+	const H = window.innerHeight;
+	const dpr = Math.min(window.devicePixelRatio, 2);
+
+	const canUseOffscreen = typeof canvas.transferControlToOffscreen === "function";
+
+	if (canUseOffscreen) {
+		const offscreen = canvas.transferControlToOffscreen();
+		worker = new Worker(new URL("../workers/portal-burn.worker.ts", import.meta.url), {
+			type: "module",
+		});
+
+		worker.onmessage = (e) => {
+			if (e.data.type === "complete") onComplete();
+			else if (e.data.type === "headerReveal") onHeaderReveal?.();
+			else if (e.data.type === "nameReveal") onNameReveal?.();
+			else if (e.data.type === "done") {
+				canvas.classList.add("hidden");
+				worker?.terminate();
+				worker = null;
+			}
+		};
+
+		const onResize = () => {
+			worker?.postMessage({
+				type: "resize",
+				W: window.innerWidth,
+				H: window.innerHeight,
+			});
+		};
+		window.addEventListener("resize", onResize, { passive: true });
+
+		worker.postMessage(
+			{ type: "init", canvas: offscreen, originX, originY, W, H, dpr },
+			[offscreen]
+		);
+	} else {
+		runInline(canvas, originX, originY, W, H, dpr, onComplete, onHeaderReveal, onNameReveal);
+	}
+}
+
+function runInline(
+	canvas: HTMLCanvasElement,
+	originX: number,
+	originY: number,
+	W: number,
+	H: number,
+	dpr: number,
+	onComplete: () => void,
+	onHeaderReveal?: () => void,
+	onNameReveal?: () => void
+) {
+	const gl = canvas.getContext("webgl2", { alpha: true, antialias: false });
+	if (!gl) { onComplete(); return; }
+
+	canvas.width = W * dpr;
+	canvas.height = H * dpr;
+	canvas.style.width = W + "px";
+	canvas.style.height = H + "px";
+	gl.viewport(0, 0, canvas.width, canvas.height);
+
+	const centerX = originX / W;
+	const centerY = 1.0 - originY / H;
+
+	const computeMaxDist = () => {
+		const aspect = W / H;
+		let maxDist = 0;
+		for (const [cx, cy] of [[0,0],[1,0],[0,1],[1,1]]) {
+			const dx = (cx - centerX) * aspect;
+			const dy = cy - centerY;
+			const d = Math.sqrt(dx * dx + dy * dy);
+			if (d > maxDist) maxDist = d;
+		}
+		return maxDist * 1.4;
+	};
+	const maxDist = computeMaxDist();
+
+	const vs = gl.createShader(gl.VERTEX_SHADER)!;
+	gl.shaderSource(vs, VERT);
+	gl.compileShader(vs);
+	const fs = gl.createShader(gl.FRAGMENT_SHADER)!;
+	gl.shaderSource(fs, FRAG);
+	gl.compileShader(fs);
+	const prog = gl.createProgram()!;
+	gl.attachShader(prog, vs);
+	gl.attachShader(prog, fs);
+	gl.linkProgram(prog);
+	gl.useProgram(prog);
+
+	const buf = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+	const aPos = gl.getAttribLocation(prog, "aPosition");
+	gl.enableVertexAttribArray(aPos);
+	gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+	const uDissolve = gl.getUniformLocation(prog, "uDissolve");
+	gl.uniform2f(gl.getUniformLocation(prog, "uCenter"), centerX, centerY);
+	gl.uniform2f(gl.getUniformLocation(prog, "uResolution"), W, H);
+	gl.uniform1f(gl.getUniformLocation(prog, "uMaxDist"), maxDist);
+
+	gl.enable(gl.BLEND);
+	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+	const aspect = W / H;
+	const distToHeader = Math.sqrt(Math.pow((0.5 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)) / maxDist;
+	const distToName = Math.sqrt(Math.pow((0.05 - centerX) * aspect, 2) + Math.pow(1 - centerY, 2)) / maxDist;
+
+	const duration = 3800;
+	const startTime = performance.now();
+	let headerRevealed = false;
+	let nameRevealed = false;
+
+	setTimeout(() => onComplete(), 400);
+
+	function animate() {
+		const elapsed = performance.now() - startTime;
+		const progress = Math.min(elapsed / duration, 1);
+		const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+		gl!.uniform1f(uDissolve, easedProgress);
+
+		if (!nameRevealed && easedProgress >= distToName && onNameReveal) {
+			nameRevealed = true;
+			onNameReveal();
+		}
+		if (!headerRevealed && easedProgress >= distToHeader && onHeaderReveal) {
+			headerRevealed = true;
+			onHeaderReveal();
+		}
+
+		gl!.clearColor(0, 0, 0, 0);
+		gl!.clear(gl!.COLOR_BUFFER_BIT);
+		gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
+
+		if (progress < 1) {
+			requestAnimationFrame(animate);
+		} else {
+			gl!.getExtension("WEBGL_lose_context")?.loseContext();
+			canvas.classList.add("hidden");
+		}
+	}
+
+	requestAnimationFrame(animate);
+}
+
+(window as any).initPortalBurn = initPortalBurn;
+</script>

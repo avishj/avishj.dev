@@ -1,0 +1,283 @@
+---
+// Projects Bento Grid with group hover opacity fade
+// Inspired by pqoqubbw.dev + Shopify Editions card patterns
+import ArrowIcon from './ArrowIcon.astro';
+import SectionHeader from './SectionHeader.astro';
+import { url } from '../utils/url';
+
+interface Project {
+  title: string;
+  description: string;
+  tech: string[];
+  link?: string;
+  image?: string;
+  size: '1x1' | '1x2' | '2x1' | '2x2';
+}
+
+const projects: Project[] = [
+  // --- Personal projects ---
+  {
+    title: 'ForexRadar',
+    description: 'Track historical Visa, Mastercard, and ECB exchange rates with real markup data. Interactive charts, offline-first caching, and 365+ days of history.',
+    tech: ['JavaScript', 'TypeScript', 'Bun'],
+    link: 'https://github.com/avishj/ForexRadar',
+    image: 'projects/forexradar',
+    size: '2x1',
+  },
+  {
+    title: 'ExplainRFC',
+    description: 'Interactive 3D visualizations that explain how the internet works. Each IETF RFC becomes an explorable exhibit with guided walkthroughs.',
+    tech: ['TypeScript', 'Astro', 'React', 'Three.js'],
+    link: 'https://github.com/avishj/ExplainRFC',
+    image: 'projects/explainrfc',
+    size: '1x2',
+  },
+  {
+    title: 'Ephemeris',
+    description: 'macOS menu-bar app for quickly tracking times across multiple timezones across the past, present, and future.',
+    tech: ['Swift', 'SwiftUI'],
+    link: 'https://github.com/avishj/ephemeris',
+    // image: 'projects/ephemeris',
+    size: '1x2',
+  },
+  {
+    title: 'UseItOrLoseIt',
+    description: 'macOS menu-bar app for tracking token usage quotas across AI providers with friendly reminders to use it or lose it.',
+    tech: ['Swift', 'SwiftUI'],
+    link: 'https://github.com/avishj/UseItOrLoseIt',
+    // image: 'projects/useitorloseit',
+    size: '2x1',
+  },
+  {
+    title: 'avishj.dev',
+    description: 'This portfolio. High-end editorial design with multi-layer parallax, GSAP scroll animations, and responsive bento grid layouts.',
+    tech: ['Astro', 'Tailwind CSS', 'GSAP'],
+    link: 'https://github.com/avishj/avishj.dev',
+    size: '1x1',
+  },
+  {
+    title: 'WatchPoint',
+    description: 'Parental monitoring app that detects abusive or harmful content in children\'s digital interactions using sentiment analysis and real-time alerts.',
+    tech: ['Python', 'NLP', 'React'],
+    link: 'https://github.com/avishj/WatchPoint',
+    size: '2x1',
+  },
+  {
+    title: 'VTop Bulk Downloader',
+    description: 'Automated bulk downloader for VTop academic portal. Downloads all semesters\' question papers, assignments, and metadata into an organized folder structure.',
+    tech: ['TypeScript', 'Puppeteer'],
+    link: 'https://github.com/avishj/VTopBulkDownloader',
+    size: '1x1',
+  },
+  {
+    title: 'SEDS India',
+    description: 'Unified 4 portals, managed 7 websites, 180+ emails, and 3+ domains. Reduced OpEx by 40%.',
+    tech: ['JavaScript', 'jQuery', 'Netlify'],
+    link: 'https://github.com/sedsindia/sedsindia.github.io',
+    image: 'projects/sedsindia',
+    size: '2x1',
+  },
+  {
+    title: 'MFC Recruitment Portal',
+    description: 'Frontend for candidate tests across 5 domains, handling 1200+ applicants with 100+ concurrent tests.',
+    tech: ['VueJS', 'Axios', 'Cloudflare'],
+    link: 'https://github.com/MFC-VIT/MFC-RecruitmentPortal-Frontend',
+    image: 'projects/mfcvit',
+    size: '1x2',
+  },
+  // --- From experience ---
+  {
+    title: 'XR Remote Desktop',
+    description: 'Novel remote desktop streaming for Snap Spectacles AR glasses. Real-time desktop mirroring with hand-tracking interaction in 3D space.',
+    tech: ['C++', 'OpenXR', 'LibVNC'],
+    size: '1x1',
+  },
+  {
+    title: 'LLM Log Migration',
+    description: 'Automated migration of 13,000+ legacy loggers to OpenTelemetry using Claude agents and AST parsing.',
+    tech: ['C#', 'Python', 'Claude API'],
+    size: '1x1',
+  },
+  {
+    title: 'Warehouse Simulation Engine',
+    description: 'GTP simulation and order orchestration system. Optimized pick face efficiency from 32hr to 12.5hr runtime.',
+    tech: ['Java', 'SpringBoot', 'Analytics'],
+    size: '1x1',
+  },
+  {
+    title: 'Multi-Modal Learning Framework',
+    description: 'Student engagement tracking with 3 deep learning models in AWS MLOps pipeline.',
+    tech: ['Python', 'TensorFlow', 'AWS'],
+    size: '1x1',
+  },
+];
+
+// Determine grid classes based on size (cols x rows)
+const sizeClasses = {
+  '2x2': 'md:col-span-2 md:row-span-2',
+  '2x1': 'md:col-span-2 md:row-span-1',
+  '1x2': 'md:col-span-1 md:row-span-2',
+  '1x1': 'md:col-span-1 md:row-span-1',
+};
+---
+
+<section id="projects" class="projects-section relative bg-(--color-bg-primary) pt-2 pb-16 text-(--color-text-primary) md:pt-3 md:pb-24">
+  <div class="max-w-(--max-width)">
+    <SectionHeader number="03" title="Projects" />
+
+    <!-- Bento Grid -->
+    <div class="bento-grid grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)] md:gap-6" style="grid-auto-flow: dense;">
+    {projects.map((project, index) => (
+      <article 
+        class={`project-card group ${sizeClasses[project.size]}`}
+        data-index={index}
+      >
+        <div class={`card-inner relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm ${project.image && project.size === '2x1' ? 'flex flex-col md:flex-row' : 'flex flex-col'}`}>
+          {/* --- Content block --- */}
+          <div class={`relative flex flex-col p-6 ${project.image && project.size === '2x1' ? 'md:w-1/2' : ''} ${project.image && project.size === '1x2' ? '' : project.image ? '' : 'h-full'}`}>
+            <div class="mb-3 flex items-start justify-between gap-2">
+              <h3 class="font-display text-xl font-medium tracking-tight text-white md:text-2xl">
+                {project.title}
+              </h3>
+              {project.link && (
+                <ArrowIcon class="h-5 w-5 flex-shrink-0 text-white/40" hover="white" />
+              )}
+            </div>
+
+            <p class="mb-4 flex-grow text-sm leading-relaxed text-white/60">
+              {project.description}
+            </p>
+
+            <div class="mt-auto flex flex-wrap gap-2">
+              {project.tech.map((tech) => (
+                <span class="tech-pill rounded-full bg-white/[0.08] px-3 py-1 font-mono text-xs text-white/70 transition-all duration-150">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* --- Image block --- */}
+          {project.image && (
+            <div class={`project-image overflow-hidden ${project.size === '2x1' ? 'md:w-1/2 min-h-[160px]' : 'min-h-[200px] flex-1'}`}>
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset={`${url(`${project.image}-400w.webp`)} 400w, ${url(`${project.image}-800w.webp`)} 800w, ${url(`${project.image}-1200w.webp`)} 1200w, ${url(`${project.image}-1600w.webp`)} 1600w, ${url(`${project.image}-2560w.webp`)} 2560w`}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
+                />
+                <img
+                  src={url(`${project.image}-800w.webp`)}
+                  alt={`${project.title} screenshot`}
+                  class="h-full w-full object-cover transition-transform duration-500"
+                  loading="lazy"
+                />
+              </picture>
+            </div>
+          )}
+
+          <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/80 to-transparent"></div>
+
+          {project.size === '2x2' && (
+            <div class="pointer-events-none absolute right-4 top-4 text-white opacity-[0.03]">
+              <svg class="h-24 w-24" viewBox="0 0 100 100" fill="currentColor">
+                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" fill="none" />
+                <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="1" fill="none" />
+                <circle cx="50" cy="50" r="15" stroke="currentColor" stroke-width="1" fill="none" />
+              </svg>
+            </div>
+          )}
+
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="absolute inset-0 z-10"
+              aria-label={`View ${project.title}`}
+            />
+          )}
+        </div>
+      </article>
+    ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { onIntroComplete } from '../utils/intro-event';
+
+  async function initProjectAnimations() {
+    const { scrollReveal, presets } = await import('../utils/scroll-animations');
+    const cards = document.querySelectorAll('.project-card .card-inner');
+    scrollReveal(cards, presets.fadeUpScale);
+  }
+
+  onIntroComplete(() => initProjectAnimations());
+
+  // Group hover opacity fade effect
+  import { groupHoverFade } from '../utils/group-hover';
+  groupHoverFade('.project-card');
+</script>
+
+<style>
+  .project-card {
+    transition: opacity 50ms ease;
+  }
+
+  .card-inner {
+    transition: 
+      transform 200ms var(--ease-out-expo), 
+      border-color 200ms ease, 
+      box-shadow 200ms ease, 
+      background-color 200ms ease;
+    will-change: transform;
+  }
+
+  /* Touch device protection - only apply hover on devices with pointer */
+  @media (hover: hover) and (pointer: fine) {
+    .project-card:hover .card-inner {
+      border-color: rgba(255, 255, 255, 0.15);
+      background-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.05);
+      transform: translateY(-4px);
+    }
+
+    .project-card:active .card-inner,
+    .project-card:has(:active) .card-inner {
+      transform: translateY(-4px) scale(0.95);
+      filter: brightness(0.9);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 50ms ease, filter 50ms ease, box-shadow 50ms ease;
+    }
+
+    .project-card:hover .tech-pill {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .project-card:hover .project-image img {
+      transform: scale(1.05);
+    }
+
+  }
+
+  /* Reduced motion - disable all animations */
+  @media (prefers-reduced-motion: reduce) {
+    .project-card {
+      transition: none;
+    }
+
+    .card-inner {
+      transition: none;
+    }
+    
+    .project-card:hover .card-inner,
+    .project-card:active .card-inner {
+      transform: none;
+    }
+
+    .tech-pill {
+      transition: none;
+    }
+  }
+</style>

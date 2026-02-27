@@ -1,0 +1,57 @@
+---
+interface Props {
+	fallbackHref: string;
+}
+
+const { fallbackHref } = Astro.props;
+---
+
+<button type="button" class="back-button group flex items-center gap-3 text-white/50 transition-colors hover:text-white/80" data-fallback={fallbackHref}>
+	<svg class="back-button-icon h-5 w-5 -rotate-90 transition-transform duration-200 ease-out" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+		<path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7m0 0H7m10 0v10"></path>
+	</svg>
+	<span class="font-mono text-base">back</span>
+</button>
+
+<script>
+	document.querySelectorAll("[data-fallback]").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			const { referrer } = document;
+			const fallback = btn.getAttribute("data-fallback")!;
+			const isInternal = referrer?.startsWith(location.origin) ?? false;
+			isInternal ? history.back() : (location.href = fallback);
+		});
+	});
+</script>
+
+<style>
+	.back-button {
+		will-change: transform;
+		transition: transform 150ms ease-out;
+		cursor: pointer;
+		background: none;
+		border: none;
+		padding: 0;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.back-button:hover {
+			transform: translateX(-2px);
+		}
+
+		.back-button:hover .back-button-icon {
+			transform: rotate(-45deg) translate(-2px, 2px);
+		}
+	}
+
+	.back-button:active {
+		transform: scale(0.97);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.back-button,
+		.back-button-icon {
+			transition: none;
+		}
+	}
+</style>
